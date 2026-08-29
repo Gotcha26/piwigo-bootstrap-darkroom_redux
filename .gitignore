@@ -72,3 +72,46 @@ node_modules/jQuery-Touch-Events/*
 !node_modules/jQuery-Touch-Events/src
 node_modules/jQuery-Touch-Events/src/*
 !node_modules/jQuery-Touch-Events/src/*.min.js
+
+#########################################################################
+# REDUX — outillage local, ajouté au fork. Bloc volontairement ADDITIF et
+# placé en fin de fichier : tout ce qui précède appartient à l'amont, et le
+# garder intact garde `git merge upstream/master` trivial sur ce fichier.
+#
+# ⛔ NE PAS y transposer les motifs habituels de la flotte
+# (`*.css`, `*.min.css`, `*.min.js`) : ici ils seraient DESTRUCTEURS. L'amont
+# versionne délibérément ses CSS compilés (theme.css, css/**/bootstrap.css) et
+# une sélection de `.min.js` sous node_modules/, via les négations ci-dessus.
+# Les ignorer déréférencerait des centaines de fichiers suivis par l'amont.
+#########################################################################
+
+# IDE & outils locaux
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
+Thumbs.db
+
+# Secrets et config locale.
+.env*
+
+# Outillage local (devtools) : NON versionné sur ce dépôt.
+# Écart assumé à la convention de la flotte, qui suit `.local/scripts/.env.project`
+# comme manifeste de build. Ce dépôt est un fork PUBLIC de projet tiers : le
+# manifeste y porterait les chemins absolus du poste (PROJECT_ROOT, EasyPHP) et du
+# bruit d'outillage privé sous les yeux de l'amont. Il vit sur le disque, et le
+# registre de flotte .env.plugins l'y trouve.
+.local/
+
+# Superpowers + worktrees (artefacts éphémères, non versionnés)
+.superpowers/
+.worktrees/
+
+# Staging de build devtools (manifeste, sidecars, archives)
+/.build/
+
+# Artefact de php-cs-fixer
+.php-cs-fixer.cache
+
+# Artefact d'audit i18n (dry-run devtools — régénéré à la demande)
+.local/AUDIT-i18n.md
