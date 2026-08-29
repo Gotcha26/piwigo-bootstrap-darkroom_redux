@@ -63,3 +63,47 @@ ul.tabs li.current {
 .ident {
    margin-left: 3rem;
 }
+
+/* About tab — components & licences */
+.bd-about {
+  margin: 0 auto;
+  max-width: 760px;
+  text-align: left;
+}
+.bd-about h3 {
+  margin-top: 1.8em;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+  padding-bottom: 4px;
+}
+.bd-about h4 {
+  margin-top: 1.4em;
+  text-align: left !important;
+}
+.bd-about-upstream,
+.bd-about-note {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+.bd-about-warning {
+  border-left: 4px solid #e74c3c;
+  padding-left: 12px;
+}
+.bd-about-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.6em;
+}
+.bd-about-table th,
+.bd-about-table td {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.bd-about-table th {
+  font-weight: bold;
+  white-space: nowrap;
+}
+.bd-about-table td:nth-child(2) {
+  white-space: nowrap;
+}
