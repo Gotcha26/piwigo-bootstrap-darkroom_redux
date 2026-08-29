@@ -103,6 +103,9 @@ Thumbs.db
 # registre de flotte .env.plugins l'y trouve.
 .local/
 
+# Consignes d'agent, même raison : outillage privé, hors de vue de l'amont.
+CLAUDE.md
+
 # Superpowers + worktrees (artefacts éphémères, non versionnés)
 .superpowers/
 .worktrees/
