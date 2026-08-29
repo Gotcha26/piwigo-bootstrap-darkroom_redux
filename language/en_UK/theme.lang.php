@@ -86,3 +86,25 @@ $lang['AutoPlay'] = 'AutoPlay';
 $lang['Previous (arrow left)'] = 'Previous (arrow left)';
 $lang['Next (arrow right)'] = 'Next (arrow right)';
 $lang['Display number of images in breadcrumb'] = 'Display number of images in breadcrumb';
+
+// About tab — credits & licences
+$lang['Source'] = 'Source';
+$lang['Upstream project'] = 'Upstream project';
+$lang['extension page'] = 'extension page';
+$lang['Privacy'] = 'Privacy';
+$lang['Some color themes load their web fonts from Google servers each time a page is displayed. The IP address of your visitors, their browser and the address of the page they are viewing are then sent to a third party. The following color themes are affected:'] = 'Some color themes load their web fonts from Google servers each time a page is displayed. The IP address of your visitors, their browser and the address of the page they are viewing are then sent to a third party. The following color themes are affected:';
+$lang['Every other color theme, including the default one, serves its fonts from your own server.'] = 'Every other color theme, including the default one, serves its fonts from your own server.';
+$lang['Third-party components'] = 'Third-party components';
+$lang['This theme redistributes the components listed below. Versions are those actually shipped.'] = 'This theme redistributes the components listed below. Versions are those actually shipped.';
+$lang['Libraries'] = 'Libraries';
+$lang['Component'] = 'Component';
+$lang['License'] = 'License';
+$lang['Bundled scripts'] = 'Bundled scripts';
+$lang['not stated'] = 'not stated';
+$lang['Icons and fonts'] = 'Icons and fonts';
+$lang['Web fonts served by Google'] = 'Web fonts served by Google';
+$lang['This list is maintained by hand and may lag behind the shipped files.'] = 'This list is maintained by hand and may lag behind the shipped files.';
+$lang['The scripts below were imported from the'] = 'The scripts below were imported from the';
+$lang['theme by Phil Bayfield. They were not written for this theme.'] = 'theme by Phil Bayfield. They were not written for this theme.';
+$lang['Piwigo core, via Bootstrap Default'] = 'Piwigo core, via Bootstrap Default';
+$lang['Bootstrap Default, extended since'] = 'Bootstrap Default, extended since';

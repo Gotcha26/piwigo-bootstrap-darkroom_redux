@@ -107,3 +107,25 @@ $lang['AutoPlay'] = 'Lecture automatique';
 $lang['Previous (arrow left)'] = 'Précédent (flèche gauche)';
 $lang['Next (arrow right)'] = 'Suivant (flèche droite)';
 $lang['Display number of images in breadcrumb'] = 'Afficher le nombre d\'images dans le fil d\'arianne';
+
+// About tab — credits & licences
+$lang['Source'] = 'Sources';
+$lang['Upstream project'] = 'Projet amont';
+$lang['extension page'] = 'fiche de l\'extension';
+$lang['Privacy'] = 'Vie privée';
+$lang['Some color themes load their web fonts from Google servers each time a page is displayed. The IP address of your visitors, their browser and the address of the page they are viewing are then sent to a third party. The following color themes are affected:'] = 'Certains thèmes de couleur chargent leurs polices depuis les serveurs de Google à chaque affichage de page. L\'adresse IP de vos visiteurs, leur navigateur et l\'adresse de la page consultée sont alors transmis à un tiers. Les thèmes de couleur concernés sont :';
+$lang['Every other color theme, including the default one, serves its fonts from your own server.'] = 'Tous les autres thèmes de couleur, dont celui par défaut, servent leurs polices depuis votre propre serveur.';
+$lang['Third-party components'] = 'Composants tiers';
+$lang['This theme redistributes the components listed below. Versions are those actually shipped.'] = 'Ce thème redistribue les composants listés ci-dessous. Les versions sont celles réellement livrées.';
+$lang['Libraries'] = 'Bibliothèques';
+$lang['Component'] = 'Composant';
+$lang['License'] = 'Licence';
+$lang['Bundled scripts'] = 'Scripts embarqués';
+$lang['not stated'] = 'non précisée';
+$lang['Icons and fonts'] = 'Icônes et polices';
+$lang['Web fonts served by Google'] = 'Polices servies par Google';
+$lang['This list is maintained by hand and may lag behind the shipped files.'] = 'Cette liste est tenue à la main et peut être en retard sur les fichiers livrés.';
+$lang['The scripts below were imported from the'] = 'Les scripts ci-dessous ont été importés du thème';
+$lang['theme by Phil Bayfield. They were not written for this theme.'] = 'de Phil Bayfield. Ils n’ont pas été écrits pour ce thème.';
+$lang['Piwigo core, via Bootstrap Default'] = 'noyau Piwigo, via Bootstrap Default';
+$lang['Bootstrap Default, extended since'] = 'Bootstrap Default, étendu depuis';
