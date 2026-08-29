@@ -1,0 +1,7 @@
+# Commits de reformatage pur, a ignorer par git blame.
+#
+# Usage local :  git config blame.ignoreRevsFile .git-blame-ignore-revs
+# GitHub applique ce fichier automatiquement dans son affichage blame.
+#
+# style: reformat the theme's own PHP to 2 spaces + K&R (refs #1)
+12464f28e89a05e1622a284e9c6e823f81e65a2e

@@ -68,14 +68,13 @@ $clear_skins = array(
 );
 // Get value of bootstrap theme and set themeconf to clear or leave as default (dark)
 $closure = \Closure::bind(function &(\BootstrapDarkroom\ThemeController $controller) {
-    return $controller->config;
+  return $controller->config;
 }, null, \BootstrapDarkroom\ThemeController::class);
 
 $config = &$closure($controller);
 
-if (in_array($config->bootstrap_theme, $clear_skins))
-{
-    $themeconf['colorscheme'] = 'clear';
+if (in_array($config->bootstrap_theme, $clear_skins)) {
+  $themeconf['colorscheme'] = 'clear';
 }
 
 $controller->init();

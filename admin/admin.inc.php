@@ -17,7 +17,7 @@ define('TAB_ABOUT', 'about');
 // Get current tab
 $page['tab'] = isset($_GET['tab']) ? $_GET['tab'] : $page['tab'] = TAB_SETTINGS;
 if (!in_array($page['tab'], array(TAB_SETTINGS, TAB_ABOUT))) {
-    $page['tab'] = TAB_SETTINGS;
+  $page['tab'] = TAB_SETTINGS;
 }
 
 $themeconfig = new \BootstrapDarkroom\Config();
@@ -29,24 +29,23 @@ $ReflectionClass = new ReflectionClass('\BootstrapDarkroom\Config');
 $themeconfig_vars = $ReflectionClass->getDefaultProperties();
 $themeconfig_defaults = $themeconfig_vars['defaults'];
 
-if (!isset($themeconfig->thumbnail_nb_images) and !isset($_POST['boostrap_darkroom_settings']))
-{
+if (!isset($themeconfig->thumbnail_nb_images) and !isset($_POST['boostrap_darkroom_settings'])) {
   $themeconfig->thumbnail_nb_images = $themeconfig_defaults['thumbnail_nb_images'];
   $themeconfig->save();
 }
 
 // Save settings
 if ($page['tab'] == TAB_SETTINGS) {
-    if (isset($_POST['boostrap_darkroom_settings'])) {
-        $themeconfig->fromPost($_POST);
-        $themeconfig->save();
+  if (isset($_POST['boostrap_darkroom_settings'])) {
+    $themeconfig->fromPost($_POST);
+    $themeconfig->save();
       
-      $template->assign(
-        array(
-          'save_success' => l10n('Your configuration settings are saved'),
-        )
-      );
-    }
+    $template->assign(
+      array(
+        'save_success' => l10n('Your configuration settings are saved'),
+      )
+    );
+  }
 }
 // TabSheet
 $tabsheet = new tabsheet();
@@ -61,9 +60,9 @@ global $template;
 
 // Add our template to the global template
 $template->set_filenames(
-    array(
-        'theme_admin_content' => dirname(__FILE__) . '/template/' . $page['tab'] . '.tpl'
-    )
+  array(
+      'theme_admin_content' => dirname(__FILE__) . '/template/' . $page['tab'] . '.tpl'
+  )
 );
 
 // Assign the template contents to ADMIN_CONTENT
