@@ -15,6 +15,7 @@
     <div class="comment">
         <div class="image">
 {if isset($comment.src_image)}
+  {* Taille déclarée dans custom-derivatives.json (Cache Machine) : la répercuter là-bas si elle change. *}
   {if isset($comment_derivative_params)}
     {define_derivative name='cropped_derivative_params' width=$comment_derivative_params->sizing->ideal_size[0] height=$comment_derivative_params->sizing->ideal_size[0] crop=true}
   {else}
