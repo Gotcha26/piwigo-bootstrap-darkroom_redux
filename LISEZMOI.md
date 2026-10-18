@@ -35,7 +35,7 @@ officielle. Les mises à jour se récupèrent ici.
 
 ## Modèle de branches
 
-- `master` — branche principale. Tout changement part de `master` et y revient.
+- `main` — branche principale. Tout changement part de `main` et y revient.
 - Les évolutions de l'amont ne sont plus fusionnées en bloc : on les examine et on reporte,
   à la main ou par `git cherry-pick`, celles qui servent ce thème.
 
