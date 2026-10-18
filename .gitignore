@@ -70,16 +70,22 @@ node_modules/jQuery-Touch-Events/src/*
 !node_modules/jQuery-Touch-Events/src/*.min.js
 
 #########################################################################
-# REDUX — outillage local, ajouté au fork. Bloc volontairement ADDITIF et
-# placé en fin de fichier : tout ce qui précède appartient à l'amont, et le
-# garder intact garde `git merge upstream/master` trivial sur ce fichier.
+# REDUX — ajouts propres au fork, en fin de fichier : placés APRÈS les
+# négations ci-dessus, ils l'emportent sur elles (la dernière règle gagne).
 #
 # ⛔ NE PAS y transposer les motifs habituels de la flotte
-# (`*.css`, `*.min.css`, `*.min.js`) : ici ils seraient DESTRUCTEURS. L'amont
-# versionne délibérément ses CSS compilés (theme.css, css/**/bootstrap.css) et
-# une sélection de `.min.js` sous node_modules/, via les négations ci-dessus.
-# Les ignorer déréférencerait des centaines de fichiers suivis par l'amont.
+# (`*.css`, `*.min.css`, `*.min.js`) : ici ils seraient DESTRUCTEURS. Le thème
+# versionne ses CSS compilés (theme.css, css/**/bootstrap.css) et une sélection
+# de `.min.js` sous node_modules/, via les négations ci-dessus — aucune étape
+# de build ne les régénère à la livraison. Les ignorer déréférencerait des
+# centaines de fichiers dont le thème a besoin à l'exécution.
 #########################################################################
+
+# Source maps : inutiles à l'exécution (le navigateur ne les demande qu'avec
+# les DevTools ouvertes) et ~60 Mo à elles seules. Retirées du dépôt, et
+# `--source-map` coupé dans package.json ; ce motif couvre aussi celles que
+# ramènerait une réinstallation des dépendances sous node_modules/.
+*.map
 
 # IDE & outils locaux
 .vscode/
