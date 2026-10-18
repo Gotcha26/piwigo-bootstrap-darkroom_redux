@@ -8,8 +8,9 @@ La documentation des fonctionnalités du thème reste celle de l'amont : voir
 
 ## Pourquoi ce fork
 
-Corriger des défauts sans attendre leur passage en amont. Les correctifs d'intérêt général y
-sont proposés en pull request ; ce dépôt sert d'antichambre, pas de divergence.
+Faire évoluer le thème à son propre rythme. Ce fork est **autonome** : il corrige, modifie et
+refond le thème sans attendre l'amont, ni chercher à rester fusionnable avec lui. Le projet
+d'origine reste une source dont on reprend, au cas par cas, ce qui est utile.
 
 Il est **gratuit et vendu nulle part**. Sa distribution est ce dépôt public.
 
@@ -34,20 +35,19 @@ officielle. Les mises à jour se récupèrent ici.
 
 ## Modèle de branches
 
-- `master` — branche d'intégration. Elle diverge de l'amont en permanence : elle porte l'identité
-  du fork. Les synchronisations se font par `git merge upstream/master`.
-- Un correctif = une branche partant de `upstream/master`, jamais de `master`. C'est ce qui le
-  rend proposable tel quel en pull request amont.
-
-Un correctif accepté en amont doit être retiré d'ici. Piwigo rebase les PR à la fusion, donc le
-commit revient sous un SHA différent et `git branch --merged` ne le voit pas. L'outil qui tranche
-est `git cherry master <branche>` : un préfixe `-` signifie « patch déjà présent ».
+- `master` — branche principale. Tout changement part de `master` et y revient.
+- Les évolutions de l'amont ne sont plus fusionnées en bloc : on les examine et on reporte,
+  à la main ou par `git cherry-pick`, celles qui servent ce thème.
 
 ## Style du code
 
-Le code propre au fork suit le style 2 espaces + K&R (voir `.git-blame-ignore-revs` pour le
-commit de reformatage). Les pull requests vers l'amont, elles, doivent respecter le style de
-l'amont — 4 espaces, accolades Allman.
+Tout le code suit le style 2 espaces + K&R (voir `.git-blame-ignore-revs` pour le commit de
+reformatage).
+
+## Source maps
+
+Le dépôt ne contient pas de source maps (`*.map`) : inutiles à l'exécution, elles pesaient
+à elles seules les deux tiers du dépôt. La compilation `npm run build` ne les produit plus.
 
 ## Licence et attribution
 

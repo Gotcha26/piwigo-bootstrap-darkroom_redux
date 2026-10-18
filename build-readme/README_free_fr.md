@@ -1,10 +1,10 @@
 # Bootstrap Darkroom (redux)
 
-Un fork maintenu de [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-bootstrap-darkroom)
-de Thomas Kuther, portant des correctifs qui ne sont pas encore passés en amont.
+Un fork autonome de [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-bootstrap-darkroom)
+de Thomas Kuther, avec ses propres correctifs et évolutions.
 
-Gratuit, et vendu nulle part. Il vit dans le dépôt public ci-dessous ; les corrections faites ici
-sont proposées au projet d'origine dès qu'elles présentent un intérêt général.
+Gratuit, et vendu nulle part. Il vit dans le dépôt public ci-dessous et évolue à son propre
+rythme : les apports utiles du projet d'origine y sont repris au cas par cas.
 
 ## Installation — à lire en premier
 
