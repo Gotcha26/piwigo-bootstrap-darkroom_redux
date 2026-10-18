@@ -13,6 +13,7 @@
 {assign var=rwidth value=$width}
 {assign var=rheight value=$height}
 {/if}
+{* Taille déclarée dans custom-derivatives.json (Cache Machine) : la répercuter là-bas si elle change. *}
 {define_derivative name='derivative_params' width=$width height=$height crop=true}
 {assign var=idx value=0+$START_ID}
 {foreach from=$thumbnails item=thumbnail}

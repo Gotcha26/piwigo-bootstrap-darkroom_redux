@@ -1,0 +1,50 @@
+{
+  "_doc": [
+    "Manifeste des dérivées personnalisées que ce thème réclame par {define_derivative width=… height=…}.",
+    "Lu par le module Cache Machine de centralAdmin (issue #704) pour les proposer à la pré-génération, colonne « Thème ».",
+    "Lecture seule : ce fichier n'est jamais exécuté et Piwigo lui-même l'ignore.",
+    "",
+    "🔴 CHARGE DE MAINTENANCE ASSUMÉE. Toute taille changée dans un gabarit sans être répercutée ici périme",
+    "ce manifeste EN SILENCE : la génération produirait des fichiers que plus aucune page ne demande.",
+    "Gabarits concernés : template/thumbnails.tpl, template/mainpage_categories.tpl, template/comment_list.tpl.",
+    "",
+    "Forme d'une entrée :",
+    "  - width + height (entiers)          : dimensions littérales, comme dans le gabarit ;",
+    "  - OU base (taille standard Piwigo)  : dimensions lues dans la configuration des tailles au moment",
+    "    de la génération — à préférer dès que le gabarit les tire d'un $derivative_params ;",
+    "    square: true reprend la largeur pour la hauteur (ideal_size[0] deux fois) ;",
+    "  - crop : true, false, ou un pourcentage 0-100 — même sémantique que {define_derivative} ;",
+    "  - min_width / min_height : facultatifs, comme dans {define_derivative} ;",
+    "  - label : libellé par code de langue Piwigo, en_UK servant de repli.",
+    "",
+    "inherit (défaut true) : un thème enfant ajoute ses entrées à celles de son parent ; false les remplace.",
+    "",
+    "Limite assumée : thumbnails.tpl rogne aussi la taille qu'un visiteur choisit dans le menu « Taille des",
+    "vignettes » (branche else du gabarit). Une variante par taille standard serait générée pour toutes les",
+    "photos au profit d'un choix rare : elle n'est pas déclarée, et reste créée à la première visite."
+  ],
+  "schema": 1,
+  "inherit": true,
+  "derivatives": [
+    {
+      "id": "thumbnails",
+      "width": 520,
+      "height": 360,
+      "crop": true,
+      "label": {
+        "fr_FR": "Vignettes des photos et des albums",
+        "en_UK": "Photo and album thumbnails"
+      }
+    },
+    {
+      "id": "comments",
+      "base": "thumb",
+      "square": true,
+      "crop": true,
+      "label": {
+        "fr_FR": "Vignettes de la page des commentaires",
+        "en_UK": "Comments page thumbnails"
+      }
+    }
+  ]
+}
