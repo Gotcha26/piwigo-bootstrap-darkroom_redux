@@ -44,6 +44,11 @@ FAMILIES = {
     "ubuntu": ("5.3.0", "Ubuntu", [(400, "normal"), (700, "normal")]),
 }
 
+# Package -> directory under assets/fonts/ when the package name cannot be
+# used. The fleet build treats any path ending in "-pro" (BUILD_PRO_SUFFIX) as
+# a Pro zone and silently leaves it out of the Free ZIP.
+DIRS = {"source-sans-pro": "source-sans"}
+
 MATERIAL = ["amber", "blue", "brown", "deep-orange", "deep-purple", "indigo",
             "light-green", "lime", "purple", "red", "teal"]
 
@@ -89,7 +94,7 @@ def vendor_family(name, version, css_family, variants):
     """Copy the woff2 files and return the family's @font-face blocks, with
     url() relative to assets/fonts/<name>/ (placeholder {base})."""
     tar = fetch_package(name, version)
-    dest = FONTS_DIR / name
+    dest = FONTS_DIR / DIRS.get(name, name)
     dest.mkdir(parents=True)
     (dest / "LICENSE").write_bytes(read(tar, "LICENSE"))
     metadata = json.loads(read(tar, "metadata.json"))
@@ -132,7 +137,7 @@ def main():
             "",
         ]
         for n in names:
-            out += [b.replace("{base}", f"../../assets/fonts/{n}/") for b in vendored[n]["blocks"]]
+            out += [b.replace("{base}", f"../../assets/fonts/{DIRS.get(n, n)}/") for b in vendored[n]["blocks"]]
         (style_dir / "fonts.css").write_text("\n".join(out) + "\n", encoding="utf-8", newline="\n")
 
     total = sum(p.stat().st_size for p in FONTS_DIR.rglob("*.woff2"))
