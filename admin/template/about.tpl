@@ -72,13 +72,9 @@
         <tr><th>{'Component'|@translate}</th><th>{'Version'|@translate}</th><th>{'License'|@translate}</th></tr>
         <tr><td><a href="https://fontawesome.com" target="_blank">Font Awesome Free</a></td><td>5.11.2</td><td>CC BY 4.0, SIL OFL 1.1, MIT</td></tr>
         <tr><td><a href="https://thenounproject.com/DmitryBaranovskiy/collection/photo/" target="_blank">Photography Icons</a> &mdash; Dmitry Baranovskiy</td><td>&mdash;</td><td><a href="https://creativecommons.org/licenses/by/3.0/us/" target="_blank">CC BY 3.0 US</a></td></tr>
-        <tr><td>PT Sans</td><td>0.0.35</td><td>SIL OFL 1.1</td></tr>
-        <tr><td>Roboto</td><td>0.0.35</td><td>Apache-2.0</td></tr>
+        <tr><td>Cabin Sketch, Lato, Montserrat, Neucha, News Cycle, Nunito Sans, Open Sans, PT Sans, Roboto, Source Sans Pro &mdash; <a href="https://fontsource.org" target="_blank">Fontsource</a></td><td>5.3.0</td><td>SIL OFL 1.1</td></tr>
+        <tr><td>Ubuntu &mdash; <a href="https://fontsource.org" target="_blank">Fontsource</a></td><td>5.3.0</td><td>UFL 1.0</td></tr>
     </table>
-
-    <h4>{'Web fonts served by Google'|@translate}</h4>
-    <p class="ident">Cabin Sketch, Lato, Montserrat, Neucha, News Cycle, Nunito Sans, Open Sans,
-        Roboto, Source Sans Pro, Ubuntu &mdash; SIL OFL 1.1, Apache-2.0, UFL 1.0</p>
 
     <h3>{'License'|@translate}</h3>
     <p>Copyright 2017 Thomas Kuther &mdash; <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License 2.0</a></p>

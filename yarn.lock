@@ -2913,16 +2913,6 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-typeface-pt-sans@^0.0.35:
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/typeface-pt-sans/-/typeface-pt-sans-0.0.35.tgz#95ac15e48c31ecb5706aa017d7af30193e19c256"
-  integrity sha512-qhrbUrkfcr4ANX7OkWRdu+RZ8h7ecXv5zINt5ZsJj3aXjDMVYI2ninSzmw0inyboxEDj7C0jvsPBW/dCc/Ja3Q==
-
-typeface-roboto@^0.0.35:
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/typeface-roboto/-/typeface-roboto-0.0.35.tgz#5965d3f6d4cd72b7b2833d6b7d42c9b59b8392ba"
-  integrity sha512-DDFZZFSWzi7fSsHWQrxHXmi5KgGQ3EJKdfFaj+hfTghpUyLWT+fPs5I7G3q+KH/z6ZOxabjkrr1FpNLYpzT9JQ==
-
 uglify-js@^3.4.9:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.0.tgz#704681345c53a8b2079fb6cec294b05ead242ff5"

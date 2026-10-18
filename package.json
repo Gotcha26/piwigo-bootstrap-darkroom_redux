@@ -13,7 +13,8 @@
     "Piwigo Translators"
   ],
   "scripts": {
-    "build": "npm-run-all build:bootstrap build:bootstrap-darkroom build:theme build:material build:bootswatch",
+    "build": "npm-run-all build:bootstrap build:bootstrap-darkroom build:theme build:material build:bootswatch check:fonts",
+    "check:fonts": "node tools/check-no-remote-fonts.js",
     "build:bootstrap": "node-sass --output-style expanded --precision 6 scss/bootstrap-default.scss css/bootstrap-default/bootstrap.css && postcss --config postcss.config.js --replace css/bootstrap-default/bootstrap.css && cleancss --level 1 --output css/bootstrap-default/bootstrap.min.css css/bootstrap-default/bootstrap.css",
     "build:bootstrap-darkroom": "node-sass --output-style expanded --precision 6 scss/bootstrap-darkroom.scss css/bootstrap-darkroom/bootstrap.css && postcss --config postcss.config.js --replace css/bootstrap-darkroom/bootstrap.css && cleancss --level 1 --output css/bootstrap-darkroom/bootstrap.min.css css/bootstrap-darkroom/bootstrap.css",
     "build:theme": "node-sass --output-style expanded --precision 6 scss/theme.scss theme.css",
@@ -32,9 +33,7 @@
     "photoswipe": "4.1.3",
     "popper.js": "^1.14.7",
     "selectize": "0.12.6",
-    "slick-carousel": "tkuther/slick#1.6.0-pwg",
-    "typeface-pt-sans": "^0.0.35",
-    "typeface-roboto": "^0.0.35"
+    "slick-carousel": "tkuther/slick#1.6.0-pwg"
   },
   "devDependencies": {
     "autoprefixer": "^9.4.7",
