@@ -123,7 +123,6 @@ $lang['License'] = 'Licence';
 $lang['Bundled scripts'] = 'Scripts embarqués';
 $lang['not stated'] = 'non précisée';
 $lang['Icons and fonts'] = 'Icônes et polices';
-$lang['Web fonts served by Google'] = 'Polices servies par Google';
 $lang['This list is maintained by hand and may lag behind the shipped files.'] = 'Cette liste est tenue à la main et peut être en retard sur les fichiers livrés.';
 $lang['The scripts below were imported from the'] = 'Les scripts ci-dessous ont été importés du thème';
 $lang['theme by Phil Bayfield. They were not written for this theme.'] = 'de Phil Bayfield. Ils n’ont pas été écrits pour ce thème.';

@@ -60,9 +60,6 @@ node_modules/slick-carousel/*
 node_modules/selectize/*
 !node_modules/selectize/dist
 
-!node_modules/typeface-pt-sans
-!node_modules/typeface-roboto
-
 !node_modules/jQuery-Touch-Events
 node_modules/jQuery-Touch-Events/*
 !node_modules/jQuery-Touch-Events/src
