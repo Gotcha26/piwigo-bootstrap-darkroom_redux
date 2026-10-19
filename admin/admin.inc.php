@@ -248,7 +248,7 @@ $template->assign(array(
   'BD_ADMIN_JS'      => function_exists('jm_asset_url')
     ? jm_asset_url($bd_url, $bd_root, $bd_js, array('with_version' => true))
     : $bd_url . $bd_js,
-  'BD_CHOICE_GRID_PARTIAL' => $bd_tpl . 'bd-choice-grid.tpl',
+  'JM_CHOICE_GRID_PARTIAL' => $bd_tpl . 'jm-choice-grid.tpl',
 ));
 
 // --- 16. Shell ---

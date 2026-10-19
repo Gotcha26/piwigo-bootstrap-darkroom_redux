@@ -10,7 +10,6 @@
 
 @use 'plugin-icon' as *;
 @use 'plugin-icon-glyphs' as *;
-@use 'bd-choice-grid';
 
 .jm-plugin-icon--bd {
   @include jm-plugin-icon-glyph('bd');
