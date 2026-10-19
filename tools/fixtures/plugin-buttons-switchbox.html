@@ -25,7 +25,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script>
+    // What core switchbox.js leaves when it ran before the theme: a click handler that toggles
+    // the box with an inline style and returns false, hiding the click from Bootstrap.
+    $('#sbLink').on('click', function () {
+      $('#sbBox').toggle();
+      return false;
+    });
+  </script>
   <script src="../../js/plugin-buttons.js"></script>
+  <script>
+    // Runs right after the normaliser's own ready handler, before window load.
+    $(function () {
+      var events = $._data(document.getElementById('sbLink'), 'events');
+      window.__sbClicksAtReady = events && events.click ? events.click.length : 0;
+    });
+  </script>
   <script src="plugin-buttons.test.js"></script>
 </body>
 </html>

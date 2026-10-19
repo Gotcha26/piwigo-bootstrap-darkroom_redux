@@ -96,6 +96,8 @@
 
     if (has('#nolabel')) {
       check('no label kept', has('#nolabel a.nav-link'), document.getElementById('nolabel').outerHTML);
+      check('no label neutral icon', $('#nolabel a.nav-link > i.fas.fa-puzzle-piece').is(':visible'),
+        document.getElementById('nolabel').outerHTML);
     }
 
     function checkDropdown(prefix, linkId, boxId) {
@@ -117,10 +119,14 @@
     }
 
     if (has('#bdmenu')) {
+      var left = $.isArray(window.SwitchBox) ? $.inArray('#batchDownloadLink2', window.SwitchBox) : -1;
+      check('switchbox registry emptied', left === -1, JSON.stringify(window.SwitchBox));
       checkDropdown('switchbox registry', 'batchDownloadLink2', 'batchDownloadBox2');
     }
 
     if (has('#sbsibling')) {
+      check('switchbox core handlers dropped at ready', window.__sbClicksAtReady === 0,
+        String(window.__sbClicksAtReady));
       checkDropdown('switchbox sibling fallback', 'sbLink', 'sbBox');
     }
 

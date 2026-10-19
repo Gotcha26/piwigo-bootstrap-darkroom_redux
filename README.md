@@ -41,7 +41,7 @@ Buttons that plugins add to the navbars are handled generically, whatever the pl
 
 * the standard Piwigo icons (`pwg-icon-*`) are shown as their Font Awesome equivalent;
 * icons a plugin already draws with Font Awesome are kept;
-* when the icon is not recognised, the button shows its label as text instead;
+* when the icon is not recognised, the button shows its label as text instead, or a neutral icon if it has no label;
 * images used as icons are sized to the height of the other icons;
 * `switchBox` menus become regular dropdown menus.
 

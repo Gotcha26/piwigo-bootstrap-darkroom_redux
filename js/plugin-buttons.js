@@ -97,12 +97,16 @@
 
   // The core switchBox menu of a link: a pair registered in window.SwitchBox while it is still
   // an array (core switchbox.js not run yet), otherwise the .switchBox right after the link.
+  // A pair found in the array is taken out of it, so that switchbox.js, loaded async by some
+  // plugins, never binds its own click handler on the converted menu.
   function findSwitchBox($link) {
     var registry = window.SwitchBox;
     if ($.isArray(registry)) {
       for (var i = 0; i + 1 < registry.length; i += 2) {
         if ($link.is(registry[i])) {
-          return $(registry[i + 1]).first();
+          var box = registry[i + 1];
+          registry.splice(i, 2);
+          return $(box).first();
         }
       }
     }
@@ -146,6 +150,10 @@
       }
       $link.append($label);
     }
+    // Neither icon nor label: a neutral icon, so that the button never disappears.
+    if (!hasIcon && !$.trim($link.text())) {
+      $link.append('<i class="fas fa-puzzle-piece fa-fw" aria-hidden="true"></i>');
+    }
 
     if (!$link.parent().is('li')) {
       $link.wrap('<li></li>');
@@ -157,12 +165,12 @@
   }
 
   // Drops the click handlers the core switchbox.js (or the plugin) bound to a converted menu,
-  // so that only Bootstrap's dropdown answers.
+  // and the inline display its toggle may have left, so that only Bootstrap's dropdown answers.
   function bindSwitchBoxes(scope) {
     $(scope || document).find('li[' + MARK + '].dropdown').each(function () {
       var $li = $(this);
       $li.children('a.dropdown-toggle').off();
-      $li.children('.dropdown-menu').off();
+      $li.children('.dropdown-menu').off().removeAttr('style');
     });
   }
 
@@ -191,6 +199,7 @@
 
   $(document).ready(function () {
     normalize();
+    bindSwitchBoxes();
   });
   $(window).on('load', function () {
     normalize();
