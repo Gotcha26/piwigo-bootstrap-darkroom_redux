@@ -1,5 +1,6 @@
 {strip}
-{if isset($loaded_plugins['piwigo-openstreetmap']) && ($BODY_ID == "thePicturePage" || $BODY_ID == "theCategoryPage")}
+{* OSM_redux est le fork privé de piwigo-openstreetmap : même bouton « carte » (.pwg-icon-globe). *}
+{if (isset($loaded_plugins['piwigo-openstreetmap']) || isset($loaded_plugins['OSM_redux'])) && ($BODY_ID == "thePicturePage" || $BODY_ID == "theCategoryPage")}
 {footer_script require='jquery'}
 $(document).ready(function() {
   $('.pwg-icon-globe').removeClass('pwg-icon').closest('a').html('<i class="fas fa-globe fa-fw" aria-hidden="true"></i>').addClass('nav-link').removeClass('pwg-state-default pwg-button').closest('li').addClass('nav-item osm-button').find('a>i').after('<span class="d-lg-none ml-2">'+$('.osm-button').find('a').attr('title')+'</span>');;
