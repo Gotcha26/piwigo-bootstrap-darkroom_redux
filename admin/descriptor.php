@@ -15,6 +15,11 @@ if (!function_exists('bd_admin_descriptor')) {
   function bd_admin_descriptor($version) {
     $theme_dir = dirname(dirname(__FILE__));
     $theme_url = get_root_url() . 'themes/bootstrap_darkroom/';
+    // Credits generated from tools/vendor.json, one list per family (credits_groups).
+    $credits = include $theme_dir . '/include/credits.php';
+    $family = function ($id) use ($credits) {
+      return isset($credits[$id]) ? $credits[$id] : array();
+    };
     return array(
       'header' => array(
         // Required: jm_help_support_boot() derives its template folder from it.
@@ -42,12 +47,21 @@ if (!function_exists('bd_admin_descriptor')) {
         ),
         'plugin_url'   => $theme_url,
         'technologies' => array('php', 'js', 'scss', 'smarty'),
-        // Shared-shell fonts and icons first (served by jm-fonts.tpl and
-        // bd-common.css), then CodeMirror (Custom CSS editor, served by the shared
-        // asset store), then the list generated from tools/vendor.json.
+        // Grouped by family, most important first (#28): a group marker opens each
+        // family. The generated families come from tools/vendor.json; the shared
+        // catalogue slugs stay literal here, where the toolkit's credits guard reads
+        // them. Admin panel: shell fonts and icons (jm-fonts.tpl, bd-common.css) and
+        // CodeMirror (Custom CSS editor), served by the shared asset store.
         'components'   => array_merge(
-          array('piwigo', 'source-sans-3', 'outfit', 'simple-icons', 'codemirror'),
-          include $theme_dir . '/include/credits.php'
+          array(array('group' => l10n('bd_credits_group_core')), 'piwigo'),
+          $family('core'),
+          array(array('group' => l10n('bd_credits_group_viewers'))),
+          $family('viewers'),
+          array(array('group' => l10n('bd_credits_group_scripts'))),
+          $family('scripts'),
+          array(array('group' => l10n('bd_credits_group_fonts'))),
+          $family('fonts'),
+          array(array('group' => l10n('bd_credits_group_admin')), 'source-sans-3', 'outfit', 'simple-icons', 'codemirror')
         ),
         'notes'        => array(
           l10n('bd_credits_note_privacy'),

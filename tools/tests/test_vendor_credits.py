@@ -49,6 +49,53 @@ class CreditEntriesTest(unittest.TestCase):
             vendor.credit_entries(manifest)
 
 
+GROUPED = dict(MANIFEST, credits_groups=[
+    {"id": "core", "items": ["Upstream", "beta"]},
+    {"id": "fonts", "items": ["Fonts", "alpha"]},
+])
+
+
+class CreditGroupsTest(unittest.TestCase):
+    def test_no_family_declared_gives_none(self):
+        self.assertIsNone(vendor.credit_groups(MANIFEST))
+
+    def test_families_in_declared_order_with_declared_items(self):
+        groups = vendor.credit_groups(GROUPED)
+        self.assertEqual([gid for gid, _ in groups], ["core", "fonts"])
+        self.assertEqual([e["name"] for e in groups[0][1]], ["Upstream", "Beta 2.0 (fork)"])
+        self.assertEqual([e["name"] for e in groups[1][1]], ["Fonts 5.3.0", "Alpha 1.0.0"])
+
+    def test_an_entry_left_out_of_every_family_is_refused(self):
+        manifest = dict(MANIFEST, credits_groups=[{"id": "core", "items": ["alpha", "beta", "Upstream"]}])
+        with self.assertRaisesRegex(vendor.ManifestError, "no family for 'Fonts'"):
+            vendor.credit_groups(manifest)
+
+    def test_an_entry_in_two_families_is_refused(self):
+        manifest = dict(MANIFEST, credits_groups=[
+            {"id": "a", "items": ["alpha", "beta", "Upstream", "Fonts"]}, {"id": "b", "items": ["alpha"]}])
+        with self.assertRaisesRegex(vendor.ManifestError, "both"):
+            vendor.credit_groups(manifest)
+
+    def test_an_unknown_or_uncredited_reference_is_refused(self):
+        for ref in ("nope", "hidden"):
+            manifest = dict(MANIFEST, credits_groups=[
+                {"id": "a", "items": ["alpha", "beta", "Upstream", "Fonts", ref]}])
+            with self.assertRaises(vendor.ManifestError):
+                vendor.credit_groups(manifest)
+
+    def test_a_family_id_must_be_a_plain_identifier(self):
+        manifest = dict(MANIFEST, credits_groups=[{"id": "Core!", "items": ["alpha", "beta", "Upstream", "Fonts"]}])
+        with self.assertRaises(vendor.ManifestError):
+            vendor.credit_groups(manifest)
+
+    def test_render_keys_the_lists_by_family(self):
+        text = vendor.render_credits(GROUPED)
+        self.assertIn("  'core' => array(\n    array('name' => 'Upstream'", text)
+        self.assertIn("  'fonts' => array(\n    array('name' => 'Fonts 5.3.0'", text)
+        self.assertLess(text.index("'core'"), text.index("'fonts'"))
+        self.assertNotIn("Hidden", text)
+
+
 class RenderCreditsTest(unittest.TestCase):
     def test_render_lists_every_name_and_license(self):
         text = vendor.render_credits(MANIFEST)
