@@ -1,14 +1,16 @@
-Piwigo Bootstrap Darkroom
+Piwigo Bootstrap Darkroom (redux)
 -------------------
 A mobile-ready [Piwigo](http://piwigo.org) theme based on [Bootstrap 4](https://getbootstrap.com)
+
+An independent fork of [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-bootstrap-darkroom) by Thomas Kuther, developed on its own. It installs as `themes/bootstrap_darkroom`, so it replaces the original in place.
 
 ### Features
 
 * Various color styles
   * [Bootswatch](https://bootswatch.com)
-  * [Material Design](https://mdbootstrap.com/)
+  * [Bootstrap Material Design](https://github.com/FezVrasta/bootstrap-material-design)
   * Darkroom: a dark, low contrast color scheme based on Lightroom® colors (the default)
-* Optional page header with fancy fading full width background image, or a jumbotron banner
+* Optional page header: a full width hero image, or a jumbotron banner
 * Different layout option for the picture details page
 * Video support using native HTML 5 video widget
 * Fullscreen slideshow view using [PhotoSwipe](http://photoswipe.com)
@@ -20,7 +22,7 @@ A mobile-ready [Piwigo](http://piwigo.org) theme based on [Bootstrap 4](https://
   * fully responsive Navbars, Carousel, PhotoSwipe slideshow, video content
   * async/ondemand loading of carousel & PhotoSwipe content, adaptive image size selection, swipe & tap events
 * Various configuration options
-* Easy customization using CSS overrides or SASS custom build for advanced needs.
+* Easy customization using CSS overrides or a child theme (see *Development & Customizing*).
  
 
 ### Usage
@@ -32,30 +34,18 @@ A mobile-ready [Piwigo](http://piwigo.org) theme based on [Bootstrap 4](https://
 2. Enable Bootstrap Darkroom
 3. Disable the smartpocket theme (it's enabled by default). This is required in order to use Bootstrap Darkroom by default on mobile devices, too.
 
-### Demo
-
-A demo is available at https://demo2.piwigo.com/ and another one at https://demo4.piwigo.com/
-
-### Documentation, Support and Issue tracker
-* [Github Wiki](https://github.com/tkuther/piwigo-bootstrap-darkroom/wiki)
-* [Forum thread](http://piwigo.org/forum/viewtopic.php?id=26624)
-* [Issue tracker](https://github.com/tkuther/piwigo-bootstrap-darkroom/issues)
-
-### Recommended Plugins for best mobile user experience
-* [GThumb+](http://piwigo.org/ext/extension_view.php?eid=591) or [gdThumb](http://piwigo.org/ext/extension_view.php?eid=771): this will give you masonry-style thumbnail pages that make most use of valuable space.
-* [RV Thumbnail Scroller](http://piwigo.org/ext/extension_view.php?eid=493): this one will load items on the thumbnails page as they are requested using ajax, ideal for swiping through albums while keeping the initial page load size small. Avoids pagination.
 
 ### Known issues
 
 * In IE11, the navbars only display correctly if using fluid-width layout.
 * On iOS the PhotoSwipe fullscreen mode isn't supported. On iPhone it does work in landscape orientation only, on iPad it doesn't work at all. That's an iOS bug. Works just fine on Android
-* Plugins that add buttons to the Navbar might not (yet) be supported, see [Plugin Support Matrix](https://github.com/tkuther/piwigo-bootstrap-darkroom/wiki/Plugin-Support-Matrix)
+* Plugins that add buttons to the Navbar might not be supported.
 * Portrait mode videos (e.g. from mobile phones) need to be recoded in actual portrait orientation, rotation tags won't work.
 * The theme no longer ships jQuery: it uses the copy bundled with Piwigo, which is **jQuery 1.11.3 (2015) and obsolete**, with known security advisories. Updating it is up to Piwigo, not to this theme.
 
 ### Preview
 
-![Preview](https://raw.githubusercontent.com/tkuther/piwigo-bootstrap-darkroom/master/screenshot.png)
+![Preview](screenshot.png)
 
 ### Components
 
