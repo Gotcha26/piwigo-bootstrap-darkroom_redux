@@ -31,7 +31,7 @@
       </div>
       <span class="jm-field-desc">{'bd_desc_bootstrap_theme'|@translate|escape}</span>
       <div class="jm-field-controls">
-        {include file=$BD_CHOICE_GRID_PARTIAL name='bootstrap_theme' groups=$BD_VARIANTS value=$theme_config->bootstrap_theme label='Color theme'|@translate}
+        {include file=$JM_CHOICE_GRID_PARTIAL name='bootstrap_theme' groups=$BD_VARIANTS value=$theme_config->bootstrap_theme label='Color theme'|@translate}
       </div>
     </div>
     {* Derived from the variant by bd-admin.js, as before. *}
