@@ -11,10 +11,18 @@ Usage (from the repository root):
 """
 
 import argparse
+import copy
 import fnmatch
+import io
 import json
+import os
+import re
+import shutil
 import subprocess
 import sys
+import tarfile
+import urllib.request
+from dataclasses import dataclass, field
 from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parent
@@ -22,6 +30,7 @@ ROOT = TOOLS.parent
 MANIFEST = TOOLS / "vendor.json"
 
 SOURCES = ("npm", "github", "manual", "frozen")
+VERSION_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z._+-]*$")
 
 
 class ManifestError(Exception):
@@ -93,13 +102,174 @@ def check(manifest, root, tracked):
     return problems
 
 
-def main(argv=None, tracked=tracked_files):
+class UpdateError(Exception):
+    pass
+
+
+@dataclass
+class UpdatePlan:
+    name: str
+    version: str
+    added: list
+    modified: list
+    removed: list
+    staged: dict = field(repr=False)
+
+
+def http_get(url):
+    request = urllib.request.Request(url, headers={"User-Agent": "bootstrap-darkroom-vendor/1"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def tarball_url(entry, name, version):
+    if entry["source"] == "npm":
+        return "https://registry.npmjs.org/%s/-/%s-%s.tgz" % (name, name.split("/")[-1], version)
+    return "https://codeload.github.com/%s/tar.gz/%s" % (entry["repo"], version)
+
+
+def _read_archive(data):
+    """Return {relative path: bytes} for the regular files of a .tgz, minus its top folder.
+
+    The whole archive is refused when any member is a link or tries to leave the
+    extraction root: nothing is trusted from a downloaded file.
+    """
+    files = {}
+    try:
+        archive = tarfile.open(fileobj=io.BytesIO(data), mode="r:gz")
+    except (tarfile.TarError, OSError, EOFError) as error:
+        raise UpdateError("not a valid .tgz archive: %s" % error)
+    with archive:
+        for member in archive.getmembers():
+            parts = member.name.replace("\\", "/").split("/")
+            if member.name.startswith(("/", "\\")) or ".." in parts or ":" in parts[0]:
+                raise UpdateError("unsafe path in archive: %s" % member.name)
+            if member.issym() or member.islnk() or member.isdev():
+                raise UpdateError("link or device in archive: %s" % member.name)
+            if not member.isfile() or len(parts) < 2:
+                continue
+            files["/".join(parts[1:])] = archive.extractfile(member).read()
+    return files
+
+
+SOURCE_MAP_COMMENT = re.compile(rb"[ \t]*(?://#|/\*#)[ \t]*sourceMappingURL=[^\r\n]*?(?:\*/)?[ \t]*(?:\r?\n|$)")
+
+
+def _without_source_map(path, content):
+    """The theme ships no source maps: drop *.map files (done by the caller) and the
+    sourceMappingURL comment of the scripts and stylesheets that point to them."""
+    if path.endswith((".js", ".css")):
+        return SOURCE_MAP_COMMENT.sub(b"", content)
+    return content
+
+
+def plan_update(name, version, manifest, root, fetch):
+    """Download <name>@<version> and work out what would change; write nothing."""
+    entry = manifest["components"].get(name)
+    if entry is None:
+        raise UpdateError("unknown component: %s" % name)
+    if entry["source"] not in ("npm", "github"):
+        raise UpdateError("%s is %s: it cannot be updated by this tool" % (name, entry["source"]))
+    if not VERSION_RE.match(version):
+        raise UpdateError("invalid version: %r" % version)
+    url = tarball_url(entry, name, version)
+    try:
+        data = fetch(url)
+    except OSError as error:
+        raise UpdateError("cannot download %s: %s" % (url, error))
+    available = _read_archive(data)
+
+    staged = {}
+    for pattern in entry["files"]:
+        matches = {path: _without_source_map(path, content) for path, content in available.items()
+                   if fnmatch.fnmatchcase(path, pattern) and not path.endswith(".map")}
+        if not matches:
+            raise UpdateError("%s@%s has no file matching %s" % (name, version, pattern))
+        staged.update(matches)
+
+    target = Path(root) / "node_modules" / name
+    current = {}
+    if target.is_dir():
+        for path in target.rglob("*"):
+            relative = path.relative_to(target).as_posix()
+            if path.is_file() and any(fnmatch.fnmatchcase(relative, p) for p in entry["files"]):
+                current[relative] = path.read_bytes()
+    return UpdatePlan(
+        name=name, version=version, staged=staged,
+        added=sorted(set(staged) - set(current)),
+        removed=sorted(set(current) - set(staged)),
+        modified=sorted(p for p in staged if p in current and staged[p] != current[p]))
+
+
+def _manifest_text(manifest):
+    return json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+
+
+def apply_update(plan, manifest, root, manifest_path):
+    """Replace node_modules/<name>/ by the staged files and bump the manifest.
+
+    Everything is prepared beside the target first; the swap is rolled back if
+    any step fails, so a component is never left half updated.
+    """
+    entry = manifest["components"][plan.name]
+    updated = copy.deepcopy(manifest)
+    updated["components"][plan.name]["version"] = plan.version
+    if entry["source"] == "github":
+        updated["components"][plan.name]["ref"] = plan.version
+
+    target = Path(root) / "node_modules" / plan.name
+    fresh = target.with_name(target.name + ".vendor-new")
+    backup = target.with_name(target.name + ".vendor-old")
+    manifest_path = Path(manifest_path)
+    manifest_new = manifest_path.with_name(manifest_path.name + ".new")
+    for leftover in (fresh, backup):
+        if leftover.exists():
+            shutil.rmtree(leftover)
+    try:
+        for relative, content in plan.staged.items():
+            destination = fresh / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(content)
+        manifest_new.write_bytes(_manifest_text(updated).encode("utf-8"))
+        if target.exists():
+            os.replace(target, backup)
+        os.replace(fresh, target)
+        os.replace(manifest_new, manifest_path)
+    except OSError as error:
+        if backup.exists():
+            if target.exists():
+                shutil.rmtree(target)
+            os.replace(backup, target)
+        raise UpdateError("update of %s failed and was rolled back: %s" % (plan.name, error))
+    finally:
+        for leftover in (fresh, backup):
+            if leftover.exists():
+                shutil.rmtree(leftover, ignore_errors=True)
+        if manifest_new.exists():
+            manifest_new.unlink()
+
+
+def _print_plan(plan):
+    print("%s -> %s" % (plan.name, plan.version))
+    for label, paths in (("added", plan.added), ("modified", plan.modified), ("removed", plan.removed)):
+        for path in paths:
+            print("  %-8s %s" % (label, path))
+    if not (plan.added or plan.modified or plan.removed):
+        print("  no file changes")
+
+
+def main(argv=None, tracked=tracked_files, fetch=http_get):
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--root", default=str(ROOT), help="repository root")
     common.add_argument("--manifest", default=str(MANIFEST), help="path to vendor.json")
     parser = argparse.ArgumentParser(prog="vendor.py", description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("check", parents=[common], help="verify the manifest against the versioned files")
+    update = sub.add_parser("update", parents=[common],
+                            help="show (or with --apply, perform) the update of one component")
+    update.add_argument("name")
+    update.add_argument("version", help="npm version, or tag / commit for a GitHub source")
+    update.add_argument("--apply", action="store_true", help="write the changes (default: dry run)")
     args = parser.parse_args(argv)
 
     try:
@@ -107,6 +277,20 @@ def main(argv=None, tracked=tracked_files):
     except ManifestError as error:
         print("vendor.json: %s" % error, file=sys.stderr)
         return 2
+
+    if args.command == "update":
+        try:
+            plan = plan_update(args.name, args.version, manifest, Path(args.root), fetch)
+            _print_plan(plan)
+            if not args.apply:
+                print("Dry run: nothing written. Re-run with --apply to perform it.")
+                return 0
+            apply_update(plan, manifest, Path(args.root), args.manifest)
+        except UpdateError as error:
+            print("update: %s" % error, file=sys.stderr)
+            return 1
+        print("Applied. Review with 'git diff', then run the manual checklist (see README).")
+        return 0
 
     if args.command == "check":
         problems = check(manifest, Path(args.root), tracked(Path(args.root)))
