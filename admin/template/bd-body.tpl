@@ -3,10 +3,13 @@
    save posts every field at once. It never submits (no action, type="button" save).
 
    Storage contract: every name="" below is a key of Config::$defaults, unchanged
-   from the former settings template. Dependent fields are greyed out (.is-disabled +
-   inert), never disabled: a disabled field would be left out of the POST and its
-   stored value wiped. Their dependency is declared by data-bd-when:
-   "<checkbox name>" or "<field name>=<value>".
+   from the former settings template. Dependent fields are hidden while their parent
+   is off (#32), with the hidden attribute, never disabled: a disabled field would be
+   left out of the POST and its stored value wiped; a hidden one is still posted.
+   Their dependency is declared by data-bd-when: "<checkbox name>" or
+   "<field name>=<value>". The server renders the initial hidden state, matching
+   that rule, so that rows do not show and then vanish on load; bd-admin.js keeps
+   it in sync afterwards.
 
    Every field carries a caption and a tooltip (shared TPL-BRICKS § documenting a
    field, #29): the caption (.jm-field-desc, bd_desc_*) says what the field IS, the
@@ -54,7 +57,7 @@
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-fluid_width" name="fluid_width" value="1"{if $theme_config->fluid_width} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="fluid_width">
+    <div class="jm-field jm-field--row" data-bd-when="fluid_width"{if !$theme_config->fluid_width} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-fluid_width_col_xxl">{'Use 6 colums for viewports >= 1680px'|@translate|escape}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_fluid_width_col_xxl'|@translate}</span></span>
@@ -73,7 +76,7 @@
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-logo_image_enabled" name="logo_image_enabled" value="1"{if $theme_config->logo_image_enabled} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="logo_image_enabled">
+    <div class="jm-field jm-field--row" data-bd-when="logo_image_enabled"{if !$theme_config->logo_image_enabled} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-logo_image_path">{'Path'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_logo_image_path'|@translate}</span></span>
@@ -101,7 +104,7 @@
         </select>
       </div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
+    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy"{if $theme_config->page_header != 'fancy'} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-page_header_image">{'Background image'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_image'|@translate}</span></span>
@@ -111,7 +114,7 @@
       {* Informative placeholder: an image of the maintainer's gallery, full URL. *}
       <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-page_header_image" name="page_header_image" value="{$theme_config->page_header_image|escape:'html'}" placeholder="https://galerie.julien-moreau.fr/i.php?/upload/2026/01/08/20260108151136-96d856d6-xl.jpg"></div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
+    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy"{if $theme_config->page_header != 'fancy'} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-page_header_both_navs">{'Integrate lower navbar'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_both_navs'|@translate}</span></span>
@@ -120,7 +123,7 @@
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-page_header_both_navs" name="page_header_both_navs" value="1"{if $theme_config->page_header_both_navs} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
+    <div class="jm-field jm-field--row" data-bd-when="page_header=fancy"{if $theme_config->page_header != 'fancy'} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-page_header_full">{'Span the full viewport height'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_full'|@translate}</span></span>
@@ -384,7 +387,7 @@
         </select>
       </div>
     </div>
-    <div class="jm-field jm-field--row" data-bd-when="comments_type=disqus">
+    <div class="jm-field jm-field--row" data-bd-when="comments_type=disqus"{if $theme_config->comments_type != 'disqus'} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-comments_disqus_shortname">{'Disqus shortname'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_comments_disqus_shortname'|@translate}</span></span>
@@ -434,7 +437,7 @@
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_enabled" name="social_enabled" value="1"{if $theme_config->social_enabled} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     {foreach from=['social_twitter' => 'Twitter', 'social_facebook' => 'Facebook', 'social_pinterest' => 'Pinterest', 'social_vk' => 'VK'] key=bd_key item=bd_network}
-    <div class="jm-field jm-field--row" data-bd-when="social_enabled">
+    <div class="jm-field jm-field--row" data-bd-when="social_enabled"{if !$theme_config->social_enabled} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-{$bd_key}">{$bd_network|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{"bd_tip_$bd_key"|@translate}</span></span>
@@ -444,7 +447,7 @@
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-{$bd_key}" name="{$bd_key}" value="1"{if $theme_config->$bd_key} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     {/foreach}
-    <div class="jm-field jm-field--row" data-bd-when="social_enabled">
+    <div class="jm-field jm-field--row" data-bd-when="social_enabled"{if !$theme_config->social_enabled} hidden{/if}>
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-social_buttons">{'Use colored share buttons instead of icons'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_social_buttons'|@translate}</span></span>
