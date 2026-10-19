@@ -104,7 +104,7 @@ $lang['bd_tip_bootstrap_theme'] = 'Click a thumbnail to choose it.<br>Darkroom i
 $lang['bd_desc_fluid_width'] = 'Spreads the pages over the whole width of the window instead of a centred column.';
 $lang['bd_tip_fluid_width'] = 'Off: the content stays in a centred column, whose width depends on the screen.<br>On: the thumbnail grid uses all the room, which suits large screens.';
 $lang['bd_desc_fluid_width_col_xxl'] = 'Adds a sixth thumbnail column on very wide screens.';
-$lang['bd_tip_fluid_width_col_xxl'] = 'Applies from a window width of 1680 px, and only with the full width layout on.';
+$lang['bd_tip_fluid_width_col_xxl'] = 'Applies from a window width of 1680 px, and only with the full width layout on.';
 $lang['bd_desc_logo_image_enabled'] = 'Shows an image in the navigation bar instead of the gallery title.';
 $lang['bd_tip_logo_image_enabled'] = 'Set the image in Path below. The gallery title becomes the image\'s alternative text.';
 $lang['bd_desc_logo_image_path'] = 'Location of the logo image.';
@@ -148,7 +148,7 @@ $lang['bd_tip_slick_centered'] = 'Works best with infinite looping on: otherwise
 $lang['bd_desc_photoswipe'] = 'Full-screen slideshow with zoom and swipe, opened from the photo page.';
 $lang['bd_tip_photoswipe'] = 'Turn it off if you use another slideshow, such as the Fotorama plugin or Piwigo\'s own.';
 $lang['bd_desc_photoswipe_interval'] = 'How long each photo stays on screen when the slideshow plays by itself.';
-$lang['bd_tip_photoswipe_interval'] = 'In milliseconds, from 1000 to 50000.<br>Example: <code>3500</code> = 3.5 seconds.';
+$lang['bd_tip_photoswipe_interval'] = 'In milliseconds, from 1000 to 50000.<br>Example: <code>3500</code> = 3.5 seconds.';
 $lang['bd_label_quicksearch_navbar'] = 'Quick search in the navigation bar';
 $lang['bd_desc_quicksearch_navbar'] = 'Puts Piwigo\'s quick search field directly in the navigation bar.';
 $lang['bd_tip_quicksearch_navbar'] = 'Off: the quick search stays in the menu, when its Menu block shows it.';
