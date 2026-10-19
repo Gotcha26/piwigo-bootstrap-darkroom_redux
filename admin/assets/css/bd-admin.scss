@@ -1,12 +1,20 @@
 @charset "UTF-8";
 // bd-admin.scss: Bootstrap Darkroom delta on top of the shared design system.
 // No `@use 'common'` here: it ships in bd-common.css, loaded BEFORE this file by
-// jm_css_bundle(). No rule on .jm-* classes either: the panel consumes them as is.
+// jm_css_bundle(). No rule on .jm-* classes either: the panel consumes them as is,
+// save for the identity icon modifier below.
 //
-// No identity glyph yet: the 'bd' slug is not in the toolkit's icon catalogue, and
-// the header renders no icon box while JM_HEADER_ICON is empty (#17).
+// Identity icon (header and credits modal, PLUGIN-ICON doctrine): crescent moon from
+// the toolkit's piwigo-logo catalogue, slug 'bd' set by admin/descriptor.php. A theme
+// has no admin sidebar entry, so the rule lives here, loaded on the panel page only.
 
+@use 'plugin-icon' as *;
+@use 'plugin-icon-glyphs' as *;
 @use 'bd-choice-grid';
+
+.jm-plugin-icon--bd {
+  @include jm-plugin-icon-glyph('bd');
+}
 
 #bd-admin {
   // Piwigo's admin theme gives <form> a margin, which narrows the sections inside
