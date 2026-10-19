@@ -1,0 +1,11 @@
+@charset "UTF-8";
+// bd-common.scss: the shared JM design system, compiled once for the whole admin
+// panel. Resolved through --load-path to the hub's _common.scss. It carries the
+// panel's light/dark switch (_theme.scss).
+//
+// Never write `@use 'common'` in any other SCSS entry of this theme: Sass does
+// not deduplicate across output files, a second import would emit a full copy.
+//
+// Never rename this file to `jm-common.scss`: the `jm-` prefix is reserved for
+// injected commons and is gitignored, so the file would silently go untracked.
+@use 'common';
