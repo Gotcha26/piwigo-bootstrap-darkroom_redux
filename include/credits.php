@@ -20,7 +20,6 @@ return array(
     array('name' => 'jQuery Touch Events 2.0.0', 'url' => 'https://github.com/benmajor/jQuery-Touch-Events', 'author' => 'Ben Major', 'license' => 'MIT'),
     array('name' => 'Selectize 0.12.6', 'url' => 'https://selectize.dev', 'author' => 'Brian Reavis', 'license' => 'Apache-2.0'),
     array('name' => 'Bootstrap Social 5.1.1', 'url' => 'https://lipis.github.io/bootstrap-social/', 'author' => 'Panayiotis Lipiridis', 'license' => 'MIT'),
-    array('name' => 'Equal Heights 1.01', 'url' => 'https://github.com/Philio/bootstrapdefault', 'author' => 'Rob Glazebrook, via Bootstrap Default', 'license' => 'GPL-3.0-or-later'),
     array('name' => 'jQuery.awesomeCloud 0.2', 'url' => 'https://github.com/Philio/bootstrapdefault', 'author' => 'Russ Porosky, IndyArmy Network, via Bootstrap Default', 'license' => 'not stated'),
     array('name' => 'rating.js', 'url' => 'https://github.com/Philio/bootstrapdefault', 'author' => 'Piwigo core, via Bootstrap Default', 'license' => 'GPL-2.0'),
   ),

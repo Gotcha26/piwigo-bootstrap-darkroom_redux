@@ -128,18 +128,6 @@
       "note": "The 35 stylesheets under css/ are frozen at Bootstrap 4.3.1 ; not rebuilt (node-sass chain retired). Adapt through override CSS.",
       "credit": false
     },
-    "jquery.equalheights": {
-      "name": "Equal Heights",
-      "url": "https://github.com/Philio/bootstrapdefault",
-      "author": "Rob Glazebrook, via Bootstrap Default",
-      "version": "1.01",
-      "source": "manual",
-      "license": "GPL-3.0-or-later",
-      "files": [
-        "js/jquery.equalheights.js"
-      ],
-      "note": "Rob Glazebrook, imported from Bootstrap Default."
-    },
     "jquery.awesomeCloud": {
       "name": "jQuery.awesomeCloud",
       "url": "https://github.com/Philio/bootstrapdefault",
@@ -218,7 +206,6 @@
         "jQuery-Touch-Events",
         "selectize",
         "bootstrap-social",
-        "jquery.equalheights",
         "jquery.awesomeCloud",
         "rating.js"
       ]
