@@ -249,6 +249,118 @@ def apply_update(plan, manifest, root, manifest_path):
             manifest_new.unlink()
 
 
+STABLE_VERSION = re.compile(r"^v?(\d+(?:\.\d+)*)$")
+# Bootstrap's scripts are loaded with the frozen 4.3.1 stylesheets (css/).
+CSS_COUPLED = ("bootstrap", "bootstrap-material-design")
+OSV_URL = "https://api.osv.dev/v1/query"
+
+
+def _numeric(version):
+    match = STABLE_VERSION.match(version)
+    return tuple(int(part) for part in match.group(1).split(".")) if match else None
+
+
+def latest_same_major(current, available):
+    """Highest stable version sharing the major of 'current'; None if nothing newer."""
+    base = _numeric(current)
+    if base is None:
+        return None
+    best = None
+    for candidate in available:
+        number = _numeric(candidate)
+        if number and number[0] == base[0] and number > base and (best is None or number > best[0]):
+            best = (number, candidate)
+    return STABLE_VERSION.match(best[1]).group(1) if best else None
+
+
+def npm_versions(name, fetch):
+    return list(json.loads(fetch("https://registry.npmjs.org/%s" % name))["versions"])
+
+
+def git_run(command):
+    return subprocess.run(command, capture_output=True, text=True, check=True, timeout=60).stdout
+
+
+def git_tags(repo, run):
+    output = run(["git", "ls-remote", "--tags", "https://github.com/%s.git" % repo])
+    tags = []
+    for line in output.splitlines():
+        reference = line.split("\t")[-1]
+        if reference.startswith("refs/tags/") and not reference.endswith("^{}"):
+            tags.append(reference[len("refs/tags/"):])
+    return tags
+
+
+def http_post(url, body):
+    request = urllib.request.Request(url, data=body, headers={
+        "User-Agent": "bootstrap-darkroom-vendor/1", "Content-Type": "application/json"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def advisories(name, version, post):
+    """Known advisory identifiers (OSV) for an npm package at a given version."""
+    body = json.dumps({"version": version, "package": {"name": name, "ecosystem": "npm"}}).encode("utf-8")
+    return [vuln["id"] for vuln in json.loads(post(OSV_URL, body)).get("vulns", [])]
+
+
+@dataclass
+class OutdatedRow:
+    name: str
+    current: str
+    kind: str
+    fork: bool = False
+    latest: str = None
+    advisories: list = field(default_factory=list)
+    notes: list = field(default_factory=list)
+    error: str = None
+
+
+def outdated(manifest, fetch, run, post):
+    """Compare every component to what is published. Read-only. Returns (rows, failed)."""
+    rows = []
+    failed = False
+    for name, entry in manifest["components"].items():
+        row = OutdatedRow(name=name, current=entry["version"], kind=entry["source"],
+                          fork=bool(entry.get("fork")))
+        rows.append(row)
+        if entry["source"] in ("manual", "frozen") or row.fork:
+            continue
+        try:
+            if entry["source"] == "npm":
+                row.latest = latest_same_major(entry["version"], npm_versions(name, fetch))
+            else:
+                row.latest = latest_same_major(entry["version"], git_tags(entry["repo"], run))
+        except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+            row.error = "%s" % error
+        if entry["source"] == "npm":
+            try:
+                row.advisories = advisories(name, entry["version"], post)
+            except (OSError, ValueError) as error:
+                row.error = row.error or "advisories: %s" % error
+        if row.latest and name in CSS_COUPLED:
+            row.notes.append("scripts newer than the frozen 4.3.1 stylesheets: not tested together")
+        failed = failed or row.error is not None
+    return rows, failed
+
+
+def _print_rows(rows):
+    print("%-32s %-12s %-14s %s" % ("component", "shipped", "latest (same major)", "advisories / notes"))
+    for row in rows:
+        if row.error:
+            latest, extra = "unreachable", row.error
+        elif row.kind in ("manual", "frozen"):
+            latest, extra = "-", "%s: not comparable" % row.kind
+        elif row.fork:
+            latest, extra = "-", "fork: compare with the upstream project by hand"
+        else:
+            latest = row.latest or "up to date"
+            extra = ", ".join(row.advisories) if row.advisories else "none listed in OSV"
+        print("%-32s %-12s %-19s %s" % (row.name, row.current, latest, extra))
+        for note in row.notes:
+            print("%-32s   note: %s" % ("", note))
+
+
 def _print_plan(plan):
     print("%s -> %s" % (plan.name, plan.version))
     for label, paths in (("added", plan.added), ("modified", plan.modified), ("removed", plan.removed)):
@@ -258,13 +370,14 @@ def _print_plan(plan):
         print("  no file changes")
 
 
-def main(argv=None, tracked=tracked_files, fetch=http_get):
+def main(argv=None, tracked=tracked_files, fetch=http_get, run=git_run, post=http_post):
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--root", default=str(ROOT), help="repository root")
     common.add_argument("--manifest", default=str(MANIFEST), help="path to vendor.json")
     parser = argparse.ArgumentParser(prog="vendor.py", description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("check", parents=[common], help="verify the manifest against the versioned files")
+    sub.add_parser("outdated", parents=[common], help="compare shipped versions to the latest published (read-only)")
     update = sub.add_parser("update", parents=[common],
                             help="show (or with --apply, perform) the update of one component")
     update.add_argument("name")
@@ -277,6 +390,13 @@ def main(argv=None, tracked=tracked_files, fetch=http_get):
     except ManifestError as error:
         print("vendor.json: %s" % error, file=sys.stderr)
         return 2
+
+    if args.command == "outdated":
+        rows, failed = outdated(manifest, fetch, run, post)
+        _print_rows(rows)
+        if failed:
+            print("Some lookups failed (see 'unreachable' above): the report is incomplete.", file=sys.stderr)
+        return 1 if failed else 0
 
     if args.command == "update":
         try:
