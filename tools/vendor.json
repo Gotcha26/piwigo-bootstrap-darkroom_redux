@@ -192,5 +192,45 @@
       "author": "Fontsource",
       "license": "UFL 1.0"
     }
+  ],
+  "credits_groups": [
+    {
+      "id": "core",
+      "items": [
+        "Bootstrap Darkroom",
+        "bootstrap",
+        "bootswatch",
+        "bootstrap-material-design",
+        "popper.js"
+      ]
+    },
+    {
+      "id": "viewers",
+      "items": [
+        "photoswipe",
+        "slick-carousel"
+      ]
+    },
+    {
+      "id": "scripts",
+      "items": [
+        "theme.js",
+        "jQuery-Touch-Events",
+        "selectize",
+        "bootstrap-social",
+        "jquery.equalheights",
+        "jquery.awesomeCloud",
+        "rating.js"
+      ]
+    },
+    {
+      "id": "fonts",
+      "items": [
+        "@fortawesome/fontawesome-free",
+        "Photography Icons",
+        "Cabin Sketch, Lato, Montserrat, Neucha, News Cycle, Nunito Sans, Open Sans, PT Sans, Roboto, Source Sans Pro",
+        "Ubuntu"
+      ]
+    }
   ]
 }
