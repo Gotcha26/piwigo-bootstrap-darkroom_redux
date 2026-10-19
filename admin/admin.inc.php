@@ -103,8 +103,10 @@ if (!isset($bd_config->thumbnail_nb_images)) {
 
 // --- 6. Shared asset store and admin theme (light / dark) ---
 // INJECT_PHP_COMMONS drops the files into include/, it does not load them.
-bd_admin_require('jm-vendor-pins.php', $bd_root . '/include');
-bd_admin_require('jm-vendor.php', $bd_root . '/include');
+// Plain election here: the store is fleet-wide, its freshest copy is the right
+// one, and this panel needs no recent addition to it.
+jm_boot_require_one('jm-vendor-pins.php', $bd_root . '/include');
+jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
 }
