@@ -25,15 +25,7 @@
 
     <h3>{'Privacy'|@translate}</h3>
 
-    <p class="bd-about-warning">{'Some color themes load their web fonts from Google servers each time a page is displayed. The IP address of your visitors, their browser and the address of the page they are viewing are then sent to a third party. The following color themes are affected:'|@translate}</p>
-
-    <p class="ident">bootswatch-cosmo, bootswatch-cyborg, bootswatch-darkly, bootswatch-flatly,
-        bootswatch-journal, bootswatch-lumen, bootswatch-lux, bootswatch-materia,
-        bootswatch-minty, bootswatch-sandstone, bootswatch-simplex, bootswatch-sketchy,
-        bootswatch-solar, bootswatch-spacelab, bootswatch-superhero, bootswatch-united,
-        bootswatch-yeti</p>
-
-    <p>{'Every other color theme, including the default one, serves its fonts from your own server.'|@translate}</p>
+    <p>{'Every color theme serves its web fonts from your own server. No web font is requested from a third party such as Google Fonts.'|@translate}</p>
 
     <h3>{'Third-party components'|@translate}</h3>
 
