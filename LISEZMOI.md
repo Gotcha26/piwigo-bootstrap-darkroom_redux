@@ -52,7 +52,30 @@ reformatage).
 ## Source maps
 
 Le dépôt ne contient pas de source maps (`*.map`) : inutiles à l'exécution, elles pesaient
-à elles seules les deux tiers du dépôt. La compilation `npm run build` ne les produit plus.
+à elles seules les deux tiers du dépôt. `tools/vendor.py` n'en conserve jamais et retire les
+commentaires `sourceMappingURL` des fichiers qu'il met à jour.
+
+## CSS figé et composants tiers
+
+Les feuilles de style de `css/` sont **figées** (Bootstrap 4.3.1) : la chaîne node-sass/Yarn est
+retirée, elle ne s'installe plus sur les Node et Python actuels. `scss/` reste en référence. Pour
+adapter l'apparence, écrire des surcharges dans `local/bootstrap_darkroom/custom.css` (chargé en
+dernier par le thème) ou dans un thème enfant.
+
+Les composants tiers (`node_modules/`, fichiers d'exécution seulement) sont décrits dans
+`tools/vendor.json`. Python 3 suffit, ni npm ni Yarn :
+
+```
+python tools/vendor.py check                      # le manifeste correspond-il aux fichiers versionnés ?
+python tools/vendor.py outdated                   # versions plus récentes (même majeure) et avis connus
+python tools/vendor.py update popper.js 1.16.1    # simulation : montre ce qui changerait
+python tools/vendor.py update popper.js 1.16.1 --apply
+python -m unittest discover -s tools/tests        # tests de l'outil
+```
+
+`update` n'écrit rien sans `--apply`. Après une mise à jour : `git diff`, puis ouvrir sur une
+galerie l'accueil, une photo (PhotoSwipe), le carrousel de miniatures (Slick), la recherche
+(Selectize), les gestes tactiles, la notation et le nuage de tags.
 
 ## Licence et attribution
 

@@ -68,30 +68,21 @@ A demo is available at https://demo2.piwigo.com/ and another one at https://demo
 * [Photography Icons](https://thenounproject.com/DmitryBaranovskiy/collection/photo/) by [Dmitry Baranovskiy](https://thenounproject.com/DmitryBaranovskiy/), licensed under [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/)
 
 ### Development & Customizing
-* All stylesheets are compiled from Bootstrap's Sass source files using node-sass.
-* Dependencies are managed using yarn. Dist dependencies are separated from the usual npm bloat using .gitignore tricks
-* To install build dependencies, use
+* **The stylesheets under `css/` are compiled and frozen** at Bootstrap 4.3.1. The node-sass/Yarn build chain was retired (it no longer installs on current Node and Python); `scss/` is kept as a reference only. Do not expect `npm run build` to exist.
+* To adapt the look, write override rules in `local/bootstrap_darkroom/custom.css` (the theme loads it last) or in a child theme.
+* Third-party scripts and styles live under `node_modules/` (runtime files only, see `.gitignore`) and are described by [`tools/vendor.json`](tools/vendor.json): name, version, origin, licence and kept files. No npm and no Yarn are involved, only Python 3:
+
 ```
-npm install yarn && yarn install
+python tools/vendor.py check                     # manifest vs versioned files
+python tools/vendor.py outdated                  # latest same-major version + known advisories (read-only)
+python tools/vendor.py update popper.js 1.16.1   # dry run: shows what would change
+python tools/vendor.py update popper.js 1.16.1 --apply
+python -m unittest discover -s tools/tests       # tests of the tool
 ```
 
-The build process is based on npm scripts and uses common shell functions, so it might not work on Windows.
+`update` writes nothing without `--apply`, never keeps source maps, and rolls back if a step fails. Review the result with `git diff`, then open these pages on a gallery: home, a photo (PhotoSwipe), the thumbnail carousel (Slick), search (Selectize), touch gestures, rating, tag cloud.
 
-To build everything, use
-```
-npm run build
-```
-To build only bootswatch, for example, use
-```
-npm run build:bootswatch
-```
-See [package.json](https://raw.githubusercontent.com/tkuther/piwigo-bootstrap-darkroom/master/package.json) for available script commands.
-
-There is built-in support for a custom Sass build.
-* Create the file _scss/custom/custom.scss_
-* Include all required Boostrap stuff in there, override variables as you wish, just like any custom bootstrap build
-* Compile with `npm run build:custom`
-* Select "Custom" style in the theme's configuration
+jQuery and jQuery Cookie are not shipped: the theme uses the copies bundled with Piwigo, and jQuery there (1.11.3) is old and obsolete. Updating it is Piwigo's job.
 
 ### Thanks
 * Phil Bayfield for his work on the Bootstrap Default theme, which this theme was initiallly based on as a child theme. It's grown up now.
