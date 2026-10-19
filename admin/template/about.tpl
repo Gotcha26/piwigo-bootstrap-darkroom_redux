@@ -25,7 +25,7 @@
 
     <h3>{'Privacy'|@translate}</h3>
 
-    <p>{'Every color theme serves its web fonts from your own server. No web font is requested from a third party such as Google Fonts.'|@translate}</p>
+    <p>{'Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.'|@translate}</p>
 
     <h3>{'Third-party components'|@translate}</h3>
 
