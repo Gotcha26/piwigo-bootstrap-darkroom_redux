@@ -23,8 +23,17 @@
 {$elt}
 {/foreach}
 {/if}
-          <div><a href="https://github.com/tkuther/piwigo-bootstrap-darkroom">Bootstrap Darkroom Theme</a> by Thomas Kuther.</div>
-          <div><a href="https://thenounproject.com/DmitryBaranovskiy/collection/photo/">Photography Icons</a> by <a href="https://thenounproject.com/DmitryBaranovskiy/">Dmitry Baranovskiy</a>, licensed under <a href="https://creativecommons.org/licenses/by/3.0/us/">Creative Commons 3.0</a>.
+          <p>{'bd_about_theme'|@translate} {'bd_credits_license'|@translate}</p>
+{if not empty($bd_credits)}
+{foreach from=$bd_credits item=group}
+          <h5 class="mt-4">{$group.title}</h5>
+          <ul class="list-unstyled">
+{foreach from=$group.items item=item}
+            <li><a href="{$item.url}">{$item.name}</a> — {$item.author} ({$item.license})</li>
+{/foreach}
+          </ul>
+{/foreach}
+{/if}
         </div>
     </div>
 </div>
