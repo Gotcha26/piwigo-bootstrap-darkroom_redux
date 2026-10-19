@@ -40,28 +40,52 @@
 {/foreach}
     </div>
 {else}
-{combine_script id='jquery.awesomeCloud' load='footer' path="themes/bootstrap_darkroom/js/jquery.awesomeCloud.js"}
-{footer_script require='jquery.awesomeCloud'}{strip}
-    $(document).ready(function(){
-        $("#tagCloudCanvas").awesomeCloud({
-            "size" : {
-                "grid": 12,
-                "factor": 0,
-                "normalize": false
-            },
-            "options": {
-                "color": "gradient",
-                "rotationRatio": 0.2,
-            },
-            "color": {
-                "start": $('#tagCloudGradientStart').css('color'),
-                "end": $('#tagCloudGradientEnd').css('color')
-            },
-            "font": "'Helvetica Neue',Helvetica,Arial,sans-serif",
-            "shape": "circle"
-        });
+{combine_script id='wordcloud' load='footer' path="themes/bootstrap_darkroom/node_modules/wordcloud/src/wordcloud2.js"}
+{footer_script require='jquery,wordcloud'}{literal}
+    $(document).ready(function() {
+      var $box = $('#tagCloudCanvas');
+      var words = [], urls = {}, max = 1;
+      $box.find('span').each(function() {
+        var weight = parseInt($(this).data('weight'), 10) || 1;
+        var $a = $(this).find('a');
+        words.push([$a.text(), weight]);
+        urls[$a.text()] = $a.attr('href');
+        max = Math.max(max, weight);
+      });
+
+      var rgb = function(selector) {
+        return ($(selector).css('color').match(/\d+/g) || [0, 0, 0]).slice(0, 3).map(Number);
+      };
+      var from = rgb('#tagCloudGradientStart'), to = rgb('#tagCloudGradientEnd');
+
+      var canvas = document.createElement('canvas');
+      canvas.width = $box.width();
+      canvas.height = $box.height();
+      canvas.style.cursor = 'pointer';
+      $box.append(canvas);
+
+      WordCloud(canvas, {
+        list: words,
+        gridSize: 12,
+        weightFactor: function(weight) {
+          return 14 + 46 * weight / max;
+        },
+        fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif",
+        rotateRatio: 0.2,
+        shape: 'circle',
+        backgroundColor: 'transparent',
+        color: function(word, weight) {
+          var t = weight / max;
+          return 'rgb(' + from.map(function(c, i) {
+            return Math.round(c + (to[i] - c) * t);
+          }).join(',') + ')';
+        },
+        click: function(item) {
+          window.location.href = urls[item[0]];
+        }
+      });
     });
-{/strip}{/footer_script}
+{/literal}{/footer_script}
     <div id="tagCloudCanvas">
 {foreach from=$tags item=tag}
         <span data-weight="{$tag.counter}"><a href="{$tag.URL}">{$tag.name}</a></span>
