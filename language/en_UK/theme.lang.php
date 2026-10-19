@@ -107,3 +107,19 @@ $lang['The scripts below were imported from the'] = 'The scripts below were impo
 $lang['theme by Phil Bayfield. They were not written for this theme.'] = 'theme by Phil Bayfield. They were not written for this theme.';
 $lang['Piwigo core, via Bootstrap Default'] = 'Piwigo core, via Bootstrap Default';
 $lang['Bootstrap Default, extended since'] = 'Bootstrap Default, extended since';
+
+// Admin panel on the shared jm-* shell (#17).
+$lang['bd_subtitle'] = 'A mobile-ready theme based on Bootstrap 4';
+$lang['bd_tab_appearance'] = 'Appearance';
+$lang['bd_tab_components'] = 'Components';
+$lang['bd_tab_social'] = 'Social media';
+$lang['bd_help_wip_title'] = 'Help: Bootstrap Darkroom';
+$lang['bd_help_wip_line1'] = 'The documentation is being written.';
+$lang['bd_help_wip_line2'] = 'Please check back soon.';
+$lang['bd_help_wip_close'] = 'Close';
+$lang['bd_msg_saved'] = 'Your configuration settings are saved';
+$lang['bd_msg_error'] = 'The settings could not be saved.';
+$lang['bd_shell_missing'] = 'The shared admin files are missing: install the theme from its release ZIP.';
+$lang['bd_variant_other'] = 'Other';
+$lang['bd_credits_note_privacy'] = 'Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.';
+$lang['bd_credits_note_jquery'] = 'jQuery is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.';

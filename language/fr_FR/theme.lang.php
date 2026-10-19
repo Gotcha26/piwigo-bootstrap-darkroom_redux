@@ -128,3 +128,19 @@ $lang['The scripts below were imported from the'] = 'Les scripts ci-dessous ont 
 $lang['theme by Phil Bayfield. They were not written for this theme.'] = 'de Phil Bayfield. Ils n’ont pas été écrits pour ce thème.';
 $lang['Piwigo core, via Bootstrap Default'] = 'noyau Piwigo, via Bootstrap Default';
 $lang['Bootstrap Default, extended since'] = 'Bootstrap Default, étendu depuis';
+
+// Panneau d'admin sur le socle commun jm-* (#17).
+$lang['bd_subtitle'] = 'Un thème adapté aux mobiles, basé sur Bootstrap 4';
+$lang['bd_tab_appearance'] = 'Apparence';
+$lang['bd_tab_components'] = 'Composants';
+$lang['bd_tab_social'] = 'Réseaux sociaux';
+$lang['bd_help_wip_title'] = 'Aide : Bootstrap Darkroom';
+$lang['bd_help_wip_line1'] = 'La documentation est en cours de rédaction.';
+$lang['bd_help_wip_line2'] = 'Merci de revenir prochainement.';
+$lang['bd_help_wip_close'] = 'Fermer';
+$lang['bd_msg_saved'] = 'Vos paramètres de configuration sont enregistrés';
+$lang['bd_msg_error'] = 'Les paramètres n\'ont pas pu être enregistrés.';
+$lang['bd_shell_missing'] = 'Les fichiers communs de l\'administration sont absents : installez le thème depuis son ZIP de version.';
+$lang['bd_variant_other'] = 'Autre';
+$lang['bd_credits_note_privacy'] = 'Tous les thèmes de couleur servent leurs polices depuis votre propre serveur, et les avatars des commentaires sont une image locale. Aucune police ni aucun avatar n\'est demandé à un tiers comme Google Fonts ou Gravatar.';
+$lang['bd_credits_note_jquery'] = 'jQuery n\'est pas livré avec ce thème : il est fourni par Piwigo lui-même, dont la version est ancienne (1.11.3, 2015) et obsolète. Sa mise à jour relève de Piwigo.';
