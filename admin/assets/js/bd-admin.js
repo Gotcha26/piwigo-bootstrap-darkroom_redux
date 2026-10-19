@@ -30,18 +30,17 @@
     return el.value; // a RadioNodeList or a select gives the selected value
   }
 
-  /* Dependent fields: data-bd-when="<checkbox>" or "<field>=<value>". Greyed out
-     with the shared .is-disabled state and made inert, never disabled: a disabled
-     field would be left out of the POST, and its stored value wiped. */
+  /* Dependent fields: data-bd-when="<checkbox>" or "<field>=<value>". Hidden while
+     their parent is off (#32), with the hidden attribute, never disabled: a disabled
+     field would be left out of the POST, and its stored value wiped; a hidden one is
+     still posted. The server renders the same initial state. */
   function syncDependents(form) {
     var rows = form.querySelectorAll('[data-bd-when]');
     for (var i = 0; i < rows.length; i++) {
       var rule = rows[i].getAttribute('data-bd-when').split('=');
       var current = valueOf(form, rule[0]);
       var on = rule.length > 1 ? current === rule[1] : current === true;
-      rows[i].classList.toggle('is-disabled', !on);
-      if (on) rows[i].removeAttribute('inert');
-      else rows[i].setAttribute('inert', '');
+      rows[i].hidden = !on;
     }
   }
 
