@@ -35,6 +35,48 @@ if (!function_exists('jm_boot_require_one')) {
     return false;
   }
 }
+if (!function_exists('bd_admin_require')) {
+  /**
+   * Loads one injected common for this panel.
+   *
+   * jm-boot elects the freshest copy among the ACTIVE PLUGINS only: a theme is
+   * never a candidate. On a gallery running an older fleet plugin, that plugin's
+   * copy would win, and the functions or keys this panel was built against
+   * (admin-page save dispatcher, theme credits) would be missing. So the theme's
+   * own copy goes first unless an active plugin declares a strictly fresher one.
+   * Every common guards each function with function_exists(): whichever copy
+   * loads second only fills the gaps, and both are loaded.
+   *
+   * A copy already loaded by a plugin earlier in the request (jm-ws.php is, from
+   * main.inc.php) keeps its existing functions; the theme's copy adds the rest.
+   *
+   * @param string $name Common file name (jm-*.php).
+   * @param string $dir  The theme's include/ folder.
+   */
+  function bd_admin_require($name, $dir) {
+    $local = $dir . '/' . $name;
+    $local_first = true;
+    $info = is_file($dir . '/jm-build-info.php') ? include $dir . '/jm-build-info.php' : null;
+    if (is_array($info) && isset($info['commons'][$name]) && is_array($info['commons'][$name])
+        && function_exists('jm_boot_scan') && function_exists('jm_boot_freshness_key')) {
+      $mine = jm_boot_freshness_key($info['commons'][$name]);
+      foreach (jm_boot_scan() as $plugin) {
+        $entry = isset($plugin['commons'][$name]) ? $plugin['commons'][$name] : null;
+        if (is_array($entry) && strcmp(jm_boot_freshness_key($entry), $mine) > 0) {
+          $local_first = false;
+          break;
+        }
+      }
+    }
+    if ($local_first && is_readable($local)) {
+      require_once $local;
+    }
+    jm_boot_require_one($name, $dir);
+    if (is_readable($local)) {
+      require_once $local;
+    }
+  }
+}
 
 // --- 2. Theme code ---
 require_once $bd_root . '/include/config.php';
@@ -42,7 +84,7 @@ require_once $bd_admin_dir . '/save.php';
 require_once $bd_admin_dir . '/descriptor.php';
 
 // --- 3. Save request: answered here, before any rendering, then exit ---
-jm_boot_require_one('jm-ws.php', $bd_root . '/include');
+bd_admin_require('jm-ws.php', $bd_root . '/include');
 if (function_exists('jm_ws_admin_page_dispatch')) {
   jm_ws_admin_page_dispatch('bootstrap_darkroom', bd_admin_save_methods());
 }
@@ -61,13 +103,13 @@ if (!isset($bd_config->thumbnail_nb_images)) {
 
 // --- 6. Shared asset store and admin theme (light / dark) ---
 // INJECT_PHP_COMMONS drops the files into include/, it does not load them.
-jm_boot_require_one('jm-vendor-pins.php', $bd_root . '/include');
-jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
+bd_admin_require('jm-vendor-pins.php', $bd_root . '/include');
+bd_admin_require('jm-vendor.php', $bd_root . '/include');
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
 }
 $bd_theme = 'clear';
-jm_boot_require_one('jm-theme-detector.php', $bd_root . '/include');
+bd_admin_require('jm-theme-detector.php', $bd_root . '/include');
 if (class_exists('JM_ThemeDetector')) {
   $bd_detector = new JM_ThemeDetector();
   $bd_theme = $bd_detector->getTheme();
@@ -105,7 +147,7 @@ $template->assign(array(
 
 // --- 10. "Help & support", rendered by the shell under the tabs ---
 // The else is not decorative: without it the shell includes an unassigned partial.
-jm_boot_require_one('jm-help-support.php', $bd_root . '/include');
+bd_admin_require('jm-help-support.php', $bd_root . '/include');
 if (function_exists('jm_help_support_boot')) {
   jm_help_support_boot($template, $bd_descriptor);
 } else {
@@ -116,13 +158,13 @@ if (function_exists('jm_help_support_boot')) {
 // Virtual path, it does not need to exist: jm-credits.php derives its template
 // folder as dirname(<path>) . '/template/', i.e. admin/template/ here, where the
 // jm-credits-*.tpl partials are injected.
-jm_boot_require_one('jm-credits.php', $bd_root . '/include');
+bd_admin_require('jm-credits.php', $bd_root . '/include');
 if (function_exists('jm_credits_boot')) {
   jm_credits_boot($template, $bd_descriptor, $bd_admin_dir . '/include');
 }
 
 // --- 12. Stylesheets in <head>: shared design system, then the theme's delta ---
-jm_boot_require_one('jm-asset.php', $bd_root . '/include');
+bd_admin_require('jm-asset.php', $bd_root . '/include');
 $bd_asset = function ($relative) use ($bd_url, $bd_root) {
   return function_exists('jm_asset_url')
     ? jm_asset_url($bd_url, $bd_root, $relative, array('css_family' => true, 'with_version' => true))

@@ -15,6 +15,13 @@
     margin: 0;
   }
 
+  // 35 thumbnails outgrow the shared 3000px cap of an open section on a narrow
+  // screen: the last cards would spill over the next section. Override offered
+  // by the shared section for bulky content.
+  [data-section-id="bd-colour"] {
+    --jm-section-body-max-height: none;
+  }
+
   .bd-code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.9em;

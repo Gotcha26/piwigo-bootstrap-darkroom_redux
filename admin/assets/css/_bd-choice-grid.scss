@@ -32,6 +32,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
   gap: var(--jm-gap-sm, 8px);
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  }
 }
 
 .bd-choice-card {
