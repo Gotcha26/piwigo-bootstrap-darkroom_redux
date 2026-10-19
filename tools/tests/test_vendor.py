@@ -255,6 +255,158 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(leftovers, ["lib"])
 
 
+REGISTRY = {"versions": {v: {} for v in ("1.0.0", "1.4.2", "1.5.0-beta.1", "2.0.0", "2.1.0")}}
+LS_REMOTE = (
+    "aaaa\trefs/tags/v1.0.0\n"
+    "bbbb\trefs/tags/v1.0.0^{}\n"
+    "cccc\trefs/tags/1.3.0\n"
+    "dddd\trefs/tags/2.0.0-rc1\n"
+)
+
+
+class OutdatedTest(unittest.TestCase):
+    def setUp(self):
+        self.manifest = {"components": {
+            "lib": component(version="1.0.0"),
+            "gh": component(source="github", repo="o/r", ref="v1.0.0", version="1.0.0"),
+            "forked": component(source="github", repo="o/fork", ref="abc", version="1.0.0", fork=True),
+            "bootstrap": component(version="1.0.0"),
+            "hand": component(source="manual", files=["js/h.js"]),
+            "css": {"version": "4.3.1", "source": "frozen", "license": "MIT"},
+        }}
+
+    @staticmethod
+    def fetch(url):
+        return json.dumps(REGISTRY).encode("utf-8")
+
+    @staticmethod
+    def git_run(command):
+        return LS_REMOTE
+
+    @staticmethod
+    def post(url, body):
+        return json.dumps({"vulns": [{"id": "GHSA-1"}, {"id": "CVE-2"}]}).encode("utf-8")
+
+    def rows(self, **overrides):
+        args = dict(fetch=self.fetch, run=self.git_run, post=self.post)
+        args.update(overrides)
+        rows, failed = vendor.outdated(self.manifest, **args)
+        return {row.name: row for row in rows}, failed
+
+    def test_latest_same_major_ignores_prereleases_and_other_majors(self):
+        self.assertEqual(vendor.latest_same_major("1.0.0", ["1.0.0", "1.4.2", "1.5.0-beta.1", "2.0.0"]), "1.4.2")
+        self.assertIsNone(vendor.latest_same_major("1.4.2", ["1.0.0", "1.4.2", "2.0.0"]))
+        self.assertEqual(vendor.latest_same_major("v1.0.0", ["v1.2.0", "1.3.0"]), "1.3.0")
+
+    def test_npm_versions_reads_the_registry(self):
+        urls = []
+
+        def fetch(url):
+            urls.append(url)
+            return self.fetch(url)
+
+        self.assertEqual(sorted(vendor.npm_versions("@s/lib", fetch)), sorted(REGISTRY["versions"]))
+        self.assertEqual(urls, ["https://registry.npmjs.org/@s/lib"])
+
+    def test_git_tags_parses_ls_remote_and_skips_peeled_refs(self):
+        commands = []
+
+        def git_run(command):
+            commands.append(command)
+            return LS_REMOTE
+
+        self.assertEqual(vendor.git_tags("o/r", git_run), ["v1.0.0", "1.3.0", "2.0.0-rc1"])
+        self.assertEqual(commands, [["git", "ls-remote", "--tags", "https://github.com/o/r.git"]])
+
+    def test_advisories_returns_ids_from_osv(self):
+        bodies = []
+
+        def post(url, body):
+            bodies.append((url, json.loads(body)))
+            return self.post(url, body)
+
+        self.assertEqual(vendor.advisories("lib", "1.0.0", post), ["GHSA-1", "CVE-2"])
+        self.assertEqual(bodies, [("https://api.osv.dev/v1/query",
+                                   {"version": "1.0.0", "package": {"name": "lib", "ecosystem": "npm"}})])
+
+    def test_outdated_npm_component_gets_latest_same_major_and_advisories(self):
+        rows, failed = self.rows()
+        self.assertFalse(failed)
+        self.assertEqual(rows["lib"].latest, "1.4.2")
+        self.assertEqual(rows["lib"].advisories, ["GHSA-1", "CVE-2"])
+
+    def test_outdated_github_component_uses_tags(self):
+        rows, failed = self.rows()
+        self.assertEqual(rows["gh"].latest, "1.3.0")
+        self.assertEqual(rows["gh"].advisories, [])
+
+    def test_outdated_marks_manual_and_frozen_components(self):
+        rows, failed = self.rows()
+        self.assertEqual(rows["hand"].kind, "manual")
+        self.assertIsNone(rows["hand"].latest)
+        self.assertEqual(rows["css"].kind, "frozen")
+        self.assertIsNone(rows["css"].latest)
+
+    def test_fork_component_is_flagged_and_not_compared(self):
+        rows, failed = self.rows()
+        self.assertTrue(rows["forked"].fork)
+        self.assertIsNone(rows["forked"].latest)
+
+    def test_css_coupled_components_warn_about_the_frozen_css(self):
+        rows, failed = self.rows()
+        self.assertTrue(any("4.3.1" in note for note in rows["bootstrap"].notes))
+        self.assertEqual(rows["lib"].notes, [])
+
+    def test_outdated_reports_network_error_per_component(self):
+        def broken(url):
+            raise OSError("offline")
+
+        rows, failed = self.rows(fetch=broken)
+        self.assertTrue(failed)
+        self.assertIn("offline", rows["lib"].error)
+        self.assertIsNone(rows["lib"].latest)
+        self.assertIsNone(rows["hand"].error)
+
+    def test_advisory_service_failure_is_reported_not_swallowed(self):
+        def broken(url, body):
+            raise OSError("osv down")
+
+        rows, failed = self.rows(post=broken)
+        self.assertTrue(failed)
+        self.assertIn("osv down", rows["lib"].error)
+        self.assertEqual(rows["lib"].latest, "1.4.2")
+
+    def test_main_outdated_prints_table_and_never_writes(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        path = Path(tmp.name) / "vendor.json"
+        path.write_text(json.dumps(self.manifest), encoding="utf-8")
+        before = path.read_bytes()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = vendor.main(["outdated", "--manifest", str(path)],
+                               fetch=self.fetch, run=self.git_run, post=self.post)
+        self.assertEqual(code, 0)
+        self.assertIn("1.4.2", out.getvalue())
+        self.assertIn("GHSA-1", out.getvalue())
+        self.assertEqual(path.read_bytes(), before)
+        self.assertEqual([p.name for p in Path(tmp.name).iterdir()], ["vendor.json"])
+
+    def test_main_outdated_exits_1_when_something_is_unreachable(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        path = Path(tmp.name) / "vendor.json"
+        path.write_text(json.dumps(self.manifest), encoding="utf-8")
+
+        def broken(url):
+            raise OSError("offline")
+
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = vendor.main(["outdated", "--manifest", str(path)],
+                               fetch=broken, run=self.git_run, post=self.post)
+        self.assertEqual(code, 1)
+        self.assertIn("unreachable", out.getvalue())
+
+
 class RealRepoTest(unittest.TestCase):
     def test_real_manifest_matches_repo(self):
         manifest = vendor.load_manifest(TOOLS / "vendor.json")
