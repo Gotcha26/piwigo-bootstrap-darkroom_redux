@@ -16,12 +16,7 @@ $(document).ready(function() {
                 $(this).find('.card-body.list-view-only').addClass('d-none');
                 $(this).find('.addCollection').removeAttr('style');
                 $(this).removeClass('col-12')
-                    .addClass($(this).data('grid-classes'))
-                    .one(
-                        'webkitTransitionEnd',
-                        function () {
-                            $('#content').find('.card-body').removeAttr('style').equalHeights();
-                        })
+                    .addClass($(this).data('grid-classes'));
             });
     });
 
@@ -42,12 +37,7 @@ $(document).ready(function() {
                 $(this).find('.card-body.list-view-only').removeClass('d-none');
                 $(this).find('.addCollection').attr('style', 'width: ' + $(this).find('img').width() + 'px');
                 $(this).removeClass($(this).data('grid-classes'))
-                    .addClass('col-12')
-                    .one(
-                    'webkitTransitionEnd',
-                    function () {
-                        $('#content').find('.card-body').removeAttr('style').equalHeights();
-                    })
+                    .addClass('col-12');
             });
     });
 

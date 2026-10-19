@@ -503,6 +503,26 @@ body {
   display: none;
 }
 
+/* Equal card heights within a row (replaces the equalHeights jQuery plugin) */
+.content-grid .col-outer {
+  display: flex;
+}
+
+.content-grid .col-outer .card {
+  width: 100%;
+  min-width: 0;
+}
+
+.content-grid .col-outer .card > .h-100 {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.content-grid .col-outer .card .card-body {
+  flex: 1 1 auto;
+}
+
 .content-list .col-outer {
   margin-top: 20px;
   margin-bottom: 20px;
