@@ -53,7 +53,6 @@
 
     <table class="bd-about-table">
         <tr><th>{'Component'|@translate}</th><th>{'Version'|@translate}</th><th>{'License'|@translate}</th></tr>
-        <tr><td><a href="https://github.com/carhartl/jquery-cookie" target="_blank">jQuery Cookie</a> &mdash; Klaus Hartl</td><td>1.4.1</td><td>MIT</td></tr>
         <tr><td>Equal Heights &mdash; Rob Glazebrook</td><td>1.01</td><td>GPL-3.0-or-later</td></tr>
         <tr><td>jQuery.awesomeCloud &mdash; Russ Porosky, IndyArmy Network</td><td>0.2</td><td>{'not stated'|@translate}</td></tr>
         <tr><td>rating.js &mdash; {'Piwigo core, via Bootstrap Default'|@translate}</td><td>&mdash;</td><td>GPL-2.0</td></tr>
