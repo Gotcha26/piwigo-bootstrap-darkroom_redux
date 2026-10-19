@@ -110,24 +110,6 @@ $lang['Display number of images in breadcrumb'] = 'Afficher le nombre d\'images 
 
 // About tab — credits & licences
 $lang['Source'] = 'Sources';
-$lang['Upstream project'] = 'Projet amont';
-$lang['extension page'] = 'fiche de l\'extension';
-$lang['Privacy'] = 'Vie privée';
-$lang['Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.'] = 'Tous les thèmes de couleur servent leurs polices depuis votre propre serveur, et les avatars des commentaires sont une image locale. Aucune police ni aucun avatar n\'est demandé à un tiers comme Google Fonts ou Gravatar.';
-$lang['Third-party components'] = 'Composants tiers';
-$lang['This theme redistributes the components listed below. Versions are those actually shipped.'] = 'Ce thème redistribue les composants listés ci-dessous. Les versions sont celles réellement livrées.';
-$lang['Libraries'] = 'Bibliothèques';
-$lang['is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.'] = 'n\'est pas livré avec ce thème : il est fourni par Piwigo lui-même, dont la version est ancienne (1.11.3, 2015) et obsolète. Sa mise à jour relève de Piwigo.';
-$lang['Component'] = 'Composant';
-$lang['License'] = 'Licence';
-$lang['Bundled scripts'] = 'Scripts embarqués';
-$lang['not stated'] = 'non précisée';
-$lang['Icons and fonts'] = 'Icônes et polices';
-$lang['This list is maintained by hand and may lag behind the shipped files.'] = 'Cette liste est tenue à la main et peut être en retard sur les fichiers livrés.';
-$lang['The scripts below were imported from the'] = 'Les scripts ci-dessous ont été importés du thème';
-$lang['theme by Phil Bayfield. They were not written for this theme.'] = 'de Phil Bayfield. Ils n’ont pas été écrits pour ce thème.';
-$lang['Piwigo core, via Bootstrap Default'] = 'noyau Piwigo, via Bootstrap Default';
-$lang['Bootstrap Default, extended since'] = 'Bootstrap Default, étendu depuis';
 
 // Panneau d'admin sur le socle commun jm-* (#17).
 $lang['bd_subtitle'] = 'Un thème adapté aux mobiles, basé sur Bootstrap 4';

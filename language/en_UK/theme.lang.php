@@ -89,24 +89,6 @@ $lang['Display number of images in breadcrumb'] = 'Display number of images in b
 
 // About tab — credits & licences
 $lang['Source'] = 'Source';
-$lang['Upstream project'] = 'Upstream project';
-$lang['extension page'] = 'extension page';
-$lang['Privacy'] = 'Privacy';
-$lang['Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.'] = 'Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.';
-$lang['Third-party components'] = 'Third-party components';
-$lang['This theme redistributes the components listed below. Versions are those actually shipped.'] = 'This theme redistributes the components listed below. Versions are those actually shipped.';
-$lang['Libraries'] = 'Libraries';
-$lang['is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.'] = 'is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.';
-$lang['Component'] = 'Component';
-$lang['License'] = 'License';
-$lang['Bundled scripts'] = 'Bundled scripts';
-$lang['not stated'] = 'not stated';
-$lang['Icons and fonts'] = 'Icons and fonts';
-$lang['This list is maintained by hand and may lag behind the shipped files.'] = 'This list is maintained by hand and may lag behind the shipped files.';
-$lang['The scripts below were imported from the'] = 'The scripts below were imported from the';
-$lang['theme by Phil Bayfield. They were not written for this theme.'] = 'theme by Phil Bayfield. They were not written for this theme.';
-$lang['Piwigo core, via Bootstrap Default'] = 'Piwigo core, via Bootstrap Default';
-$lang['Bootstrap Default, extended since'] = 'Bootstrap Default, extended since';
 
 // Admin panel on the shared jm-* shell (#17).
 $lang['bd_subtitle'] = 'A mobile-ready theme based on Bootstrap 4';
