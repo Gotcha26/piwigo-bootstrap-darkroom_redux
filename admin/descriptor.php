@@ -43,9 +43,10 @@ if (!function_exists('bd_admin_descriptor')) {
         'plugin_url'   => $theme_url,
         'technologies' => array('php', 'js', 'scss', 'smarty'),
         // Shared-shell fonts and icons first (served by jm-fonts.tpl and
-        // bd-common.css), then the list generated from tools/vendor.json.
+        // bd-common.css), then CodeMirror (Custom CSS editor, served by the shared
+        // asset store), then the list generated from tools/vendor.json.
         'components'   => array_merge(
-          array('piwigo', 'source-sans-3', 'outfit', 'simple-icons'),
+          array('piwigo', 'source-sans-3', 'outfit', 'simple-icons', 'codemirror'),
           include $theme_dir . '/include/credits.php'
         ),
         'notes'        => array(

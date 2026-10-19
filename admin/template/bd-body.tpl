@@ -181,6 +181,10 @@
     <div class="jm-field">
       <label class="jm-field-label" for="bd-f-custom_css">{'Custom CSS'|@translate}</label>
       <textarea class="jm-input jm-input--wide bd-code" id="bd-f-custom_css" name="custom_css" rows="12" spellcheck="false">{$theme_config->custom_css|escape:'html'}</textarea>
+      {* CodeMirror from the shared asset store (#21): core first, then the CSS mode.
+         Without it, the textarea stays a plain textarea. *}
+      {jm_vendor_asset key="codemirror/codemirror.min.js"}
+      {jm_vendor_asset key="codemirror/mode/css.min.js"}
     </div>
   </div>
 </section>

@@ -112,6 +112,12 @@ jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
 }
+// CodeMirror stylesheet for the Custom CSS editor (#21); its scripts are emitted by
+// {jm_vendor_asset} in bd-body.tpl. Never href="": it would resolve to this page.
+$bd_cm_css = function_exists('jm_vendor_url') ? jm_vendor_url('codemirror/codemirror.min.css') : null;
+if ($bd_cm_css !== null && $bd_cm_css !== '') {
+  $template->append('head_elements', '<link rel="stylesheet" href="' . htmlspecialchars($bd_cm_css, ENT_QUOTES) . '">');
+}
 $bd_theme = 'clear';
 bd_admin_require('jm-theme-detector.php', $bd_root . '/include');
 if (class_exists('JM_ThemeDetector')) {
@@ -159,12 +165,11 @@ if (function_exists('jm_help_support_boot')) {
 }
 
 // --- 11. Credits modal ---
-// Virtual path, it does not need to exist: jm-credits.php derives its template
-// folder as dirname(<path>) . '/template/', i.e. admin/template/ here, where the
-// jm-credits-*.tpl partials are injected.
+// The build line is read from include/jm-build-info.php, while the jm-credits-*.tpl
+// partials are injected in admin/template/: the two folders are passed apart.
 bd_admin_require('jm-credits.php', $bd_root . '/include');
 if (function_exists('jm_credits_boot')) {
-  jm_credits_boot($template, $bd_descriptor, $bd_admin_dir . '/include');
+  jm_credits_boot($template, $bd_descriptor, $bd_root . '/include', $bd_tpl);
 }
 
 // --- 11b. "Maintenance & advanced options", at the end of the Appearance tab (#22) ---
