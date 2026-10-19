@@ -2,7 +2,7 @@
 /*
 Theme Name: Bootstrap Darkroom (redux)
 Version: 0.1.0
-Description: A mobile-ready & feature-rich theme based on Boostrap 4, with PhotoSwipe full-screen slideshow, Slick carousel, over 30 color styles and lots of configuration options. Redux: community fork tracking upstream, distributed outside the Piwigo extension repository.
+Description: A mobile-ready & feature-rich theme based on Bootstrap 4, with PhotoSwipe full-screen slideshow, Slick carousel, over 30 color styles and lots of configuration options. Redux: independent fork of Bootstrap Darkroom by Thomas Kuther, developed on its own and distributed outside the Piwigo extension repository.
 Theme URI: https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux
 Author: Thomas Kuther, Gotcha
 Author URI: https://github.com/Gotcha26
