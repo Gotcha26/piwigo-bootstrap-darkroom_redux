@@ -222,6 +222,17 @@ class Config {
     return isset($this->config[$key]);
   }
 
+  /**
+   * The loaded configuration, as stored: a stored null stays null, and a key
+   * missing from an old row is missing here too. The Custom CSS is not in it
+   * (it is a file, read through __get()). Used by the settings export.
+   *
+   * @return array
+   */
+  public function toArray() {
+    return $this->config;
+  }
+
   public function fromPost(array $post) {
     foreach (array_keys($this->defaults) as $key) {
       $this->__set($key, isset($post[$key]) ? stripslashes($post[$key]) : null);

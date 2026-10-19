@@ -81,12 +81,14 @@ if (!function_exists('bd_admin_require')) {
 // --- 2. Theme code ---
 require_once $bd_root . '/include/config.php';
 require_once $bd_admin_dir . '/save.php';
+require_once $bd_admin_dir . '/export-import.php';
 require_once $bd_admin_dir . '/descriptor.php';
 
-// --- 3. Save request: answered here, before any rendering, then exit ---
+// --- 3. Save, export and import requests: answered here, before any rendering, then exit ---
 bd_admin_require('jm-ws.php', $bd_root . '/include');
+bd_admin_require('jm-export-import.php', $bd_root . '/include');
 if (function_exists('jm_ws_admin_page_dispatch')) {
-  jm_ws_admin_page_dispatch('bootstrap_darkroom', bd_admin_save_methods());
+  jm_ws_admin_page_dispatch('bootstrap_darkroom', bd_admin_save_methods() + bd_admin_expimp_methods());
 }
 
 // --- 4. Language ---
@@ -165,6 +167,30 @@ if (function_exists('jm_credits_boot')) {
   jm_credits_boot($template, $bd_descriptor, $bd_admin_dir . '/include');
 }
 
+// --- 11b. "Maintenance & advanced options", at the end of the Appearance tab (#22) ---
+// Settings export / import, then the accordion mode. The section joins the tab's
+// exclusive group, like the other Appearance sections. jm_maintenance_prepare() loads
+// the labels the export brick reads, so it runs first; the export messages of the
+// shared script come from jm-export-import.lang.php (bd_admin_expimp_js_strings()).
+bd_admin_require('jm-maintenance.php', $bd_root . '/include');
+if (function_exists('jm_maintenance_prepare') && function_exists('jm_export_import_brick_assign')) {
+  jm_maintenance_prepare($template, array(
+    array('partial' => $bd_tpl . 'jm-brick-export-import.tpl', 'group' => 'maintenance'),
+    array('brick' => 'accordion-mode', 'group' => 'advanced'),
+  ), array('tpl_dir' => $bd_tpl, 'accordion_group' => 'bd-appearance'));
+  jm_export_import_brick_assign($template, array(
+    'label'       => l10n('jm_maint_export_import_label'),
+    'tip'         => l10n('jm_maint_export_import_tip'),
+    'desc'        => l10n('jm_maint_export_import_desc'),
+    'export_btn'  => l10n('jm_maint_export_btn'),
+    'import_btn'  => l10n('jm_maint_import_btn'),
+    'feedback_id' => 'bd-import-feedback',
+  ));
+}
+if (is_readable($bd_root . '/include/jm-export-import.lang.php')) {
+  include_once $bd_root . '/include/jm-export-import.lang.php';
+}
+
 // --- 12. Stylesheets in <head>: shared design system, then the theme's delta ---
 bd_admin_require('jm-asset.php', $bd_root . '/include');
 $bd_asset = function ($relative) use ($bd_url, $bd_root) {
@@ -207,7 +233,7 @@ $template->assign(array(
   // Unassigned, Smarty would render an empty token and every save would be refused.
   'PWG_TOKEN'        => get_pwg_token(),
   'BD_SAVE_URL'      => get_root_url() . 'admin.php?page=theme&theme=bootstrap_darkroom',
-  'BD_STRINGS_JSON'  => json_encode(bd_admin_js_strings(), $bd_json),
+  'BD_STRINGS_JSON'  => json_encode(bd_admin_js_strings() + array('expimp' => bd_admin_expimp_js_strings()), $bd_json),
   'BD_ADMIN_JS'      => function_exists('jm_asset_url')
     ? jm_asset_url($bd_url, $bd_root, $bd_js, array('with_version' => true))
     : $bd_url . $bd_js,
