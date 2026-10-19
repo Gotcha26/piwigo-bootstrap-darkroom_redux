@@ -35,7 +35,7 @@
       ]
     },
     "jQuery-Touch-Events": {
-      "version": "1.0.9",
+      "version": "2.0.0",
       "source": "github",
       "license": "MIT",
       "repo": "benmajor/jQuery-Touch-Events",

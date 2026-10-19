@@ -200,6 +200,29 @@ class UpdateTest(unittest.TestCase):
             self.plan(archive)
         self.assertFalse((self.root / "evil.js").exists())
 
+    def test_rejects_drive_letter_in_any_path_segment(self):
+        drive = tarfile.TarInfo("package/dist/C:x.js")
+        with self.assertRaises(vendor.UpdateError):
+            self.plan(make_tgz({"dist/a.js": b"x"}, extra=[(drive, b"boom")]))
+
+    def test_failed_rollback_keeps_the_backup(self):
+        plan = self.plan(self.new_archive())
+        real_replace = vendor.os.replace
+        calls = []
+
+        def broken(src, dst):
+            calls.append(dst)
+            if len(calls) >= 2:
+                raise OSError("locked by another process")
+            return real_replace(src, dst)
+
+        with mock.patch.object(vendor.os, "replace", broken):
+            with self.assertRaises(vendor.UpdateError) as caught:
+                vendor.apply_update(plan, self.manifest, self.root, self.manifest_path)
+        self.assertIn("vendor-old", str(caught.exception))
+        backup = self.root / "node_modules" / "lib.vendor-old" / "dist" / "a.js"
+        self.assertEqual(backup.read_bytes(), b"old-a")
+
     def test_rejects_symlink_in_archive(self):
         link = tarfile.TarInfo("package/dist/link.js")
         link.type = tarfile.SYMTYPE
@@ -390,6 +413,18 @@ class OutdatedTest(unittest.TestCase):
         self.assertIn("GHSA-1", out.getvalue())
         self.assertEqual(path.read_bytes(), before)
         self.assertEqual([p.name for p in Path(tmp.name).iterdir()], ["vendor.json"])
+
+    def test_github_component_is_not_reported_as_free_of_advisories(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        path = Path(tmp.name) / "vendor.json"
+        path.write_text(json.dumps(self.manifest), encoding="utf-8")
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            vendor.main(["outdated", "--manifest", str(path)],
+                        fetch=self.fetch, run=self.git_run, post=self.post)
+        github_line = next(line for line in out.getvalue().splitlines() if line.startswith("gh "))
+        self.assertIn("not checked", github_line)
+        self.assertNotIn("none listed", github_line)
 
     def test_main_outdated_exits_1_when_something_is_unreachable(self):
         tmp = tempfile.TemporaryDirectory()
