@@ -1,30 +1,18 @@
 {strip}
-{* OSM_redux est le fork privé de piwigo-openstreetmap : même bouton « carte » (.pwg-icon-globe). *}
-{if (isset($loaded_plugins['piwigo-openstreetmap']) || isset($loaded_plugins['OSM_redux'])) && ($BODY_ID == "thePicturePage" || $BODY_ID == "theCategoryPage")}
-{footer_script require='jquery'}
-$(document).ready(function() {
-  $('.pwg-icon-globe').removeClass('pwg-icon').closest('a').html('<i class="fas fa-globe fa-fw" aria-hidden="true"></i>').addClass('nav-link').removeClass('pwg-state-default pwg-button').closest('li').addClass('nav-item osm-button').find('a>i').after('<span class="d-lg-none ml-2">'+$('.osm-button').find('a').attr('title')+'</span>');;
-});
-{/footer_script}
-{/if}
-
+{*
+  Functional layout fixes for specific plugins only.
+  Plugin buttons in the contextual navbars (icons, nav-link structure, switchBox menus) are
+  normalised generically by js/plugin-buttons.js: do not add a per-plugin button block here.
+*}
 {if isset($loaded_plugins['rv_gmaps']) && $BODY_ID == "thePicturePage"}
 {footer_script require='jquery'}
 $(document).ready(function() {
-  $('.pwg-icon-map').removeClass('pwg-icon').closest('a').html('<i class="fas fa-globe fa-fw" aria-hidden="true"></i>').addClass('nav-link').removeClass('pwg-state-default pwg-button').wrap('<li class="nav-item rvgmaps-button"></li>').find('i').after('<span class="d-lg-none ml-2">'+$('.rvgmaps-button').find('a').attr('title')+'</span>');
   $('#map').wrap('<div id="mapContainer" class="container"></div>');
   $('#mapPicture').prependTo('#mapContainer').wrap('<div class="row justify-content-center"></div>');
 });
 {/footer_script}
 {/if}
 
-{if isset($loaded_plugins['rv_gmaps']) && $BODY_ID == "theCategoryPage"}
-{footer_script require='jquery'}
-$(document).ready(function() {
-  $('.pwg-icon-map').removeClass('pwg-icon').closest('a').html('<i class="fas fa-globe fa-fw" aria-hidden="true"></i>').addClass('nav-link').removeClass('pwg-state-default pwg-button').closest('li').addClass('nav-item rvgmaps-button').find('a>i').after('<span class="d-lg-none ml-2">'+$('.rvgmaps-button').find('a').attr('title')+'</span>');
-});
-{/footer_script}
-{/if}
 {if isset($loaded_plugins['rv_gmaps']) && $BODY_ID == "theMapListPage"}
 {footer_script require='jquery'}
 $(document).ready(function() {
@@ -75,34 +63,11 @@ $(document).ready(function() {
 {/footer_script}
 {/if}
 
-{if isset($loaded_plugins['BatchDownloader'])}
-{footer_script require='jquery'}
-$(document).ready(function() {
-  if ($('#batchDownloadLink').next('div#batchDownloadBox').length > 0) {
-    $('#batchDownloadLink').closest('li').addClass('nav-item dropdown');
-    $('#batchDownloadLink').addClass('nav-link dropdown-toggle').removeClass('pwg-state-default pwg-button').attr('data-toggle', 'dropdown').attr('href', '#');
-    $('#batchDownloadBox').off();
-    $('#batchDownloadBox a').addClass('dropdown-item');
-    $('#batchDownloadBox').attr('role', 'menu').attr('style', '');
-    $('#batchDownloadBox .switchBoxTitle').addClass('dropdown-header').removeClass('switchBoxTitle');
-    $('#batchDownloadBox br').remove();
-    $('#batchDownloadBox').addClass('dropdown-menu dropdown-menu-right').removeClass('switchBox');
-    $('#batchDownloadLink .pwg-button-text').addClass('d-lg-none ml-2').removeClass('pwg-button-text');
-  } else {
-    $('#batchDownloadLink').closest('li').addClass('nav-item');
-    $('#batchDownloadLink').addClass('nav-link').removeClass('pwg-state-default pwg-button');
-  }
-  $('.batch-downloader-icon').addClass('fas fa-cloud-download-alt fa-fw').removeClass('pwg-icon').after('<span class="d-lg-none"> ' + $('#batchDownloadLink').attr('title') + '</span>');
-});
-$(window).on('load', function() {
- if ($('#batchDownloadLink').next('div#batchDownloadBox').length > 0) {
-    $('#batchDownloadLink').next('div#batchDownloadBox').off();
-    $('#batchDownloadLink').off().on('click', function() { $('#batchDownloadLink').dropdown() });
-  }
-});
-{/footer_script}
-{/if}
-
+{*
+  download_by_size adds no button: a prefilter renames the theme's own download button and its
+  #downloadSizeBox is printed outside the navbar, with no window.SwitchBox entry. Only the ids
+  tie them together, so no generic rule can reach it.
+*}
 {if isset($loaded_plugins['download_by_size'])}
 {footer_script require='jquery'}
 $(document).ready(function() {

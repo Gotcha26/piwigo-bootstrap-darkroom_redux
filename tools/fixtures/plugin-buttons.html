@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Plugin buttons fixtures</title>
+  <link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-darkroom/bootstrap.min.css">
+  <link rel="stylesheet" href="../../theme.css">
+</head>
+<body>
+  <nav class="navbar navbar-contextual navbar-expand-lg">
+    <div class="navbar-collapse justify-content-end" id="secondary-navbar">
+      <ul class="navbar-nav">
+        <li id="theme" class="nav-item"><a href="#" title="Search" class="pwg-state-default pwg-button nav-link"><i class="fas fa-search"></i><span class="pwg-button-text">Search</span></a></li>
+        <li id="osm"><a href="#" title="Carte" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-globe">&nbsp;</span><span class="pwg-button-text">Carte</span></a></li>
+        <a id="map-bare" href="#" title="Carte GM" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-map">&nbsp;</span><span class="pwg-button-text">Carte GM</span></a>
+        <li id="bd"><a id="batchDownloadLink" href="#" title="Télécharger" class="pwg-state-default pwg-button"><span class="pwg-icon batch-downloader-icon fas fa-cloud-download-alt fa-fw" style="background:url(zip.png) center center no-repeat;">&nbsp;</span></a></li>
+        <li id="unknown"><a href="#" title="Truc" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-nimportequoi">&nbsp;</span><span class="pwg-button-text">Truc</span></a></li>
+        <img id="urlshackicon" title="Piwishack" onclick="window.__shack = 1;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAl0lEQVR4nO3QsQ3AQBDDMO+/9GUMPhAV6gnttvtz0wBdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DVAA3QN0ABdAzRA1wAN0DXgHkDIAR9DiOHSUzU5EwAAAABJRU5ErkJggg==" class="button" alt="URLShack">
+        <li id="xss"><a href="#" title="&lt;b&gt;x&lt;/b&gt;" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-zzz">&nbsp;</span></a></li>
+        <li id="bdmenu"><a id="batchDownloadLink2" href="#" title="Télécharger tout" class="pwg-state-default pwg-button"><span class="pwg-icon batch-downloader-icon fas fa-cloud-download-alt fa-fw">&nbsp;</span></a>
+          <div id="batchDownloadBox2" class="switchBox" style="display:none"><div class="switchBoxTitle">Téléchargement</div><a href="#a">Petit</a><br><a href="#b">Grand</a></div>
+          <script>(SwitchBox = window.SwitchBox || []).push('#batchDownloadLink2', '#batchDownloadBox2');</script>
+        </li>
+        <li id="stale"><a id="staleLink" href="#" title="Formats" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-sizes">&nbsp;</span></a>
+          <div id="staleBox" class="switchBox" style="display:none"><div class="switchBoxTitle">Formats</div><a href="#x">X</a></div>
+          <script>(SwitchBox = window.SwitchBox || []).push('#staleLink', '#noSuchBox');</script>
+        </li>
+        <li id="nolabel"><a href="#" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-zzz">&nbsp;</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <pre id="results"></pre>
+  <script>
+    window.__themeBefore = document.getElementById('theme').outerHTML;
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>window.jQuery || (document.getElementById('results').textContent = '"no-jquery"');</script>
+  <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
+  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="../../js/plugin-buttons.js"></script>
+  <script src="plugin-buttons.test.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Plugin buttons fixtures: switchBox already consumed</title>
+  <link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-darkroom/bootstrap.min.css">
+  <link rel="stylesheet" href="../../theme.css">
+  <script>
+    // core switchbox.js already ran: the registry is an object and the pairs are gone.
+    window.SwitchBox = {push: function () {}};
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-contextual navbar-expand-lg">
+    <div class="navbar-collapse justify-content-end" id="secondary-navbar">
+      <ul class="navbar-nav">
+        <li id="sbsibling"><a id="sbLink" href="#" title="Tailles" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-sizes">&nbsp;</span><span class="pwg-button-text">Tailles</span></a>
+          <div id="sbBox" class="switchBox" style="display:none"><div class="switchBoxTitle">Tailles</div><a href="#s">S</a><br><a href="#m">M</a></div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <pre id="results"></pre>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>window.jQuery || (document.getElementById('results').textContent = '"no-jquery"');</script>
+  <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
+  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script>
+    // What core switchbox.js leaves when it ran before the theme: a click handler that toggles
+    // the box with an inline style and returns false, hiding the click from Bootstrap.
+    $('#sbLink').on('click', function () {
+      $('#sbBox').toggle();
+      return false;
+    });
+    $('#sbBox').on('mouseleave click', function () {
+      $(this).hide();
+    });
+    // A plugin's own delegated handler on its menu items: must survive the conversion.
+    $('#sbBox').on('click', 'a', function (e) {
+      e.preventDefault();
+      window.__pluginItemClicks = (window.__pluginItemClicks || 0) + 1;
+    });
+  </script>
+  <script src="../../js/plugin-buttons.js"></script>
+  <script>
+    // Runs right after the normaliser's own ready handler, before window load.
+    $(function () {
+      var events = $._data(document.getElementById('sbLink'), 'events');
+      window.__sbClicksAtReady = events && events.click ? events.click.length : 0;
+    });
+  </script>
+  <script src="plugin-buttons.test.js"></script>
+</body>
+</html>
