@@ -1435,7 +1435,7 @@ jQuery-Touch-Events@benmajor/jQuery-Touch-Events#2.0.0:
   version "1.0.9"
   resolved "https://codeload.github.com/benmajor/jQuery-Touch-Events/tar.gz/96771542eebc115e694e0f0df08dfda6103d9b70"
 
-jquery@>=1.7.2, jquery@>=3.3.0:
+jquery@>=1.7.2:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==

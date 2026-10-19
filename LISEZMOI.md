@@ -33,6 +33,11 @@ L'en-tête `Theme URI` ne pointe pas vers le dépôt d'extensions Piwigo. Ce th�
 proposé à la mise à jour dans l'administration — et, surtout, jamais écrasé par la version
 officielle. Les mises à jour se récupèrent ici.
 
+## jQuery
+
+Le thème n'embarque plus jQuery : il utilise celui du cœur de Piwigo, soit **jQuery 1.11.3 (2015),
+obsolète** et visé par des avis de sécurité connus. Sa mise à jour relève de Piwigo, pas du thème.
+
 ## Modèle de branches
 
 - `main` — branche principale. Tout changement part de `main` et y revient.

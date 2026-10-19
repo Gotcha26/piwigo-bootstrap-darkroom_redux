@@ -51,6 +51,7 @@ A demo is available at https://demo2.piwigo.com/ and another one at https://demo
 * On iOS the PhotoSwipe fullscreen mode isn't supported. On iPhone it does work in landscape orientation only, on iPad it doesn't work at all. That's an iOS bug. Works just fine on Android
 * Plugins that add buttons to the Navbar might not (yet) be supported, see [Plugin Support Matrix](https://github.com/tkuther/piwigo-bootstrap-darkroom/wiki/Plugin-Support-Matrix)
 * Portrait mode videos (e.g. from mobile phones) need to be recoded in actual portrait orientation, rotation tags won't work.
+* The theme no longer ships jQuery: it uses the copy bundled with Piwigo, which is **jQuery 1.11.3 (2015) and obsolete**, with known security advisories. Updating it is up to Piwigo, not to this theme.
 
 ### Preview
 
