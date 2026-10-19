@@ -22,6 +22,10 @@
           <div id="batchDownloadBox2" class="switchBox" style="display:none"><div class="switchBoxTitle">Téléchargement</div><a href="#a">Petit</a><br><a href="#b">Grand</a></div>
           <script>(SwitchBox = window.SwitchBox || []).push('#batchDownloadLink2', '#batchDownloadBox2');</script>
         </li>
+        <li id="stale"><a id="staleLink" href="#" title="Formats" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-sizes">&nbsp;</span></a>
+          <div id="staleBox" class="switchBox" style="display:none"><div class="switchBoxTitle">Formats</div><a href="#x">X</a></div>
+          <script>(SwitchBox = window.SwitchBox || []).push('#staleLink', '#noSuchBox');</script>
+        </li>
         <li id="nolabel"><a href="#" class="pwg-state-default pwg-button"><span class="pwg-icon pwg-icon-zzz">&nbsp;</span></a></li>
       </ul>
     </div>
@@ -31,6 +35,7 @@
     window.__themeBefore = document.getElementById('theme').outerHTML;
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>window.jQuery || (document.getElementById('results').textContent = '"no-jquery"');</script>
   <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="../../js/plugin-buttons.js"></script>

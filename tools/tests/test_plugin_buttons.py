@@ -3,7 +3,7 @@
 Serves the repository over a local HTTP server, renders each page of
 tools/fixtures/ in headless Chrome (--dump-dom) and reads the JSON results the
 page writes into <pre id="results">. Skipped when no Chrome/Edge is installed.
-jQuery 1.11.3 is loaded from cdnjs, so the run needs network access.
+jQuery 1.11.3 is loaded from cdnjs: offline, a page reports "no-jquery" and the test is skipped.
 """
 
 import functools
@@ -43,9 +43,37 @@ def find_browser():
     return None
 
 
+OFFLINE_MARKER = 'no-jquery'
+
+
+def parse_results(dom):
+    """Results a fixture page wrote, or None when it could not load jQuery (offline)."""
+    match = re.search(r'<pre id="results">(.*?)</pre>', dom, re.S)
+    if not match:
+        raise ValueError('no results block')
+    body = html.unescape(match.group(1)).strip()
+    if not body:
+        raise ValueError('empty results (script error?)')
+    results = json.loads(body)
+    return None if results == OFFLINE_MARKER else results
+
+
 class _QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *args):
         pass
+
+
+class ParseResults(unittest.TestCase):
+    def test_results_are_decoded(self):
+        dom = '<pre id="results">[{&quot;name&quot;:&quot;a&quot;,&quot;ok&quot;:true}]</pre>'
+        self.assertEqual(parse_results(dom), [{'name': 'a', 'ok': True}])
+
+    def test_offline_marker_means_no_results(self):
+        self.assertIsNone(parse_results('<pre id="results">"no-jquery"</pre>'))
+
+    def test_missing_block_fails(self):
+        with self.assertRaises(ValueError):
+            parse_results('<body></body>')
 
 
 class PluginButtonsFixtures(unittest.TestCase):
@@ -69,15 +97,16 @@ class PluginButtonsFixtures(unittest.TestCase):
             [self.browser, '--headless=new', '--disable-gpu', '--no-first-run',
              '--window-size=1280,800', '--virtual-time-budget=10000', '--dump-dom', url],
             capture_output=True, text=True, encoding='utf-8', timeout=120)
-        match = re.search(r'<pre id="results">(.*?)</pre>', out.stdout, re.S)
-        self.assertIsNotNone(match, 'no results block in %s' % page)
-        body = html.unescape(match.group(1)).strip()
-        self.assertTrue(body, 'empty results in %s (script error or jQuery not loaded?)' % page)
-        return json.loads(body)
+        try:
+            return parse_results(out.stdout)
+        except ValueError as e:
+            self.fail('%s: %s' % (page, e))
 
     def test_fixture_pages(self):
         for page in PAGES:
             results = self.render(page)
+            if results is None:
+                self.skipTest('jQuery could not be loaded from cdnjs (offline?)')
             self.assertTrue(results, 'no assertion ran in %s' % page)
             for result in results:
                 with self.subTest(page=page, check=result['name']):

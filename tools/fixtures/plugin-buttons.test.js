@@ -124,9 +124,23 @@
       checkDropdown('switchbox registry', 'batchDownloadLink2', 'batchDownloadBox2');
     }
 
+    if (has('#stale')) {
+      checkDropdown('switchbox stale registry falls back on sibling', 'staleLink', 'staleBox');
+    }
+
     if (has('#sbsibling')) {
       check('switchbox core handlers dropped at ready', window.__sbClicksAtReady === 0,
         String(window.__sbClicksAtReady));
+      var boxEvents = $._data(document.getElementById('sbBox'), 'events') || {};
+      var direct = $.grep((boxEvents.click || []).concat(boxEvents.mouseout || [], boxEvents.mouseleave || []),
+        function (h) {
+          return !h.selector;
+        });
+      check('switchbox core box handlers dropped', direct.length === 0, direct.length + ' direct handlers');
+      window.__pluginItemClicks = 0;
+      $('#sbBox a').first().trigger('click');
+      check('switchbox plugin delegated handler kept', window.__pluginItemClicks === 1,
+        String(window.__pluginItemClicks));
       checkDropdown('switchbox sibling fallback', 'sbLink', 'sbBox');
     }
 

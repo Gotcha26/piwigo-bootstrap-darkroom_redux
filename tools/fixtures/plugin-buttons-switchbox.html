@@ -23,6 +23,7 @@
   </nav>
   <pre id="results"></pre>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>window.jQuery || (document.getElementById('results').textContent = '"no-jquery"');</script>
   <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script>
@@ -31,6 +32,14 @@
     $('#sbLink').on('click', function () {
       $('#sbBox').toggle();
       return false;
+    });
+    $('#sbBox').on('mouseleave click', function () {
+      $(this).hide();
+    });
+    // A plugin's own delegated handler on its menu items: must survive the conversion.
+    $('#sbBox').on('click', 'a', function (e) {
+      e.preventDefault();
+      window.__pluginItemClicks = (window.__pluginItemClicks || 0) + 1;
     });
   </script>
   <script src="../../js/plugin-buttons.js"></script>

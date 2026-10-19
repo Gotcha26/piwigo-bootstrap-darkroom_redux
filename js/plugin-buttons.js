@@ -104,13 +104,36 @@
     if ($.isArray(registry)) {
       for (var i = 0; i + 1 < registry.length; i += 2) {
         if ($link.is(registry[i])) {
-          var box = registry[i + 1];
+          var $box = $(registry[i + 1]).first();
           registry.splice(i, 2);
-          return $(box).first();
+          if ($box.length) {
+            return $box;
+          }
+          break;
         }
       }
     }
     return $link.next('.switchBox');
+  }
+
+  // Removes the handlers bound directly on an element (what core switchbox.js binds), and keeps
+  // the delegated ones a plugin may have set on its own menu items.
+  // jQuery files mouseleave under mouseout: match on origType and unbind with it.
+  function offDirect($el, types) {
+    $el.each(function () {
+      var el = this;
+      var direct = [];
+      $.each($._data(el, 'events') || {}, function (stored, handlers) {
+        $.each(handlers, function (n, h) {
+          if (!h.selector && $.inArray(h.origType, types) !== -1) {
+            direct.push(h);
+          }
+        });
+      });
+      $.each(direct, function (n, h) {
+        $(el).off(h.origType, h.handler);
+      });
+    });
   }
 
   function toDropdown($link, $box) {
@@ -164,13 +187,15 @@
     }
   }
 
-  // Drops the click handlers the core switchbox.js (or the plugin) bound to a converted menu,
-  // and the inline display its toggle may have left, so that only Bootstrap's dropdown answers.
+  // Drops the click handlers the core switchbox.js bound to a converted menu, and the inline
+  // display its toggle may have left, so that only Bootstrap's dropdown answers.
   function bindSwitchBoxes(scope) {
     $(scope || document).find('li[' + MARK + '].dropdown').each(function () {
       var $li = $(this);
-      $li.children('a.dropdown-toggle').off();
-      $li.children('.dropdown-menu').off().removeAttr('style');
+      offDirect($li.children('a.dropdown-toggle'), ['click']);
+      var $menu = $li.children('.dropdown-menu');
+      offDirect($menu, ['click', 'mouseleave']);
+      $menu.removeAttr('style');
     });
   }
 
