@@ -128,17 +128,18 @@
       "note": "The 35 stylesheets under css/ are frozen at Bootstrap 4.3.1 ; not rebuilt (node-sass chain retired). Adapt through override CSS.",
       "credit": false
     },
-    "jquery.awesomeCloud": {
-      "name": "jQuery.awesomeCloud",
-      "url": "https://github.com/Philio/bootstrapdefault",
-      "author": "Russ Porosky, IndyArmy Network, via Bootstrap Default",
-      "version": "0.2",
-      "source": "manual",
-      "license": "not stated",
+    "wordcloud": {
+      "name": "wordcloud2.js",
+      "url": "https://github.com/timdream/wordcloud2.js",
+      "author": "Tim Guan-tin Chien",
+      "version": "1.2.3",
+      "source": "npm",
+      "license": "MIT",
       "files": [
-        "js/jquery.awesomeCloud.js"
+        "LICENSE",
+        "src/wordcloud2.js"
       ],
-      "note": "Russ Porosky, IndyArmy Network."
+      "note": "Replaces the unlicensed jQuery.awesomeCloud (#4)."
     }
   },
   "credits_extra": [
@@ -206,7 +207,7 @@
         "jQuery-Touch-Events",
         "selectize",
         "bootstrap-social",
-        "jquery.awesomeCloud",
+        "wordcloud",
         "rating.js"
       ]
     },
