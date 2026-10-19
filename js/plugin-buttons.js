@@ -95,12 +95,39 @@
     return $link.is('img') || $link.find('i, svg, img, ' + FA_CLASSES).length > 0;
   }
 
+  // The core switchBox menu of a link: a pair registered in window.SwitchBox while it is still
+  // an array (core switchbox.js not run yet), otherwise the .switchBox right after the link.
+  function findSwitchBox($link) {
+    var registry = window.SwitchBox;
+    if ($.isArray(registry)) {
+      for (var i = 0; i + 1 < registry.length; i += 2) {
+        if ($link.is(registry[i])) {
+          return $(registry[i + 1]).first();
+        }
+      }
+    }
+    return $link.next('.switchBox');
+  }
+
+  function toDropdown($link, $box) {
+    var $li = $link.parent();
+    $li.addClass('dropdown');
+    $link.addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+    $box.appendTo($li)
+      .removeClass('switchBox').removeAttr('style')
+      .addClass('dropdown-menu dropdown-menu-right').attr('role', 'menu');
+    $box.find('a').addClass('dropdown-item');
+    $box.find('.switchBoxTitle').addClass('dropdown-header').removeClass('switchBoxTitle');
+    $box.find('br').remove();
+  }
+
   function normalizeButton(button) {
     var $button = $(button);
     if ($button.is('a.nav-link')) {
       return;
     }
     var $link = $button;
+    var $box = $button.is('a') ? findSwitchBox($button) : $();
     var label = findLabel($button, $link);
     var hasIcon = normalizeIcons($link);
 
@@ -124,6 +151,19 @@
       $link.wrap('<li></li>');
     }
     $link.parent().addClass('nav-item').attr(MARK, '1');
+    if ($box.length) {
+      toDropdown($link, $box);
+    }
+  }
+
+  // Drops the click handlers the core switchbox.js (or the plugin) bound to a converted menu,
+  // so that only Bootstrap's dropdown answers.
+  function bindSwitchBoxes(scope) {
+    $(scope || document).find('li[' + MARK + '].dropdown').each(function () {
+      var $li = $(this);
+      $li.children('a.dropdown-toggle').off();
+      $li.children('.dropdown-menu').off();
+    });
   }
 
   function normalize(scope) {
@@ -145,7 +185,8 @@
 
   window.bdPluginButtons = {
     CORE_ICONS: CORE_ICONS,
-    normalize: normalize
+    normalize: normalize,
+    bindSwitchBoxes: bindSwitchBoxes
   };
 
   $(document).ready(function () {
@@ -153,5 +194,6 @@
   });
   $(window).on('load', function () {
     normalize();
+    bindSwitchBoxes();
   });
 })(jQuery);

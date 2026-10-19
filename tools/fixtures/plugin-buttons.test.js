@@ -89,6 +89,32 @@
       check('no label kept', has('#nolabel a.nav-link'), document.getElementById('nolabel').outerHTML);
     }
 
+    function checkDropdown(prefix, linkId, boxId) {
+      var link = document.getElementById(linkId);
+      var box = document.getElementById(boxId);
+      var li = link.parentNode;
+      check(prefix,
+        /\bdropdown-toggle\b/.test(link.className) && link.getAttribute('data-toggle') === 'dropdown' &&
+        /\bdropdown\b/.test(li.className) && box.parentNode === li &&
+        /\bdropdown-menu\b/.test(box.className) && /\bdropdown-menu-right\b/.test(box.className) &&
+        !/\bswitchBox\b/.test(box.className) && !box.hasAttribute('style') &&
+        $(box).children('a').length === $(box).children('a.dropdown-item').length &&
+        $(box).children('.dropdown-header').length === 1 && !$(box).find('.switchBoxTitle').length &&
+        !box.querySelector('br'),
+        li.outerHTML);
+      $(link).trigger('click');
+      check(prefix + ' opens', /\bshow\b/.test(box.className), li.outerHTML);
+      $(link).trigger('click');
+    }
+
+    if (has('#bdmenu')) {
+      checkDropdown('switchbox registry', 'batchDownloadLink2', 'batchDownloadBox2');
+    }
+
+    if (has('#sbsibling')) {
+      checkDropdown('switchbox sibling fallback', 'sbLink', 'sbBox');
+    }
+
     if (has('#theme')) {
       var after = document.getElementById('theme').outerHTML;
       check('theme button untouched', after === window.__themeBefore, after);
