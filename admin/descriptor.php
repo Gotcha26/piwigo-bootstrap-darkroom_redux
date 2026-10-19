@@ -19,7 +19,9 @@ if (!function_exists('bd_admin_descriptor')) {
       'header' => array(
         // Required: jm_help_support_boot() derives its template folder from it.
         'partial'  => $theme_dir . '/admin/template/jm-header.tpl',
-        'icon'     => 'bd',
+        // No glyph yet: the 'bd' slug is not in the toolkit's icon catalogue, and
+        // an unknown slug would render an empty box. Empty means no icon at all.
+        'icon'     => '',
         'title'    => 'Bootstrap Darkroom',
         'version'  => $version,
         'subtitle' => l10n('bd_subtitle'),

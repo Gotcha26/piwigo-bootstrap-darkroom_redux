@@ -1,4 +1,34 @@
 @charset "UTF-8";
 // bd-admin.scss: Bootstrap Darkroom delta on top of the shared design system.
 // No `@use 'common'` here: it ships in bd-common.css, loaded BEFORE this file by
-// jm_css_bundle().
+// jm_css_bundle(). No rule on .jm-* classes either: the panel consumes them as is.
+//
+// No identity glyph yet: the 'bd' slug is not in the toolkit's icon catalogue, and
+// the header renders no icon box while JM_HEADER_ICON is empty (#17).
+
+@use 'bd-choice-grid';
+
+#bd-admin {
+  // Piwigo's admin theme gives <form> a margin, which narrows the sections inside
+  // the form compared to "Help & support", rendered outside it.
+  #bd-settings-form {
+    margin: 0;
+  }
+
+  .bd-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    tab-size: 2;
+    white-space: pre;
+    overflow-wrap: normal;
+  }
+
+  .bd-unit {
+    margin-left: var(--jm-gap-sm, 8px);
+    color: var(--jm-muted);
+  }
+
+  .bd-shell-missing {
+    padding: var(--jm-gap-md, 12px);
+  }
+}
