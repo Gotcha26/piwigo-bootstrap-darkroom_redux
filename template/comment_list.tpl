@@ -30,8 +30,8 @@
                 <img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$comment.ALT}">
             </a>
 {else}
-{include file="http_scheme.tpl"}
-            <img class="gravatar" src="//www.gravatar.com/avatar/{$comment.EMAIL|default:''|trim|strtolower|md5}?d={$http_scheme}://{$smarty.server.HTTP_HOST}/{get_gallery_home_url()}themes/bootstrap_darkroom/img/user.png" />
+            {* Local avatar only: no request to a third party (was Gravatar, see #9) *}
+            <img class="avatar" src="{$ROOT_URL}themes/bootstrap_darkroom/img/user.png" alt="">
 {/if}
         </div>
         <div class="description">
