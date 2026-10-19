@@ -35,11 +35,20 @@ An independent fork of [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-boo
 3. Disable the smartpocket theme (it's enabled by default). This is required in order to use Bootstrap Darkroom by default on mobile devices, too.
 
 
+### Plugin buttons
+
+Buttons that plugins add to the navbars are handled generically, whatever the plugin:
+
+* the standard Piwigo icons (`pwg-icon-*`) are shown as their Font Awesome equivalent;
+* icons a plugin already draws with Font Awesome are kept;
+* when the icon is not recognised, the button shows its label as text instead;
+* images used as icons are sized to the height of the other icons;
+* `switchBox` menus become regular dropdown menus.
+
 ### Known issues
 
 * In IE11, the navbars only display correctly if using fluid-width layout.
 * On iOS the PhotoSwipe fullscreen mode isn't supported. On iPhone it does work in landscape orientation only, on iPad it doesn't work at all. That's an iOS bug. Works just fine on Android
-* Plugins that add buttons to the Navbar might not be supported.
 * Portrait mode videos (e.g. from mobile phones) need to be recoded in actual portrait orientation, rotation tags won't work.
 * The theme no longer ships jQuery: it uses the copy bundled with Piwigo, which is **jQuery 1.11.3 (2015) and obsolete**, with known security advisories. Updating it is up to Piwigo, not to this theme.
 
