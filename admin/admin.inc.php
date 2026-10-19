@@ -157,12 +157,11 @@ if (function_exists('jm_help_support_boot')) {
 }
 
 // --- 11. Credits modal ---
-// Virtual path, it does not need to exist: jm-credits.php derives its template
-// folder as dirname(<path>) . '/template/', i.e. admin/template/ here, where the
-// jm-credits-*.tpl partials are injected.
+// The build line is read from include/jm-build-info.php, while the jm-credits-*.tpl
+// partials are injected in admin/template/: the two folders are passed apart.
 bd_admin_require('jm-credits.php', $bd_root . '/include');
 if (function_exists('jm_credits_boot')) {
-  jm_credits_boot($template, $bd_descriptor, $bd_admin_dir . '/include');
+  jm_credits_boot($template, $bd_descriptor, $bd_root . '/include', $bd_tpl);
 }
 
 // --- 12. Stylesheets in <head>: shared design system, then the theme's delta ---
