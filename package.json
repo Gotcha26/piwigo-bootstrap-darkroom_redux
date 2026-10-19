@@ -1,0 +1,7 @@
+{
+  "name": "piwigo-theme-bootstrap-darkroom-redux",
+  "private": true,
+  "scripts": {
+    "minify": "node ../.local/scripts/minify.js .local/scripts/.env.project"
+  }
+}

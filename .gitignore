@@ -113,3 +113,10 @@ CLAUDE.md
 
 # Artefact d'audit i18n (dry-run devtools — régénéré à la demande)
 .local/AUDIT-i18n.md
+
+# Shared jm-* commons, injected from the toolkit at build time (#17): never tracked.
+**/jm-*
+
+# Admin assets compiled by `npm run minify` (#17): built, not tracked.
+admin/assets/css/*.css
+admin/assets/js/*.min.js

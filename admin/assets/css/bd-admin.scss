@@ -1,0 +1,4 @@
+@charset "UTF-8";
+// bd-admin.scss: Bootstrap Darkroom delta on top of the shared design system.
+// No `@use 'common'` here: it ships in bd-common.css, loaded BEFORE this file by
+// jm_css_bundle().
