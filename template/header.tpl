@@ -84,7 +84,7 @@
 {else}
 {assign var=loc value="footer"} 
 {/if}
-{combine_script id='jquery' path='themes/bootstrap_darkroom/node_modules/jquery/dist/jquery.min.js' load=$loc}
+{* jQuery comes from Piwigo core (registered as 'jquery'): resolved through the require= of the scripts below *}
 {combine_script id='jquery.ajaxmanager' require='jquery' path='themes/default/js/plugins/jquery.ajaxmanager.js' load='footer'}
 {combine_script id='thumbnails.loader' require='jquery.ajaxmanager' path='themes/default/js/thumbnails.loader.js' load='footer'}
 {combine_script id='popper.js' require='jquery' path='themes/bootstrap_darkroom/node_modules/popper.js/dist/umd/popper.min.js' load=$loc}
