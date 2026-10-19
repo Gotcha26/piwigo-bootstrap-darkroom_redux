@@ -97,6 +97,7 @@ $lang['Every other color theme, including the default one, serves its fonts from
 $lang['Third-party components'] = 'Third-party components';
 $lang['This theme redistributes the components listed below. Versions are those actually shipped.'] = 'This theme redistributes the components listed below. Versions are those actually shipped.';
 $lang['Libraries'] = 'Libraries';
+$lang['is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.'] = 'is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.';
 $lang['Component'] = 'Component';
 $lang['License'] = 'License';
 $lang['Bundled scripts'] = 'Bundled scripts';
