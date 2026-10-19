@@ -1,0 +1,119 @@
+{
+  "components": {
+    "@fortawesome/fontawesome-free": {
+      "version": "5.11.2",
+      "source": "npm",
+      "license": "CC BY 4.0, SIL OFL 1.1, MIT",
+      "files": [
+        "css/*",
+        "webfonts/*"
+      ]
+    },
+    "bootstrap": {
+      "version": "4.3.1",
+      "source": "npm",
+      "license": "MIT",
+      "files": [
+        "dist/css/*",
+        "dist/js/*"
+      ]
+    },
+    "bootstrap-material-design": {
+      "version": "4.1.2",
+      "source": "npm",
+      "license": "MIT",
+      "files": [
+        "dist/js/*"
+      ]
+    },
+    "bootstrap-social": {
+      "version": "5.1.1",
+      "source": "npm",
+      "license": "MIT",
+      "files": [
+        "bootstrap-social.css"
+      ]
+    },
+    "jQuery-Touch-Events": {
+      "version": "1.0.9",
+      "source": "github",
+      "license": "MIT",
+      "repo": "benmajor/jQuery-Touch-Events",
+      "ref": "96771542eebc115e694e0f0df08dfda6103d9b70",
+      "files": [
+        "src/*"
+      ]
+    },
+    "photoswipe": {
+      "version": "4.1.3",
+      "source": "npm",
+      "license": "MIT",
+      "files": [
+        "dist/default-skin/*",
+        "dist/*"
+      ]
+    },
+    "popper.js": {
+      "version": "1.15.0",
+      "source": "npm",
+      "license": "MIT",
+      "files": [
+        "dist/umd/*"
+      ]
+    },
+    "selectize": {
+      "version": "0.12.6",
+      "source": "npm",
+      "license": "Apache-2.0",
+      "files": [
+        "dist/css/*",
+        "dist/js/*",
+        "dist/js/standalone/*",
+        "dist/less/plugins/*",
+        "dist/less/*"
+      ]
+    },
+    "slick-carousel": {
+      "version": "1.6.0",
+      "source": "github",
+      "license": "MIT",
+      "repo": "tkuther/slick",
+      "ref": "f2203807a12a15f3f86c816f02f1f52e17ce9107",
+      "fork": true,
+      "files": [
+        "slick/*",
+        "slick/fonts/*"
+      ]
+    },
+    "bootswatch": {
+      "version": "4.3.1",
+      "source": "frozen",
+      "license": "MIT",
+      "note": "Bootswatch palettes are compiled into css/bootswatch-*/ ; the SCSS sources are no longer shipped."
+    },
+    "compiled-css": {
+      "version": "4.3.1",
+      "source": "frozen",
+      "license": "MIT",
+      "note": "The 35 stylesheets under css/ are frozen at Bootstrap 4.3.1 ; not rebuilt (node-sass chain retired). Adapt through override CSS."
+    },
+    "jquery.equalheights": {
+      "version": "1.01",
+      "source": "manual",
+      "license": "GPL-3.0-or-later",
+      "files": [
+        "js/jquery.equalheights.js"
+      ],
+      "note": "Rob Glazebrook, imported from Bootstrap Default."
+    },
+    "jquery.awesomeCloud": {
+      "version": "0.2",
+      "source": "manual",
+      "license": "not stated",
+      "files": [
+        "js/jquery.awesomeCloud.js"
+      ],
+      "note": "Russ Porosky, IndyArmy Network."
+    }
+  }
+}
