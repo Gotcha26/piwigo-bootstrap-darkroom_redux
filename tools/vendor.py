@@ -142,7 +142,7 @@ def _read_archive(data):
     with archive:
         for member in archive.getmembers():
             parts = member.name.replace("\\", "/").split("/")
-            if member.name.startswith(("/", "\\")) or ".." in parts or ":" in parts[0]:
+            if member.name.startswith(("/", "\\")) or ".." in parts or any(":" in part for part in parts):
                 raise UpdateError("unsafe path in archive: %s" % member.name)
             if member.issym() or member.islnk() or member.isdev():
                 raise UpdateError("link or device in archive: %s" % member.name)
@@ -225,6 +225,7 @@ def apply_update(plan, manifest, root, manifest_path):
     for leftover in (fresh, backup):
         if leftover.exists():
             shutil.rmtree(leftover)
+    keep_backup = False
     try:
         for relative, content in plan.staged.items():
             destination = fresh / relative
@@ -236,13 +237,20 @@ def apply_update(plan, manifest, root, manifest_path):
         os.replace(fresh, target)
         os.replace(manifest_new, manifest_path)
     except OSError as error:
-        if backup.exists():
-            if target.exists():
-                shutil.rmtree(target)
-            os.replace(backup, target)
+        try:
+            if backup.exists():
+                if target.exists():
+                    shutil.rmtree(target)
+                os.replace(backup, target)
+        except OSError as rollback_error:
+            keep_backup = True
+            raise UpdateError("update of %s failed (%s) and the rollback failed too (%s): "
+                              "the previous version is kept in %s" % (plan.name, error, rollback_error, backup))
         raise UpdateError("update of %s failed and was rolled back: %s" % (plan.name, error))
     finally:
-        for leftover in (fresh, backup):
+        # The backup is the only copy of the previous version: delete it only
+        # after a successful swap or a successful rollback.
+        for leftover in (fresh,) if keep_backup else (fresh, backup):
             if leftover.exists():
                 shutil.rmtree(leftover, ignore_errors=True)
         if manifest_new.exists():
@@ -355,7 +363,10 @@ def _print_rows(rows):
             latest, extra = "-", "fork: compare with the upstream project by hand"
         else:
             latest = row.latest or "up to date"
-            extra = ", ".join(row.advisories) if row.advisories else "none listed in OSV"
+            if row.kind != "npm":
+                extra = "advisories not checked (not an npm package)"
+            else:
+                extra = ", ".join(row.advisories) if row.advisories else "none listed in OSV"
         print("%-32s %-12s %-19s %s" % (row.name, row.current, latest, extra))
         for note in row.notes:
             print("%-32s   note: %s" % ("", note))

@@ -75,9 +75,9 @@ node_modules/jQuery-Touch-Events/src/*
 #########################################################################
 
 # Source maps : inutiles à l'exécution (le navigateur ne les demande qu'avec
-# les DevTools ouvertes) et ~60 Mo à elles seules. Retirées du dépôt, et
-# `--source-map` coupé dans package.json ; ce motif couvre aussi celles que
-# ramènerait une réinstallation des dépendances sous node_modules/.
+# les DevTools ouvertes) et ~60 Mo à elles seules. Retirées du dépôt ;
+# tools/vendor.py n'en conserve jamais, et ce motif couvre aussi celles que
+# ramènerait une installation manuelle sous node_modules/.
 *.map
 
 # IDE & outils locaux
