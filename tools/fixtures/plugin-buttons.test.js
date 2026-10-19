@@ -19,6 +19,12 @@
   }
 
   function run() {
+    if ($('body').hasClass('nojs')) {
+      $('.nojs-img').each(function () {
+        check('img height no js (' + this.id + ')', $(this).height() < 32, $(this).height() + 'px');
+      });
+      return;
+    }
     if (!window.bdPluginButtons) {
       check('normaliser loaded', false, 'window.bdPluginButtons is not defined');
       return;
@@ -77,6 +83,9 @@
         wrap.parentNode.tagName === 'LI' && /\bnav-item\b/.test(wrap.parentNode.className) &&
         window.__shack === 1,
         wrap.parentNode.outerHTML);
+      var iconHeight = $('#osm i.fa-globe').height();
+      check('img height', Math.abs($(img).height() - iconHeight) <= 2,
+        'img ' + $(img).height() + 'px, icon ' + iconHeight + 'px');
     }
 
     if (has('#xss')) {

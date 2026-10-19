@@ -95,6 +95,7 @@
     {combine_script id='bootstrap' require='popper.js' path='themes/bootstrap_darkroom/node_modules/bootstrap/dist/js/bootstrap.min.js' load=$loc}
 {/if}
 {combine_script id=$themeconf.name require='bootstrap' path='themes/bootstrap_darkroom/js/theme.js' load='footer'}
+{combine_script id='bootstrap_darkroom.plugin_buttons' require='bootstrap' path='themes/bootstrap_darkroom/js/plugin-buttons.js' load='footer'}
 {/strip}
 {get_combined_scripts load='header'}
 {if not empty($head_elements)}
