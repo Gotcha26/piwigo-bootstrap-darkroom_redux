@@ -155,13 +155,19 @@ $template->assign(array(
   'JM_HELP_WIP_PARTIAL'     => $bd_tpl . 'jm-help-wip.tpl',
 ));
 
-// --- 10. "Help & support", rendered by the shell under the tabs ---
-// The else is not decorative: without it the shell includes an unassigned partial.
+// --- 10. "Help & support", once, at the end of the first tab ---
+// Tabbed body (shared ADMIN-SHELL § placement): detached from the shell, which would
+// otherwise render it outside the tabs, under every one of them. bd-body.tpl includes
+// it at the end of Appearance, after "Maintenance & advanced options".
+// The else is not decorative: without it the template includes an unassigned partial.
 bd_admin_require('jm-help-support.php', $bd_root . '/include');
 if (function_exists('jm_help_support_boot')) {
-  jm_help_support_boot($template, $bd_descriptor);
+  jm_help_support_boot($template, $bd_descriptor, array('inline' => false));
 } else {
-  $template->assign('JM_HELP_SUPPORT_PARTIAL', $bd_tpl . 'jm-help-support.tpl');
+  $template->assign(array(
+    'JM_HELP_SUPPORT_PARTIAL' => $bd_tpl . 'jm-help-support.tpl',
+    'JM_HELP_SUPPORT_INLINE'  => false,
+  ));
 }
 
 // --- 11. Credits modal ---

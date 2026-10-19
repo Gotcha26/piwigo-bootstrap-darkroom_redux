@@ -276,6 +276,11 @@
    neither posted nor seen by the dirty tracker. *}
 {if isset($JM_MAINTENANCE_PARTIAL)}{include file=$JM_MAINTENANCE_PARTIAL}{/if}
 
+{* Shared "Help & support", once, last accordion of the first tab (shared ADMIN-SHELL
+   § placement): detached from the shell (inline => false in admin.inc.php), which
+   would otherwise render it under every tab. *}
+{if isset($JM_HELP_SUPPORT_PARTIAL)}{include file=$JM_HELP_SUPPORT_PARTIAL}{/if}
+
 </div>{* /appearance *}
 
 {* ===================================================================== Components *}
