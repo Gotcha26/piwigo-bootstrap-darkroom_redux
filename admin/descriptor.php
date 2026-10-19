@@ -32,7 +32,10 @@ if (!function_exists('bd_admin_descriptor')) {
         'subtitle' => l10n('bd_subtitle'),
       ),
       'support' => array(
-        'repo' => 'https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux',
+        'repo'            => 'https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux',
+        // Rendered in the Appearance tab: joins its exclusive accordion group, like the
+        // Maintenance section above it.
+        'accordion_group' => 'bd-appearance',
       ),
       'credits' => array(
         'kind'         => 'theme',
