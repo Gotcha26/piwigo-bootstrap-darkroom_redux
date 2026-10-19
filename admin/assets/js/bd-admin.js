@@ -6,7 +6,7 @@
  * dependencies): jm.createTabs, jm.createAccordion, jm.sectionColumns, jm.tooltip,
  * jm.Credits, jm.modal, jm.helpWip, jm.flash, jm.flashServerMessages,
  * jm.createDirtyTracker, jm.createFormSave, jm.formSaveButtonState, jm.ws,
- * jm.createDataActionRouter.
+ * jm.createDataActionRouter, jm.createCodeEditor.
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
  * jm_ws_admin_page_dispatch() answers: a theme has no reliable ws.php method.
@@ -151,6 +151,10 @@
     if (!form) return;
     // Before the dirty tracker takes its baseline: the derived values are part of it.
     initForm(form);
+    // Custom CSS editor (#21). It writes back to the textarea and fires `input`,
+    // which the dirty tracker already listens to. No-op without CodeMirror.
+    var css = document.getElementById('bd-f-custom_css');
+    if (css && jm.createCodeEditor) jm.createCodeEditor(css, { mode: 'text/css', theme: 'bd-jm' });
     var save = initSave(form);
     if (save && jm.createDataActionRouter) {
       jm.createDataActionRouter({ click: { 'config-save': function () { save.save(); } } });

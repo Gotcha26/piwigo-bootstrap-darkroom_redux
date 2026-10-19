@@ -110,6 +110,12 @@ jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
 }
+// CodeMirror stylesheet for the Custom CSS editor (#21); its scripts are emitted by
+// {jm_vendor_asset} in bd-body.tpl. Never href="": it would resolve to this page.
+$bd_cm_css = function_exists('jm_vendor_url') ? jm_vendor_url('codemirror/codemirror.min.css') : null;
+if ($bd_cm_css !== null && $bd_cm_css !== '') {
+  $template->append('head_elements', '<link rel="stylesheet" href="' . htmlspecialchars($bd_cm_css, ENT_QUOTES) . '">');
+}
 $bd_theme = 'clear';
 bd_admin_require('jm-theme-detector.php', $bd_root . '/include');
 if (class_exists('JM_ThemeDetector')) {
