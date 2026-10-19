@@ -26,6 +26,7 @@ class ThemeController {
       add_event_handler('blockmanager_apply', array($this, 'hideMenus'));                                                                                                
     }
 
+    add_event_handler('loc_begin_about', array($this, 'assignCredits'));
     add_event_handler('loc_begin_page_header', array($this, 'checkIfHomepage'));
     add_event_handler('loc_after_page_header', array($this, 'stripBreadcrumbs'));
     add_event_handler('format_exif_data', array($this, 'exifReplacements'));
@@ -56,6 +57,21 @@ class ThemeController {
     }
 
     $template->assign('theme_config', $this->config);
+  }
+
+  // Component list of the About page, generated from tools/vendor.json (the
+  // admin credits modal reads the same file).
+  public function assignCredits() {
+    global $template;
+
+    $credits = include PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/credits.php';
+    $groups = array();
+    foreach (array('core', 'viewers', 'scripts', 'fonts') as $id) {
+      if (!empty($credits[$id])) {
+        $groups[] = array('title' => l10n('bd_credits_group_' . $id), 'items' => $credits[$id]);
+      }
+    }
+    $template->assign('bd_credits', $groups);
   }
 
   public function showUpgradeWarning() {
