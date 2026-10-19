@@ -6,7 +6,12 @@
    from the former settings template. Dependent fields are greyed out (.is-disabled +
    inert), never disabled: a disabled field would be left out of the POST and its
    stored value wiped. Their dependency is declared by data-bd-when:
-   "<checkbox name>" or "<field name>=<value>". *}
+   "<checkbox name>" or "<field name>=<value>".
+
+   Every field carries a caption and a tooltip (shared TPL-BRICKS § documenting a
+   field, #29): the caption (.jm-field-desc, bd_desc_*) says what the field IS, the
+   tooltip (bd_tip_*) says HOW to use it. Tooltips may hold <br> and <code>, so they
+   are printed unescaped; captions are escaped. *}
 <form id="bd-settings-form" class="jm-cols" autocomplete="off" novalidate>
 
 {* ===================================================================== Appearance *}
@@ -15,8 +20,17 @@
 <section class="jm-section is-open" data-section-id="bd-colour" data-accordion-group="bd-appearance">
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_colour'|@translate icon_glyph='&#9680;&#65038;' expanded=true}
   <div class="jm-section-body">
-    <p class="jm-field-desc">{'bd_colour_desc'|@translate|escape}</p>
-    {include file=$BD_CHOICE_GRID_PARTIAL name='bootstrap_theme' groups=$BD_VARIANTS value=$theme_config->bootstrap_theme label='Color theme'|@translate}
+    <div class="jm-field">
+      <div class="jm-field-header">
+        <span class="jm-field-label">{'Color theme'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_bootstrap_theme'|@translate}</span></span>
+        </span>
+      </div>
+      <span class="jm-field-desc">{'bd_desc_bootstrap_theme'|@translate|escape}</span>
+      <div class="jm-field-controls">
+        {include file=$BD_CHOICE_GRID_PARTIAL name='bootstrap_theme' groups=$BD_VARIANTS value=$theme_config->bootstrap_theme label='Color theme'|@translate}
+      </div>
+    </div>
     {* Derived from the variant by bd-admin.js, as before. *}
     <input type="hidden" name="navbar_main_style" value="{$theme_config->navbar_main_style|escape:'html'}">
     <input type="hidden" name="navbar_main_bg" value="{$theme_config->navbar_main_bg|escape:'html'}">
@@ -34,35 +48,51 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-fluid_width">{'Full width layout'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Use full width containers that span the entire width of the viewport'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_fluid_width'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_fluid_width'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-fluid_width" name="fluid_width" value="1"{if $theme_config->fluid_width} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row" data-bd-when="fluid_width">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-fluid_width_col_xxl">{'Use 6 colums for viewports >= 1680px'|@translate|escape}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-fluid_width_col_xxl">{'Use 6 colums for viewports >= 1680px'|@translate|escape}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_fluid_width_col_xxl'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_fluid_width_col_xxl'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-fluid_width_col_xxl" name="fluid_width_col_xxl" value="1"{if $theme_config->fluid_width_col_xxl} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
 
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-logo_image_enabled">{'Site logo'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Display a site logo image instead of plain text'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_logo_image_enabled'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_logo_image_enabled'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-logo_image_enabled" name="logo_image_enabled" value="1"{if $theme_config->logo_image_enabled} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row" data-bd-when="logo_image_enabled">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-logo_image_path">{'Path'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'The path to the image, relative to your Piwigo installation folder'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_logo_image_path'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_logo_image_path'|@translate|escape}</span>
       </div>
-      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-logo_image_path" name="logo_image_path" value="{$theme_config->logo_image_path|escape:'html'}" placeholder="relative/path/to/image"></div>
+      {* Informative placeholder (shared PLACEHOLDER-FIELD): an image of the maintainer's
+         gallery, as a path relative to the Piwigo folder, since header.tpl prefixes it
+         with the root URL. *}
+      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-logo_image_path" name="logo_image_path" value="{$theme_config->logo_image_path|escape:'html'}" placeholder="i.php?/upload/2026/01/08/20260108151136-96d856d6-th.jpg"></div>
     </div>
 
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-page_header">{'Banner style'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-page_header">{'Banner style'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_page_header'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-page_header" name="page_header">
           <option value="jumbotron"{if $theme_config->page_header == 'jumbotron'} selected{/if}>{'Jumbotron'|@translate}</option>
@@ -74,17 +104,29 @@
     <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-page_header_image">{'Background image'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'URL or releative path to the image'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_image'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_page_header_image'|@translate|escape}</span>
       </div>
-      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-page_header_image" name="page_header_image" value="{$theme_config->page_header_image|escape:'html'}"></div>
+      {* Informative placeholder: an image of the maintainer's gallery, full URL. *}
+      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-page_header_image" name="page_header_image" value="{$theme_config->page_header_image|escape:'html'}" placeholder="https://galerie.julien-moreau.fr/i.php?/upload/2026/01/08/20260108151136-96d856d6-xl.jpg"></div>
     </div>
     <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-page_header_both_navs">{'Integrate lower navbar'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-page_header_both_navs">{'Integrate lower navbar'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_both_navs'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_page_header_both_navs'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-page_header_both_navs" name="page_header_both_navs" value="1"{if $theme_config->page_header_both_navs} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row" data-bd-when="page_header=fancy">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-page_header_full">{'Span the full viewport height'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-page_header_full">{'Span the full viewport height'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_page_header_full'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_page_header_full'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-page_header_full" name="page_header_full" value="1"{if $theme_config->page_header_full} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
   </div>
@@ -96,8 +138,9 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-category_wells">{'Display categories as Bootstrap media wells'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'This will display categories as media wells with squared thumbnails, similar to the smartpocket mobile theme.'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_category_wells'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_category_wells'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-category_wells" name="category_wells">
@@ -108,26 +151,47 @@
       </div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-cat_descriptions">{'Display category description in grid view'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-cat_descriptions">{'Display category description in grid view'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_cat_descriptions'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_cat_descriptions'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-cat_descriptions" name="cat_descriptions" value="1"{if $theme_config->cat_descriptions} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-cat_nb_images">{'Display number of images in album and subalbums'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-cat_nb_images">{'Display number of images in album and subalbums'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_cat_nb_images'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_cat_nb_images'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-cat_nb_images" name="cat_nb_images" value="1"{if $theme_config->cat_nb_images} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-thumbnail_caption">{'Show image caption'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-thumbnail_caption">{'Show image caption'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_thumbnail_caption'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_thumbnail_caption'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-thumbnail_caption" name="thumbnail_caption" value="1"{if $theme_config->thumbnail_caption} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-thumbnail_desc">{'Use description rather than title for images'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-thumbnail_desc">{'Use description rather than title for images'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_thumbnail_desc'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_thumbnail_desc'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-thumbnail_desc" name="thumbnail_desc" value="1"{if $theme_config->thumbnail_desc} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-thumbnail_linkto">{'Link thumbnail to'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_linkto'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_thumbnail_linkto'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_thumbnail_linkto'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-thumbnail_linkto" name="thumbnail_linkto">
@@ -140,8 +204,9 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-thumbnail_cat_desc">{'Description display style'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Simple'|@translate}: {'center-aligned h5 heading'|@translate|escape}. {'Advanced'|@translate}: {'left-aligned free text for advanced descriptions'|@translate|escape}.</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_thumbnail_cat_desc'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_thumbnail_cat_desc'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-thumbnail_cat_desc" name="thumbnail_cat_desc">
@@ -151,7 +216,12 @@
       </div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-thumbnail_nb_images">{'Display number of images in breadcrumb'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-thumbnail_nb_images">{'Display number of images in breadcrumb'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_thumbnail_nb_images'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_thumbnail_nb_images'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-thumbnail_nb_images" name="thumbnail_nb_images" value="1"{if $theme_config->thumbnail_nb_images} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
   </div>
@@ -161,7 +231,12 @@
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_picture'|@translate icon_glyph='&#9635;&#65038;' expanded=false}
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-picture_info">{'Picture info display position'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-picture_info">{'Picture info display position'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_picture_info'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_picture_info'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-picture_info" name="picture_info">
           <option value="cards"{if $theme_config->picture_info == 'cards'} selected{/if}>{'Card grid below the image'|@translate}</option>
@@ -177,9 +252,13 @@
 <section class="jm-section" data-section-id="bd-css" data-accordion-group="bd-appearance">
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_css'|@translate icon_glyph='&#10100;&#10101;' expanded=false}
   <div class="jm-section-body">
-    <p class="jm-field-desc">{'bd_css_desc'|@translate|escape}</p>
     <div class="jm-field">
-      <label class="jm-field-label" for="bd-f-custom_css">{'Custom CSS'|@translate}</label>
+      <div class="jm-field-header">
+        <label class="jm-field-label" for="bd-f-custom_css">{'Custom CSS'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_custom_css'|@translate}</span></span>
+        </label>
+      </div>
+      <span class="jm-field-desc">{'bd_desc_custom_css'|@translate|escape}</span>
       <textarea class="jm-input jm-input--wide bd-code" id="bd-f-custom_css" name="custom_css" rows="12" spellcheck="false">{$theme_config->custom_css|escape:'html'}</textarea>
       {* CodeMirror from the shared asset store (#21): core first, then the CSS mode.
          Without it, the textarea stays a plain textarea. *}
@@ -205,16 +284,18 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-slick_enabled">{'Enabled'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Enable the slick carousel below the main image on the picture page'|@translate|escape}.</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_slick_enabled'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_slick_enabled'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-slick_enabled" name="slick_enabled" value="1"{if $theme_config->slick_enabled} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-slick_lazyload">{'lazyLoad method'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">ondemand {'will load the image as soon as you slide to it'|@translate|escape}. progressive {'loads all images one after another when the page loads (use carefully!)'|@translate|escape}.</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_slick_lazyload'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_slick_lazyload'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-slick_lazyload" name="slick_lazyload">
@@ -226,16 +307,18 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-slick_infinite">{'Infinite looping'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Endlessly scroll through album images'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_slick_infinite'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_slick_infinite'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-slick_infinite" name="slick_infinite" value="1"{if $theme_config->slick_infinite} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-slick_centered">{'Center mode'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Display the currently selected image in the middle. Works best with infinite looping enabled.'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_slick_centered'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_slick_centered'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-slick_centered" name="slick_centered" value="1"{if $theme_config->slick_centered} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
@@ -248,13 +331,19 @@
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-photoswipe">{'Enabled'|@translate}
-          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'Enable PhotoSwipe fullscreen slideshow. Disable if you prefer to use Plugins like Fotorama or Piwigo\'s default slideshow.'|@translate|escape}</span></span>
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_photoswipe'|@translate}</span></span>
         </label>
+        <span class="jm-field-desc">{'bd_desc_photoswipe'|@translate|escape}</span>
       </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-photoswipe" name="photoswipe" value="1"{if $theme_config->photoswipe} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-photoswipe_interval">{'Autoplay interval'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-photoswipe_interval">{'Autoplay interval'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_photoswipe_interval'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_photoswipe_interval'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls">
         <input type="number" class="jm-input" id="bd-f-photoswipe_interval" name="photoswipe_interval" value="{$theme_config->photoswipe_interval|escape:'html'}" min="1000" max="50000" step="100">
         <span class="bd-unit">{'milliseconds'|@translate}</span>
@@ -267,7 +356,12 @@
   {include file=$JM_SECTION_HEADER_PARTIAL title='Quick search'|@translate icon_glyph='&#8981;&#65038;' expanded=false}
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-quicksearch_navbar">{'Quick search'|@translate} {'directly in the navigation bar'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-quicksearch_navbar">{'bd_label_quicksearch_navbar'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_quicksearch_navbar'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_quicksearch_navbar'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-quicksearch_navbar" name="quicksearch_navbar" value="1"{if $theme_config->quicksearch_navbar} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
   </div>
@@ -277,7 +371,12 @@
   {include file=$JM_SECTION_HEADER_PARTIAL title='Comments'|@translate icon_glyph='&#9993;&#65038;' expanded=false}
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-comments_type">{'Comments'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-comments_type">{'Comments'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_comments_type'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_comments_type'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-comments_type" name="comments_type">
           <option value="piwigo"{if $theme_config->comments_type == 'piwigo'} selected{/if}>{'Piwigo'|@translate}</option>
@@ -286,7 +385,12 @@
       </div>
     </div>
     <div class="jm-field jm-field--row" data-bd-when="comments_type=disqus">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-comments_disqus_shortname">{'Disqus shortname'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-comments_disqus_shortname">{'Disqus shortname'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_comments_disqus_shortname'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_comments_disqus_shortname'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-comments_disqus_shortname" name="comments_disqus_shortname" value="{$theme_config->comments_disqus_shortname|escape:'html'}"></div>
     </div>
   </div>
@@ -296,7 +400,12 @@
   {include file=$JM_SECTION_HEADER_PARTIAL title='Tag cloud'|@translate icon_glyph='&#9729;&#65038;' expanded=false}
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-tag_cloud_type">{'Tag cloud'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-tag_cloud_type">{'Tag cloud'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_tag_cloud_type'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_tag_cloud_type'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-tag_cloud_type" name="tag_cloud_type">
           <option value="basic"{if $theme_config->tag_cloud_type == 'basic'} selected{/if}>{'Basic'|@translate}</option>
@@ -316,27 +425,32 @@
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_social'|@translate icon_glyph='&#8689;&#65038;' expanded=true}
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_enabled">{'Enabled'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-social_enabled">{'Enabled'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_social_enabled'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_social_enabled'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_enabled" name="social_enabled" value="1"{if $theme_config->social_enabled} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
+    {foreach from=['social_twitter' => 'Twitter', 'social_facebook' => 'Facebook', 'social_pinterest' => 'Pinterest', 'social_vk' => 'VK'] key=bd_key item=bd_network}
     <div class="jm-field jm-field--row" data-bd-when="social_enabled">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_twitter">{'Twitter'|@translate}</label></div>
-      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_twitter" name="social_twitter" value="1"{if $theme_config->social_twitter} checked{/if}><span class="jm-switch-track"></span></label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-{$bd_key}">{$bd_network|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{"bd_tip_$bd_key"|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{"bd_desc_$bd_key"|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-{$bd_key}" name="{$bd_key}" value="1"{if $theme_config->$bd_key} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
+    {/foreach}
     <div class="jm-field jm-field--row" data-bd-when="social_enabled">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_facebook">{'Facebook'|@translate}</label></div>
-      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_facebook" name="social_facebook" value="1"{if $theme_config->social_facebook} checked{/if}><span class="jm-switch-track"></span></label></div>
-    </div>
-    <div class="jm-field jm-field--row" data-bd-when="social_enabled">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_pinterest">{'Pinterest'|@translate}</label></div>
-      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_pinterest" name="social_pinterest" value="1"{if $theme_config->social_pinterest} checked{/if}><span class="jm-switch-track"></span></label></div>
-    </div>
-    <div class="jm-field jm-field--row" data-bd-when="social_enabled">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_vk">{'VK'|@translate}</label></div>
-      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_vk" name="social_vk" value="1"{if $theme_config->social_vk} checked{/if}><span class="jm-switch-track"></span></label></div>
-    </div>
-    <div class="jm-field jm-field--row" data-bd-when="social_enabled">
-      <div class="jm-field-label-col"><label class="jm-field-label" for="bd-f-social_buttons">{'Use colored share buttons instead of icons'|@translate}</label></div>
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-social_buttons">{'Use colored share buttons instead of icons'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_social_buttons'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_social_buttons'|@translate|escape}</span>
+      </div>
       <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-social_buttons" name="social_buttons" value="1"{if $theme_config->social_buttons} checked{/if}><span class="jm-switch-track"></span></label></div>
     </div>
   </div>
