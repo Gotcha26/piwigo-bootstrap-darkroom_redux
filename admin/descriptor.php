@@ -32,7 +32,14 @@ if (!function_exists('bd_admin_descriptor')) {
       'credits' => array(
         'kind'         => 'theme',
         'license_url'  => $theme_url . 'LICENSE.txt',
+        'license_label' => l10n('bd_credits_license'),
         'product_page' => false,
+        // The forked project, credited under the author and in the thanks.
+        'upstream'     => array(
+          'name'   => 'Bootstrap Darkroom',
+          'url'    => 'https://github.com/Piwigo/piwigo-bootstrap-darkroom',
+          'author' => 'Thomas Kuther',
+        ),
         'plugin_url'   => $theme_url,
         'technologies' => array('php', 'js', 'scss', 'smarty'),
         // Shared-shell fonts and icons first (served by jm-fonts.tpl and

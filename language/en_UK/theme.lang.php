@@ -113,5 +113,6 @@ $lang['bd_css_desc'] = 'Written to local/bootstrap_darkroom/custom.css and loade
 $lang['bd_section_slick'] = 'Slick carousel';
 $lang['bd_section_social'] = 'Social sharing';
 $lang['bd_tip_linkto'] = 'The PhotoSwipe choices require PhotoSwipe to be enabled (Components tab).';
+$lang['bd_credits_license'] = 'Distributed under the Apache License 2.0.';
 $lang['bd_credits_note_privacy'] = 'Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.';
 $lang['bd_credits_note_jquery'] = 'jQuery is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.';
