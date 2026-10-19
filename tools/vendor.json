@@ -150,12 +150,6 @@
       "license": "Apache-2.0"
     },
     {
-      "name": "rating.js",
-      "url": "https://github.com/Philio/bootstrapdefault",
-      "author": "Piwigo core, via Bootstrap Default",
-      "license": "GPL-2.0"
-    },
-    {
       "name": "theme.js",
       "url": "https://github.com/Philio/bootstrapdefault",
       "author": "Phil Bayfield (Bootstrap Default), extended since",
@@ -207,8 +201,7 @@
         "jQuery-Touch-Events",
         "selectize",
         "bootstrap-social",
-        "wordcloud",
-        "rating.js"
+        "wordcloud"
       ]
     },
     {

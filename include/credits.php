@@ -21,7 +21,6 @@ return array(
     array('name' => 'Selectize 0.12.6', 'url' => 'https://selectize.dev', 'author' => 'Brian Reavis', 'license' => 'Apache-2.0'),
     array('name' => 'Bootstrap Social 5.1.1', 'url' => 'https://lipis.github.io/bootstrap-social/', 'author' => 'Panayiotis Lipiridis', 'license' => 'MIT'),
     array('name' => 'wordcloud2.js 1.2.3', 'url' => 'https://github.com/timdream/wordcloud2.js', 'author' => 'Tim Guan-tin Chien', 'license' => 'MIT'),
-    array('name' => 'rating.js', 'url' => 'https://github.com/Philio/bootstrapdefault', 'author' => 'Piwigo core, via Bootstrap Default', 'license' => 'GPL-2.0'),
   ),
   'fonts' => array(
     array('name' => 'Font Awesome Free 5.11.2', 'url' => 'https://fontawesome.com', 'author' => 'Fonticons, Inc.', 'license' => 'CC BY 4.0, SIL OFL 1.1, MIT'),
