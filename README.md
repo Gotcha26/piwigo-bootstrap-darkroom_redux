@@ -28,7 +28,7 @@ A mobile-ready [Piwigo](http://piwigo.org) theme based on [Bootstrap 4](https://
 1. Installation:
  * Use the Piwigo built-in extension manager (preferred)
  * or git clone and move to piwigo/themes/bootstrap_darkroom
- * or download from http://piwigo.org/ext/extension_view.php?eid=831
+ * or download from http://piwigo.org/ext/extension_view.php?eid=1122
 2. Enable Bootstrap Darkroom
 3. Disable the smartpocket theme (it's enabled by default). This is required in order to use Bootstrap Darkroom by default on mobile devices, too.
 
