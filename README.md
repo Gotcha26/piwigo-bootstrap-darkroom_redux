@@ -59,13 +59,7 @@ A demo is available at https://demo2.piwigo.com/ and another one at https://demo
 
 ### Components
 
-* [Bootstrap 4](https://getbootstrap.com)
-* [Bootswatch](https://bootswatch.com)
-* [Bootstrap Material Design](https://mdbootstrap.com/)
-* [PhotoSwipe](http://photoswipe.com/)
-* [Slick](http://kenwheeler.github.io/slick/)
-* [jQuery-Touch-Events](https://github.com/benmajor/jQuery-Touch-Events)
-* [Photography Icons](https://thenounproject.com/DmitryBaranovskiy/collection/photo/) by [Dmitry Baranovskiy](https://thenounproject.com/DmitryBaranovskiy/), licensed under [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/)
+The full list of redistributed components, with their versions, origins and licences, lives in one place: [`tools/vendor.json`](tools/vendor.json). [`include/credits.php`](include/credits.php) is generated from it (`python tools/vendor.py credits --apply`) and feeds both the credits window of the admin panel and the public About page, so this README does not repeat it.
 
 ### Development & Customizing
 * **The stylesheets under `css/` are compiled and frozen** at Bootstrap 4.3.1. The node-sass/Yarn build chain was retired (it no longer installs on current Node and Python); `scss/` is kept as a reference only. Do not expect `npm run build` to exist.
