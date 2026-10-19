@@ -6,7 +6,8 @@
  * dependencies): jm.createTabs, jm.createAccordion, jm.sectionColumns, jm.tooltip,
  * jm.Credits, jm.modal, jm.helpWip, jm.flash, jm.flashServerMessages,
  * jm.createDirtyTracker, jm.createFormSave, jm.formSaveButtonState, jm.ws,
- * jm.createDataActionRouter, jm.createCodeEditor.
+ * jm.createDataActionRouter, jm.createCodeEditor, jm.createAccordionModeControl,
+ * jm.createUiPref, jm.createSegmentedControl, jm.exportImport.
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
  * jm_ws_admin_page_dispatch() answers: a theme has no reliable ws.php method.
@@ -134,13 +135,39 @@
     });
   }
 
+  /* Settings export / import (#22), served like the save by the theme's admin page.
+     The messages come from BDAdmin.strings.expimp: the shared catalogue is published
+     too late for a theme's admin page. */
+  function initExportImport() {
+    if (!jm.exportImport || !document.getElementById('bd-import-feedback')) return null;
+    return jm.exportImport.create({
+      wsExportMethod: 'bootstrap_darkroom.configExport',
+      wsImportMethod: 'bootstrap_darkroom.configImport',
+      wsUrl: A.saveUrl,
+      filename: 'bootstrap_darkroom-config.json',
+      feedbackId: 'bd-import-feedback',
+      token: function () { return A.pwgToken; },
+      strings: function () { return (A.strings && A.strings.expimp) || {}; }
+    });
+  }
+
   function init() {
     if (!document.getElementById('bd-admin')) return;
     jm = window.jm || {};
     if (jm.createTabs) {
       jm.createTabs({ namespace: 'bootstrap_darkroom', validTabs: TABS, idPrefix: 'bd', rootSelector: '#bd-admin' }).init();
     }
-    if (jm.createAccordion) jm.createAccordion();
+    // Accordion mode, a per-browser preference set in the Maintenance section (#22).
+    // "Expand all" opens every section, hidden tabs included: they are open when
+    // the admin switches to them.
+    var mode = jm.createAccordionModeControl ? jm.createAccordionModeControl({
+      key: 'bootstrap_darkroom-accordion-mode',
+      expandAllScope: function () { return document.querySelectorAll('#bd-admin .jm-section'); }
+    }) : null;
+    if (jm.createAccordion) {
+      jm.createAccordion(mode ? { isSingleMode: function () { return mode.get() === 'single'; } } : {});
+    }
+    if (mode) mode.restoreOnLoad();
     if (jm.sectionColumns) jm.sectionColumns();
     if (jm.tooltip) jm.tooltip();
     if (jm.Credits) jm.Credits.init();
@@ -156,8 +183,17 @@
     var css = document.getElementById('bd-f-custom_css');
     if (css && jm.createCodeEditor) jm.createCodeEditor(css, { mode: 'text/css', theme: 'bd-jm' });
     var save = initSave(form);
-    if (save && jm.createDataActionRouter) {
-      jm.createDataActionRouter({ click: { 'config-save': function () { save.save(); } } });
+    var expimp = initExportImport();
+    if (jm.createDataActionRouter) {
+      jm.createDataActionRouter({
+        click: {
+          'config-save': function () { if (save) save.save(); },
+          'config-export': function () { if (expimp) expimp.exportConfig(); }
+        },
+        change: {
+          'config-import': function (el) { if (expimp) expimp.importConfig(el); }
+        }
+      });
     }
   }
 

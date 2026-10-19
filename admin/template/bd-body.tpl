@@ -189,6 +189,11 @@
   </div>
 </section>
 
+{* Shared "Maintenance & advanced options" (#22): export / import, accordion mode.
+   Inside the form, harmless: its buttons and file input carry no name, so they are
+   neither posted nor seen by the dirty tracker. *}
+{if isset($JM_MAINTENANCE_PARTIAL)}{include file=$JM_MAINTENANCE_PARTIAL}{/if}
+
 </div>{* /appearance *}
 
 {* ===================================================================== Components *}
