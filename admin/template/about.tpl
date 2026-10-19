@@ -25,15 +25,7 @@
 
     <h3>{'Privacy'|@translate}</h3>
 
-    <p class="bd-about-warning">{'Some color themes load their web fonts from Google servers each time a page is displayed. The IP address of your visitors, their browser and the address of the page they are viewing are then sent to a third party. The following color themes are affected:'|@translate}</p>
-
-    <p class="ident">bootswatch-cosmo, bootswatch-cyborg, bootswatch-darkly, bootswatch-flatly,
-        bootswatch-journal, bootswatch-lumen, bootswatch-lux, bootswatch-materia,
-        bootswatch-minty, bootswatch-sandstone, bootswatch-simplex, bootswatch-sketchy,
-        bootswatch-solar, bootswatch-spacelab, bootswatch-superhero, bootswatch-united,
-        bootswatch-yeti</p>
-
-    <p>{'Every other color theme, including the default one, serves its fonts from your own server.'|@translate}</p>
+    <p>{'Every color theme serves its web fonts from your own server. No web font is requested from a third party such as Google Fonts.'|@translate}</p>
 
     <h3>{'Third-party components'|@translate}</h3>
 
@@ -46,13 +38,14 @@
         <tr><td><a href="https://bootswatch.com" target="_blank">Bootswatch</a></td><td>4.3.1</td><td>MIT</td></tr>
         <tr><td><a href="https://fezvrasta.github.io/bootstrap-material-design" target="_blank">Bootstrap Material Design</a></td><td>4.1.2</td><td>MIT</td></tr>
         <tr><td><a href="https://lipis.github.io/bootstrap-social/" target="_blank">Bootstrap Social</a></td><td>5.1.1</td><td>MIT</td></tr>
-        <tr><td><a href="https://jquery.com" target="_blank">jQuery</a></td><td>3.4.1</td><td>MIT</td></tr>
         <tr><td><a href="https://github.com/benmajor/jQuery-Touch-Events" target="_blank">jQuery Touch Events</a></td><td>1.0.9</td><td>MIT</td></tr>
         <tr><td><a href="https://popper.js.org" target="_blank">Popper.js</a></td><td>1.15.0</td><td>MIT</td></tr>
         <tr><td><a href="https://photoswipe.com" target="_blank">PhotoSwipe</a></td><td>4.1.3</td><td>MIT</td></tr>
         <tr><td><a href="https://kenwheeler.github.io/slick/" target="_blank">Slick</a></td><td>1.6.0 (fork)</td><td>MIT</td></tr>
         <tr><td><a href="https://selectize.dev" target="_blank">Selectize</a></td><td>0.12.6</td><td>Apache-2.0</td></tr>
     </table>
+
+    <p><a href="https://jquery.com" target="_blank">jQuery</a> {'is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.'|@translate}</p>
 
     <h4>{'Bundled scripts'|@translate}</h4>
 
