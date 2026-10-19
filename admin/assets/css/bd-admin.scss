@@ -30,6 +30,95 @@
     overflow-wrap: normal;
   }
 
+  // Custom CSS editor (#21). The wrapper comes from the shared code editor; the
+  // chrome follows the --jm-* tokens, so light and dark come for free. Syntax
+  // colours are a small dedicated palette, outside the design system.
+  #bd-f-custom_css + .jm-code-editor-wrap {
+    height: 260px;
+  }
+
+  .cm-s-bd-jm.CodeMirror {
+    height: 100%;
+    background: var(--jm-surface);
+    color: var(--jm-fg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  .cm-s-bd-jm .CodeMirror-gutters {
+    background: var(--jm-surface-alt);
+    border-right: 1px solid var(--jm-border);
+  }
+
+  .cm-s-bd-jm .CodeMirror-linenumber,
+  .cm-s-bd-jm .cm-comment {
+    color: var(--jm-muted);
+  }
+
+  .cm-s-bd-jm .cm-comment {
+    font-style: italic;
+  }
+
+  .cm-s-bd-jm .CodeMirror-cursor {
+    border-left: 1px solid var(--jm-fg);
+  }
+
+  .cm-s-bd-jm .CodeMirror-selected {
+    background: rgba(52, 152, 219, 0.25);
+  }
+
+  .cm-s-bd-jm .cm-property {
+    color: #2980b9;
+  }
+
+  .cm-s-bd-jm .cm-atom,
+  .cm-s-bd-jm .cm-keyword {
+    color: #8e44ad;
+  }
+
+  .cm-s-bd-jm .cm-string {
+    color: #27ae60;
+  }
+
+  .cm-s-bd-jm .cm-number {
+    color: #d35400;
+  }
+
+  .cm-s-bd-jm .cm-tag,
+  .cm-s-bd-jm .cm-qualifier,
+  .cm-s-bd-jm .cm-variable-2 {
+    color: #c0392b;
+  }
+
+  &[data-theme="dark"] {
+    .cm-s-bd-jm .CodeMirror-selected {
+      background: rgba(93, 173, 226, 0.25);
+    }
+
+    .cm-s-bd-jm .cm-property {
+      color: #5dade2;
+    }
+
+    .cm-s-bd-jm .cm-atom,
+    .cm-s-bd-jm .cm-keyword {
+      color: #bb8fce;
+    }
+
+    .cm-s-bd-jm .cm-string {
+      color: #58d68d;
+    }
+
+    .cm-s-bd-jm .cm-number {
+      color: #f0966e;
+    }
+
+    .cm-s-bd-jm .cm-tag,
+    .cm-s-bd-jm .cm-qualifier,
+    .cm-s-bd-jm .cm-variable-2 {
+      color: #ec7063;
+    }
+  }
+
   .bd-unit {
     margin-left: var(--jm-gap-sm, 8px);
     color: var(--jm-muted);
