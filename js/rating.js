@@ -1,90 +1,90 @@
-var gRatingOptions, gRatingButtons, gUserRating;
+/**
+ * Star rating widget for the picture page.
+ *
+ * Original implementation for this theme, released under Apache-2.0 like the
+ * rest of it. It speaks the protocol the picture templates already use, and
+ * nothing else:
+ *
+ *   var _pwgRatingAutoQueue = _pwgRatingAutoQueue || [];
+ *   _pwgRatingAutoQueue.push({rootUrl: '…', image_id: 42, onSuccess: function (result) {…}});
+ *
+ * It then drives the #rateForm markup (one <span data-value="N"> per mark,
+ * class rateButtonStarFull / rateButtonStarEmpty) and posts the mark through
+ * the pwg.images.rate web service, using PwgWS from Piwigo's own scripts.js.
+ * The file keeps its path because the BC-BG child theme loads it from here.
+ */
+(function ($) {
+  var FULL = 'rateButtonStarFull';
+  var EMPTY = 'rateButtonStarEmpty';
 
-function makeNiceRatingForm(options)
-{
-	gRatingOptions = options;
-	var form = $('#rateForm');
-	if (!form) return; //? template changed
+  function init(options) {
+    var form = $('#rateForm');
+    var stars = form.find('span');
+    var current = null;
+    var busy = false;
 
-	gRatingButtons = form.find('span');
-	gUserRating = "";
-	gRatingButtons.each(function() {
-        if ($(this).hasClass('rateButtonStarFull')) {
-            gUserRating = $(this).data('value');
-        }
-    });
-
-    gRatingButtons.each(function() {
-        $(this).data('initialRateValue', $(this).data('value'));
-
-        pwgAddEventListener($(this).get(0), "click", updateRating);
-        pwgAddEventListener($(this).get(0), "mouseout", function() {updateRatingStarDisplay( gUserRating );});
-        pwgAddEventListener($(this).get(0), "mouseover", function(e) {
-            updateRatingStarDisplay(e.target ? $(e.target).data('initialRateValue') : $(e.srcElement).data('initialRateValue'));
-        });
-    });
-
-	updateRatingStarDisplay(gUserRating);
-}
-
-function updateRatingStarDisplay(userRating)
-{
-    gRatingButtons.each(function() {
-        $(this).addClass(userRating !=="" && userRating >= $(this).data('initialRateValue') ? 'rateButtonStarFull' : 'rateButtonStarEmpty');
-        $(this).removeClass(userRating !=="" && userRating >= $(this).data('initialRateValue') ? 'rateButtonStarEmpty' : 'rateButtonStarFull');
-    });
-}
-
-function updateRating(e)
-{
-	var elem = e.target || e.srcElement;
-    var rateButton = $(elem);
-    if (rateButton.data('disabled') == true || rateButton.data('initialRateValue') == gUserRating) {
-        return false; //nothing to do
+    if (!stars.length) {
+      return;
     }
 
-    gRatingButtons.each(function() {
-        rateButton.data('disabled', true);
+    stars.filter('.' + FULL).each(function () {
+      current = $(this).data('value');
     });
 
-	var y = new PwgWS(gRatingOptions.rootUrl);
-	y.callService(
-		"pwg.images.rate", {image_id: gRatingOptions.image_id, rate: rateButton.data('initialRateValue') } ,
-		{
-			method: "POST",
-			onFailure: function(num, text) {
-				alert(num + " " + text);
-				document.location = $('#rateForm').attr('action') + "&rate=" + rateButton.data('initialRateValue');
-			},
-			onSuccess: function(result) {
-				gUserRating = rateButton.data('initialRateValue');
-                gRatingButtons.each(function() {
-                    rateButton.data('disabled', false);
-                });
-				if (gRatingOptions.onSuccess) gRatingOptions.onSuccess(result);
-				if (gRatingOptions.updateRateElement) gRatingOptions.updateRateElement.innerHTML = gRatingOptions.updateRateText;
-				if (gRatingOptions.ratingSummaryElement)
-				{
-					var t = gRatingOptions.ratingSummaryText;
-					var args =[result.score, result.count, result.average], idx = 0, rexp = new RegExp( /%\.?\d*[sdf]/ );
-					while (idx<args.length) t=t.replace(rexp, args[idx++]);
-					gRatingOptions.ratingSummaryElement.innerHTML = t;
-				}
-			}
-		}
-	);
-	return false;
-}
+    // Fill every star up to and including `mark`; an empty mark clears them all.
+    function paint(mark) {
+      stars.each(function () {
+        var on = mark !== null && mark >= $(this).data('value');
+        $(this).toggleClass(FULL, on).toggleClass(EMPTY, !on);
+      });
+    }
 
-(function() {
-if (typeof _pwgRatingAutoQueue!="undefined" && _pwgRatingAutoQueue.length)
-{
-    for (var i=0; i<_pwgRatingAutoQueue.length; i++)
-        makeNiceRatingForm(_pwgRatingAutoQueue[i]);
-}
-_pwgRatingAutoQueue = {
-	push: function(opts) {
-		makeNiceRatingForm(opts);
-	}
-}
-})();
+    function rate(mark) {
+      if (busy || mark === current) {
+        return;
+      }
+      busy = true;
+
+      new PwgWS(options.rootUrl).callService(
+        'pwg.images.rate',
+        {image_id: options.image_id, rate: mark},
+        {
+          method: 'POST',
+          onFailure: function (code, message) {
+            alert(code + ' ' + message);
+            // No-JS path: let the server handle the mark through the form.
+            document.location = form.attr('action') + '&rate=' + mark;
+          },
+          onSuccess: function (result) {
+            current = mark;
+            busy = false;
+            if (options.onSuccess) {
+              options.onSuccess(result);
+            }
+          }
+        }
+      );
+    }
+
+    stars.on('click', function () {
+      rate($(this).data('value'));
+      return false;
+    }).on('mouseover', function () {
+      paint($(this).data('value'));
+    }).on('mouseout', function () {
+      paint(current);
+    });
+
+    paint(current);
+  }
+
+  // Replay whatever the page queued before this file loaded, then take over
+  // the queue so later pushes initialise immediately.
+  var queued = window._pwgRatingAutoQueue;
+  window._pwgRatingAutoQueue = {push: init};
+  if (queued && queued.length) {
+    $.each(queued, function (i, options) {
+      init(options);
+    });
+  }
+})(jQuery);
