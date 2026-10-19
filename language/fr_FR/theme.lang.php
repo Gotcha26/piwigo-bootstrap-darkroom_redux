@@ -171,6 +171,11 @@ $lang['bd_tip_photoswipe'] = 'Désactivez-le si vous utilisez un autre diaporama
 $lang['bd_desc_photoswipe_interval'] = 'Durée d\'affichage de chaque photo quand le diaporama défile tout seul.';
 $lang['bd_tip_photoswipe_interval'] = 'En millisecondes, de 1000 à 50000.<br>Exemple : <code>3500</code> = 3,5 secondes.';
 $lang['bd_label_quicksearch_navbar'] = 'Recherche rapide dans la barre de navigation';
+// Libellés amont sans traduction française, ni dans le thème ni dans le cœur.
+$lang['Background image'] = 'Image de fond';
+$lang['Custom CSS'] = 'CSS personnalisée';
+$lang['Disqus shortname'] = 'Identifiant Disqus';
+$lang['Tag cloud'] = 'Nuage de tags';
 $lang['bd_desc_quicksearch_navbar'] = 'Place le champ de recherche rapide de Piwigo directement dans la barre de navigation.';
 $lang['bd_tip_quicksearch_navbar'] = 'Désactivé : la recherche rapide reste dans le menu, quand son bloc Menu l\'affiche.';
 $lang['bd_desc_comments_type'] = 'Le système de commentaires des pages photo.';
