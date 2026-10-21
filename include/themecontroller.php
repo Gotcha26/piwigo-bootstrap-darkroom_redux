@@ -9,7 +9,7 @@ class ThemeController {
   }
 
   public function init() {
-    load_language('theme.lang', PHPWG_THEMES_PATH.'bootstrap_darkroom/');
+    load_language('theme.lang', PHPWG_THEMES_PATH.'bootstrap_darkroom/', array('force_fallback' => 'en_UK'));
     load_language('lang', PHPWG_ROOT_PATH.PWG_LOCAL_DIR, array('no_fallback'=>true, 'local'=>true) );
 
     add_event_handler('init', array($this, 'assignConfig'));
@@ -125,7 +125,7 @@ class ThemeController {
     }
 
     if (isset($pwg_loaded_plugins['exif_view'])) {
-      load_language('lang.exif', PHPWG_PLUGINS_PATH.'exif_view/');
+      load_language('lang.exif', PHPWG_PLUGINS_PATH.'exif_view/', array('force_fallback' => 'en_UK'));
     }
   }
 

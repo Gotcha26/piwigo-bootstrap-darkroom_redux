@@ -102,7 +102,7 @@ if (function_exists('jm_ws_admin_page_dispatch')) {
 }
 
 // --- 4. Language ---
-load_language('theme.lang', $bd_root . '/');
+load_language('theme.lang', $bd_root . '/', array('force_fallback' => 'en_UK'));
 
 // --- 5. Settings added after 2024-12: store their default once (PHP 8 notices) ---
 $bd_config = new \BootstrapDarkroom\Config();
