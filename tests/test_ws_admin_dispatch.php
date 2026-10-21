@@ -29,7 +29,8 @@ function bd_assert($c, $m) {
 }
 
 $root = dirname(__DIR__);
-$hub  = dirname($root) . '/.local';
+require_once __DIR__ . '/_hub.php';
+$hub  = jm_test_hub_root();
 foreach (array('jm-ws.php', 'jm-vendor-pins.php', 'jm-vendor.php') as $common) {
   if (!is_readable($hub . '/include/' . $common)) {
     fwrite(STDERR, "FAIL: hub common not found ($hub/include/$common)\n");
