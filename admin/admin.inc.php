@@ -84,11 +84,21 @@ require_once $bd_admin_dir . '/save.php';
 require_once $bd_admin_dir . '/export-import.php';
 require_once $bd_admin_dir . '/descriptor.php';
 
-// --- 3. Save, export and import requests: answered here, before any rendering, then exit ---
+// --- 3. Save, export, import and asset-alert requests: answered here, before any rendering, then exit ---
+// Shared asset store, loaded BEFORE the dispatcher: jm-vendor.php also carries the
+// methods behind the "third-party asset bundle not installed" alert buttons.
+// INJECT_PHP_COMMONS drops the files into include/, it does not load them.
+// Plain election here: the store is fleet-wide, its freshest copy is the right
+// one. An older elected copy has neither the alert nor its methods: both go together.
+jm_boot_require_one('jm-vendor-pins.php', $bd_root . '/include');
+jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
 bd_admin_require('jm-ws.php', $bd_root . '/include');
 bd_admin_require('jm-export-import.php', $bd_root . '/include');
 if (function_exists('jm_ws_admin_page_dispatch')) {
-  jm_ws_admin_page_dispatch('bootstrap_darkroom', bd_admin_save_methods() + bd_admin_expimp_methods());
+  jm_ws_admin_page_dispatch(
+    'bootstrap_darkroom',
+    bd_admin_save_methods() + bd_admin_expimp_methods() + bd_admin_vendor_methods()
+  );
 }
 
 // --- 4. Language ---
@@ -103,12 +113,7 @@ if (!isset($bd_config->thumbnail_nb_images)) {
   $bd_config->save();
 }
 
-// --- 6. Shared asset store and admin theme (light / dark) ---
-// INJECT_PHP_COMMONS drops the files into include/, it does not load them.
-// Plain election here: the store is fleet-wide, its freshest copy is the right
-// one, and this panel needs no recent addition to it.
-jm_boot_require_one('jm-vendor-pins.php', $bd_root . '/include');
-jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
+// --- 6. Shared asset store (loaded in step 3) and admin theme (light / dark) ---
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
 }

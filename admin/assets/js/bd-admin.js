@@ -7,7 +7,7 @@
  * jm.Credits, jm.modal, jm.helpWip, jm.flash, jm.flashServerMessages,
  * jm.createDirtyTracker, jm.createFormSave, jm.formSaveButtonState, jm.ws,
  * jm.createDataActionRouter, jm.createCodeEditor, jm.createAccordionModeControl,
- * jm.createUiPref, jm.createSegmentedControl, jm.exportImport.
+ * jm.createUiPref, jm.createSegmentedControl, jm.exportImport, jm.vendorAlert.
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
  * jm_ws_admin_page_dispatch() answers: a theme has no reliable ws.php method.
@@ -150,9 +150,24 @@
     });
   }
 
+  /* "Third-party asset bundle not installed" alert, rendered by the shared shell.
+     Its two methods are answered by jm_ws_admin_page_dispatch() on this admin page
+     (BDAdmin.saveUrl), never by ws.php. Bound before the form guard: the alert does
+     not depend on the form. */
+  function initVendorAlert() {
+    if (!window.jm || typeof window.jm.vendorAlert !== 'function' || typeof window.jm.ws !== 'function') return;
+    window.jm.vendorAlert({
+      wsMethod: 'bootstrap_darkroom.vendorRetry',
+      wsDismissMethod: 'bootstrap_darkroom.vendorDismiss',
+      wsUrl: A.saveUrl,
+      getToken: function () { return A.pwgToken; }
+    });
+  }
+
   function init() {
     if (!document.getElementById('bd-admin')) return;
     jm = window.jm || {};
+    initVendorAlert();
     if (jm.createTabs) {
       jm.createTabs({ namespace: 'bootstrap_darkroom', validTabs: TABS, idPrefix: 'bd', rootSelector: '#bd-admin' }).init();
     }

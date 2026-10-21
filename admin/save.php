@@ -79,3 +79,23 @@ if (!function_exists('bd_admin_settings_save')) {
     return array('saved' => true);
   }
 }
+
+if (!function_exists('bd_admin_vendor_methods')) {
+  /**
+   * Method table of the "third-party asset bundle not installed" alert, for
+   * jm_ws_admin_page_dispatch(): bootstrap_darkroom.vendorRetry and
+   * bootstrap_darkroom.vendorDismiss, built by the shared jm-vendor.php. The alert
+   * is rendered by the shell; its buttons post to this admin page, like the save.
+   *
+   * jm-vendor.php absent (clone without a build) or an older copy elected: no
+   * method, and no alert either, since the same common assigns it.
+   *
+   * @return array
+   */
+  function bd_admin_vendor_methods() {
+    if (!function_exists('jm_ws_methods_vendor_retry')) {
+      return array();
+    }
+    return jm_ws_methods_vendor_retry(array('enabled' => true));
+  }
+}
