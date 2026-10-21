@@ -93,18 +93,13 @@ __pycache__/
 *.py[cod]
 Thumbs.db
 
-# Secrets et config locale.
+# Secrets and local config.
+# .env* is ignored, EXCEPT the project manifest (non-secret build settings), tracked
+# as everywhere else in the fleet so that a fresh clone can build (piwigo_local#1274).
 .env*
+!.local/scripts/.env.project
 
-# Outillage local (devtools) : NON versionné sur ce dépôt.
-# Écart assumé à la convention de la flotte, qui suit `.local/scripts/.env.project`
-# comme manifeste de build. Ce dépôt est un fork PUBLIC de projet tiers : le
-# manifeste y porterait les chemins absolus du poste (PROJECT_ROOT, EasyPHP) et du
-# bruit d'outillage privé sous les yeux de l'amont. Il vit sur le disque, et le
-# registre de flotte .env.plugins l'y trouve.
-.local/
-
-# Consignes d'agent, même raison : outillage privé, hors de vue de l'amont.
+# Agent instructions: private tooling, kept out of the public repository.
 CLAUDE.md
 
 # Superpowers + worktrees (artefacts éphémères, non versionnés)
