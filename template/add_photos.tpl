@@ -19,7 +19,7 @@
 {combine_script id='piecon' load='footer' path='themes/default/js/plugins/piecon.js'}
 
 {footer_script}
-var rootUrl = "{$ABSOLUTE_ROOT_URL}";
+var rootUrl = "{$ABSOLUTE_ROOT_URL|escape:'javascript'}";
 {literal}
 jQuery(document).ready(function(){
 
@@ -173,9 +173,9 @@ Piecon.setOptions({
 
 {/literal}
 
-var pwg_token = '{$pwg_token}';
-var photosUploaded_label = "{'%d photos uploaded into album "%s"'|translate|escape}";
-var moderation_Label = "{'Your photos are waiting for validation, administrators have been notified'|translate|escape}";
+var pwg_token = '{$pwg_token|escape:'javascript'}';
+var photosUploaded_label = "{'%d photos uploaded into album "%s"'|translate|escape|escape:'javascript'}";
+var moderation_Label = "{'Your photos are waiting for validation, administrators have been notified'|translate|escape|escape:'javascript'}";
 var uploadedPhotos = [];
 var uploadCategory = null;
 
@@ -197,14 +197,14 @@ var limit_storage = {$limit_storage};
 		// url : '../upload.php',
 		url : rootUrl + 'ws.php?method=pwg.images.upload&format=json',
 		
-		chunk_size: '{/literal}{$chunk_size}{literal}kb',
+		chunk_size: '{/literal}{$chunk_size|escape:'javascript'}{literal}kb',
 		
 		filters : {
 			// Maximum file size
-			max_file_size : '{/literal}{$upload_max_filesize}{literal}',
+			max_file_size : '{/literal}{$upload_max_filesize|escape:'javascript'}{literal}',
 			// Specify what files to browse for
 			mime_types: [
-				{title : "Image files", extensions : "{/literal}{$file_exts}{literal}"}
+				{title : "Image files", extensions : "{/literal}{$file_exts|escape:'javascript'}{literal}"}
 			]
 		},
 
@@ -251,7 +251,7 @@ var limit_storage = {$limit_storage};
 
         // warn user if she wants to leave page while upload is running
         jQuery(window).bind('beforeunload', function() {
-          return "{/literal}{'Upload in progress'|translate|escape}{literal}";
+          return "{/literal}{'Upload in progress'|translate|escape|escape:'javascript'}{literal}";
         });
 
         // no more change on category/level

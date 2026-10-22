@@ -1,5 +1,5 @@
 {footer_script}
-    var error_icon = "{$ROOT_URL}{$themeconf.icon_dir}/errors_small.png", max_requests = {$maxRequests};
+    var error_icon = "{$ROOT_URL|escape:'javascript'}{$themeconf.icon_dir|escape:'javascript'}/errors_small.png", max_requests = {$maxRequests};
 {/footer_script}
 {* this might sound ridiculous, but we want to fit the thumbnails to 90% of col-xs-12 without them being too blurry *}
 {assign var=width value=520}

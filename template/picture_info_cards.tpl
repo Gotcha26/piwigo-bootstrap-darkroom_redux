@@ -61,7 +61,7 @@
                       {combine_script id='rating' require='core.scripts' path='themes/bootstrap_darkroom/js/rating.js' load='async'}
                       {footer_script require='jquery'}
                            var _pwgRatingAutoQueue = _pwgRatingAutoQueue||[];
-                           _pwgRatingAutoQueue.push( {ldelim}rootUrl: '{$ROOT_URL}', image_id: {$current.id},
+                           _pwgRatingAutoQueue.push( {ldelim}rootUrl: '{$ROOT_URL|escape:'javascript'}', image_id: {$current.id},
                                     onSuccess : function(rating) {ldelim}
                                            var e = document.getElementById("updateRate");
                                            if (e) e.innerHTML = "{'Update your rating'|@translate|@escape:'javascript'}";
@@ -253,10 +253,10 @@
 $('#show_exif_data').on('click', function() {
   if ($('#full_exif_data').hasClass('d-none')) {
     $('#full_exif_data').addClass('d-flex').removeClass('d-none');
-    $('#show_exif_data').html('<i class="fas fa-info mr-1"></i> {"Hide EXIF data"|@translate}');
+    $('#show_exif_data').html('<i class="fas fa-info mr-1"></i> {"Hide EXIF data"|@translate|escape:'javascript'}');
   } else {
     $('#full_exif_data').addClass('d-none').removeClass('d-flex');
-    $('#show_exif_data').html('<i class="fas fa-info mr-1"></i> {"Show EXIF data"|@translate}');
+    $('#show_exif_data').html('<i class="fas fa-info mr-1"></i> {"Show EXIF data"|@translate|escape:'javascript'}');
   }
 });
 {/footer_script}

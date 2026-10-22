@@ -20,7 +20,7 @@
         }
         jQuery('.derivative-li').removeClass('active');
         jQuery('#derivative'+typeMap).addClass('active');
-        document.cookie = 'picture_deriv='+typeSave+';path={$COOKIE_PATH}';
+        document.cookie = 'picture_deriv='+typeSave+';path={$COOKIE_PATH|escape:'javascript'}';
     }
 {/strip}{/footer_script}
                 <li class="nav-item dropdown">

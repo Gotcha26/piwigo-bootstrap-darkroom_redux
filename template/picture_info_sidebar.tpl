@@ -107,7 +107,7 @@
                         {combine_script id='rating' require='core.scripts' path='themes/bootstrap_darkroom/js/rating.js' load='async'}
                         {footer_script require='jquery'}
                                 var _pwgRatingAutoQueue = _pwgRatingAutoQueue||[];
-                                _pwgRatingAutoQueue.push( {ldelim}rootUrl: '{$ROOT_URL}', image_id: {$current.id},
+                                _pwgRatingAutoQueue.push( {ldelim}rootUrl: '{$ROOT_URL|escape:'javascript'}', image_id: {$current.id},
                                         onSuccess : function(rating) {ldelim}
                                                 var e = document.getElementById("updateRate");
                                                 if (e) e.innerHTML = "{'Update your rating'|@translate|@escape:'javascript'}";

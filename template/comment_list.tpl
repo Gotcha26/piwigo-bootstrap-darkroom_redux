@@ -8,7 +8,7 @@
 	min-height:{$comment_derivative_params->max_height()+5}px
 }
 {/html_style}{/strip}
-{footer_script}var error_icon = "{$ROOT_URL}{$themeconf.icon_dir}/errors_small.png";{/footer_script}
+{footer_script}var error_icon = "{$ROOT_URL|escape:'javascript'}{$themeconf.icon_dir|escape:'javascript'}/errors_small.png";{/footer_script}
 {/if}
 <div id="commentList">
 {foreach from=$comments item=comment name=comment_loop}

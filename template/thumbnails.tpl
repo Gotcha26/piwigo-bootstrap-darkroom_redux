@@ -1,6 +1,6 @@
 {if !empty($thumbnails)}
 {footer_script}
-  var error_icon = "{$ROOT_URL}{$themeconf.icon_dir}/errors_small.png"{if isset($maxRequests)}, max_requests = {$maxRequests}{/if};
+  var error_icon = "{$ROOT_URL|escape:'javascript'}{$themeconf.icon_dir|escape:'javascript'}/errors_small.png"{if isset($maxRequests)}, max_requests = {$maxRequests}{/if};
 {/footer_script}
 {if $derivative_params->type == "thumb"}
 {assign var=width value=520}

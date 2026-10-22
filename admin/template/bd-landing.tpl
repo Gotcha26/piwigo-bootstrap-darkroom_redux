@@ -12,7 +12,7 @@
 
 <script>
 window.BDAdmin = {
-  pwgToken: '{$PWG_TOKEN}',
+  pwgToken: '{$PWG_TOKEN|escape:'javascript'}',
   saveUrl:  '{$BD_SAVE_URL|escape:'javascript'}',
   {* Already JSON from json_encode() (tags, ampersands and quotes escaped). *}
   strings:  {$BD_STRINGS_JSON}

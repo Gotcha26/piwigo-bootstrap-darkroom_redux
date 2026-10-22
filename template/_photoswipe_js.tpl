@@ -3,7 +3,7 @@
 {combine_script id="photoswipe" require="jquery" path="themes/bootstrap_darkroom/node_modules/photoswipe/dist/photoswipe.min.js" load="footer"}
 {combine_script id="photoswipe.ui" require="photoswipe" path="themes/bootstrap_darkroom/node_modules/photoswipe/dist/photoswipe-ui-default.min.js" load="footer"}
 {footer_script require='jquery' require="photoswipe.ui"}{strip}
-var selector = '{$selector}';
+var selector = '{$selector|escape:'javascript'}';
 
 function startPhotoSwipe(idx) {
     $(selector).each(function() {
