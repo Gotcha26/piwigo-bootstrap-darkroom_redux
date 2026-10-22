@@ -68,11 +68,9 @@ $fr = $catalogue('fr_FR');
 bd_assert($en !== null && count($en) > 0, 'en_UK theme.lang.php exists and defines keys');
 bd_assert($fr !== null && count($fr) > 0, 'fr_FR theme.lang.php exists and defines keys');
 if ($en && $fr) {
-  // Keys that ARE the English text ('Custom CSS'...) need no en_UK entry: an
-  // untranslated key renders as itself. Only the symbolic bd_* keys must exist.
-  $symbolic = function ($k) { return strpos($k, 'bd_') === 0; };
-  $missing = array_filter(array_diff($fr, $en), $symbolic);
-  bd_assert(!$missing, 'en_UK holds every symbolic bd_* key of fr_FR' . ($missing ? ' (missing: ' . implode(', ', $missing) . ')' : ''));
+  // 1:1 with fr_FR, including keys that are the English text themselves.
+  $missing = array_diff($fr, $en);
+  bd_assert(!$missing, 'en_UK holds every key of fr_FR' . ($missing ? ' (missing: ' . implode(', ', $missing) . ')' : ''));
   $untranslated = array_diff($en, $fr);
   bd_assert(!$untranslated, 'fr_FR holds every key of en_UK' . ($untranslated ? ' (missing: ' . implode(', ', $untranslated) . ')' : ''));
 }

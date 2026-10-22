@@ -150,6 +150,11 @@ $lang['bd_tip_photoswipe'] = 'Turn it off if you use another slideshow, such as 
 $lang['bd_desc_photoswipe_interval'] = 'How long each photo stays on screen when the slideshow plays by itself.';
 $lang['bd_tip_photoswipe_interval'] = 'In milliseconds, from 1000 to 50000.<br>Example: <code>3500</code> = 3.5 seconds.';
 $lang['bd_label_quicksearch_navbar'] = 'Quick search in the navigation bar';
+// Same keys as fr_FR (1:1), where the key is already the English text.
+$lang['Background image'] = 'Background image';
+$lang['Custom CSS'] = 'Custom CSS';
+$lang['Disqus shortname'] = 'Disqus shortname';
+$lang['Tag cloud'] = 'Tag cloud';
 $lang['bd_desc_quicksearch_navbar'] = 'Puts Piwigo\'s quick search field directly in the navigation bar.';
 $lang['bd_tip_quicksearch_navbar'] = 'Off: the quick search stays in the menu, when its Menu block shows it.';
 $lang['bd_desc_comments_type'] = 'The comment system of the photo pages.';
