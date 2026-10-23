@@ -121,3 +121,6 @@ CLAUDE.md
 # Admin assets compiled by `npm run minify` (#17): built, not tracked.
 admin/assets/css/*.css
 admin/assets/js/*.min.js
+
+# Dossier d'images sources (avant conversion WebP) — exclu de tout le parc.
+.local/archives/
