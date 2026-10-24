@@ -1,7 +1,10 @@
+# Ne figurent ici que les règles qui PROTÈGENT quelque chose et doivent voyager avec le
+# dépôt. Éditeurs, système, temporaires (*.log) et outils de l'agent (__pycache__,
+# .superpowers, .playwright-mcp) : .gitignore global du poste. Fichiers de travail de
+# devtools : écrits sous .build/ (GIT-CONVENTIONS.md § .gitignore minimal obligatoire).
+
+# Fichier local de l'utilisateur du thème (hérité de l'amont).
 local_head.tpl
-npm-debug.log
-yarn-error.log
-.DS_Store
 
 # for custom themes
 css/custom/*.css
@@ -85,42 +88,40 @@ node_modules/wordcloud/*
 # ramènerait une installation manuelle sous node_modules/.
 *.map
 
-# IDE & outils locaux
-.vscode/
-.idea/
-.playwright-mcp/
-__pycache__/
-*.py[cod]
-Thumbs.db
+# ====== Node.js ======
+# Le dossier node_modules/ est vendu SÉLECTIVEMENT (négations ci-dessus) : pas de règle
+# `node_modules/` globale. Le verrou, lui, n'est jamais versionné.
+package-lock.json
 
-# Secrets and local config.
-# .env* is ignored, EXCEPT the project manifest (non-secret build settings), tracked
-# as everywhere else in the fleet so that a fresh clone can build (piwigo_local#1274).
+# ====== Secrets & environnements ======
 .env*
+credentials.json
+secrets.json
+api-keys.json
+# EXCEPTIONS (après le wildcard) — non secrets, trackés (ENV-FILES.md) :
+# le manifeste projet, tracké pour qu'un clone neuf puisse construire (piwigo_local#1274),
+# et la config wiki GitHub (alignement parc).
 !.local/scripts/.env.project
+!.local/scripts/.env.wiki
 
-# Agent instructions: private tooling, kept out of the public repository.
+# ====== Instructions de l'agent ======
+# Outillage privé, tenu hors du dépôt public.
 CLAUDE.md
 
-# Superpowers + worktrees (artefacts éphémères, non versionnés)
-.superpowers/
-.worktrees/
-
-# Staging de build devtools (manifeste, sidecars, archives)
+# ====== Artefacts de build ======
+# Staging et ZIP du build, sorties de minify, fichiers de travail de devtools.
 /.build/
-
-# Artefact de php-cs-fixer
-.php-cs-fixer.cache
-
-# Artefact d'audit i18n (dry-run devtools — régénéré à la demande)
-.local/AUDIT-i18n.md
-
-# Shared jm-* commons, injected from the toolkit at build time (#17): never tracked.
-**/jm-*
-
-# Admin assets compiled by `npm run minify` (#17): built, not tracked.
+# Assets d'administration compilés par `npm run minify` (#17) : construits, non suivis.
 admin/assets/css/*.css
 admin/assets/js/*.min.js
-
 # Dossier d'images sources (avant conversion WebP) — exclu de tout le parc.
 .local/archives/
+
+# ====== Communs injectés au build (source unique : .local/) ======
+# Communs jm-* injectés depuis la boîte à outils (#17) : jamais suivis.
+**/jm-*
+
+# ====== Worktrees ======
+# ⛔ Load-bearing : sans cette ligne, git suit la jonction `.worktrees/.local` vers
+# le hub et propose d'ajouter le hub ENTIER au dépôt.
+.worktrees/
