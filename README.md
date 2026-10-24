@@ -33,6 +33,13 @@ selected theme, settings and child themes carry over.
 
 This theme is not listed in the Piwigo extension repository: Piwigo will never offer to update it, nor overwrite it with the official release.
 
+## ⚠️ Known issues
+
+- In IE11, the navbars only display correctly with the fluid-width layout.
+- On iOS, PhotoSwipe fullscreen is not supported (iPhone: landscape only; iPad: not at all) — an iOS bug.
+- Portrait videos (e.g. from phones) must be re-encoded in actual portrait orientation: rotation tags are ignored.
+- The theme uses the jQuery bundled with Piwigo, **jQuery 1.11.3 (2015), obsolete** and subject to known security advisories; updating it is up to Piwigo.
+
 ## 📜 Origin and license
 
 Original theme by Thomas Kuther, released under the Apache License 2.0 — see [`LICENSE.txt`](LICENSE.txt). Fork maintained by Gotcha.

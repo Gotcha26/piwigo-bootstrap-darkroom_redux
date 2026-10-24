@@ -33,6 +33,13 @@ l'identique** : thème sélectionné, réglages et thèmes enfants sont conserv�
 
 Ce thème n'est pas référencé dans le dépôt d'extensions Piwigo : Piwigo ne vous proposera jamais de le mettre à jour, ni ne l'écrasera par la version officielle.
 
+## ⚠️ Problèmes connus
+
+- Sous IE11, les barres de navigation ne s'affichent correctement qu'en mise en page pleine largeur.
+- Sous iOS, le plein écran de PhotoSwipe n'est pas pris en charge (iPhone : en paysage seulement ; iPad : pas du tout) — un bogue d'iOS.
+- Les vidéos en portrait (prises au téléphone, par exemple) doivent être réencodées réellement en portrait : les balises de rotation sont ignorées.
+- Le thème utilise le jQuery fourni par Piwigo, **jQuery 1.11.3 (2015), obsolète** et visé par des avis de sécurité connus ; sa mise à jour relève de Piwigo.
+
 ## 📜 Origine et licence
 
 Thème original de Thomas Kuther, publié sous licence Apache 2.0 — voir [`LICENSE.txt`](LICENSE.txt). Fork maintenu par Gotcha.
