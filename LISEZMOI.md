@@ -1,83 +1,51 @@
+![Bootstrap Darkroom (redux)](assets/logos/bootstrapDarkroom-banner.fr@2x.webp)
+
 # Bootstrap Darkroom (redux)
 
-Fork maintenu du thème Piwigo [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-bootstrap-darkroom)
-de Thomas Kuther.
+Bootstrap Darkroom (redux) est un thème Piwigo adapté aux mobiles, fondé sur Bootstrap 4, avec par défaut un style sombre inspiré de Lightroom.  
+C'est pour les galeries qui veulent montrer leurs photos sur un fond sombre et calme, sur tous les écrans.
 
-La documentation des fonctionnalités du thème reste celle de l'amont : voir
-[README.md](README.md). Ce fichier ne décrit que ce qui distingue ce fork.
+---
 
-## Pourquoi ce fork
+## 🎯 À quoi ça sert, et pourquoi
 
-Faire évoluer le thème à son propre rythme. Ce fork est **autonome** : il corrige, modifie et
-refond le thème sans attendre l'amont, ni chercher à rester fusionnable avec lui. Le projet
-d'origine reste une source dont on reprend, au cas par cas, ce qui est utile.
+Une galerie se consulte surtout sur téléphone et tablette, et une photo est mise en valeur par un
+fond sombre neutre. ***Bootstrap Darkroom (redux)*** est un thème adaptatif pensé pour cela, avec
+un diaporama plein écran, un carrousel sur la page d'une photo et un choix de styles de couleurs.
 
-Il est **gratuit et vendu nulle part**. Sa distribution est ce dépôt public.
+C'est un fork autonome de Bootstrap Darkroom de Thomas Kuther, avec ses propres correctifs et
+évolutions. Il s'installe sous le même nom de dossier que l'original et le **remplace donc à
+l'identique** : thème sélectionné, réglages et thèmes enfants sont conservés.
 
-## Remplacement à l'identique
+## ✨ Ce que vous y trouvez
 
-Ce thème s'installe dans `themes/bootstrap_darkroom` — le dossier du thème d'origine, dont il
-conserve l'identifiant.
+- **Des styles de couleurs** : Bootswatch, Bootstrap Material Design, et Darkroom — une palette sombre à faible contraste (par défaut).
+- **Un diaporama plein écran** avec PhotoSwipe, lecture automatique et vidéo HTML5 comprises.
+- **Un carrousel** pour parcourir l'album depuis la page d'une photo, et un en-tête facultatif en image pleine largeur ou jumbotron.
+- **Entièrement adaptatif** : barres de navigation, carrousel, diaporama et vidéo s'ajustent à l'écran, avec gestes de balayage et de toucher.
+- **Une personnalisation facile** par surcharges CSS dans `local/bootstrap_darkroom/custom.css`, ou par thème enfant.
 
-C'est délibéré. Piwigo identifie un thème par son nom de dossier et le stocke tel quel en base,
-dans `$conf['default_theme']` et dans les préférences de chaque utilisateur. Garder ce nom rend
-la bascule transparente : thème sélectionné, réglages et thèmes enfants sont préservés, sans
-rien à reconfigurer.
+## 🛠️ Installation
 
-Corollaire : les deux ne peuvent pas cohabiter. Conservez une copie de votre
-`themes/bootstrap_darkroom` actuel **hors** de `themes/` avant de basculer.
+1. Conservez une copie de votre `themes/bootstrap_darkroom` actuel hors de `themes/`, puis copiez ce thème dans `themes/bootstrap_darkroom` de votre installation Piwigo.
+2. Activez-le depuis **Administration → Thèmes**.
+3. Désactivez le thème smartpocket (activé par défaut), pour que Bootstrap Darkroom soit aussi le thème par défaut sur mobile.
 
-## Mises à jour
+Ce thème n'est pas référencé dans le dépôt d'extensions Piwigo : Piwigo ne vous proposera jamais de le mettre à jour, ni ne l'écrasera par la version officielle.
 
-L'en-tête `Theme URI` ne pointe pas vers le dépôt d'extensions Piwigo. Ce thème n'est donc jamais
-proposé à la mise à jour dans l'administration — et, surtout, jamais écrasé par la version
-officielle. Les mises à jour se récupèrent ici.
+## ⚠️ Problèmes connus
 
-## jQuery
+- Sous IE11, les barres de navigation ne s'affichent correctement qu'en mise en page pleine largeur.
+- Sous iOS, le plein écran de PhotoSwipe n'est pas pris en charge (iPhone : en paysage seulement ; iPad : pas du tout) — un bogue d'iOS.
+- Les vidéos en portrait (prises au téléphone, par exemple) doivent être réencodées réellement en portrait : les balises de rotation sont ignorées.
+- Le thème utilise le jQuery fourni par Piwigo, **jQuery 1.11.3 (2015), obsolète** et visé par des avis de sécurité connus ; sa mise à jour relève de Piwigo.
 
-Le thème n'embarque plus jQuery : il utilise celui du cœur de Piwigo, soit **jQuery 1.11.3 (2015),
-obsolète** et visé par des avis de sécurité connus. Sa mise à jour relève de Piwigo, pas du thème.
+## 📜 Origine et licence
 
-## Modèle de branches
+Thème original de Thomas Kuther, publié sous licence Apache 2.0 — voir [`LICENSE.txt`](LICENSE.txt). Fork maintenu par Gotcha.
 
-- `main` — branche principale. Tout changement part de `main` et y revient.
-- Les évolutions de l'amont ne sont plus fusionnées en bloc : on les examine et on reporte,
-  à la main ou par `git cherry-pick`, celles qui servent ce thème.
+---
 
-## Style du code
-
-Tout le code suit le style 2 espaces + K&R (voir `.git-blame-ignore-revs` pour le commit de
-reformatage).
-
-## Source maps
-
-Le dépôt ne contient pas de source maps (`*.map`) : inutiles à l'exécution, elles pesaient
-à elles seules les deux tiers du dépôt. `tools/vendor.py` n'en conserve jamais et retire les
-commentaires `sourceMappingURL` des fichiers qu'il met à jour.
-
-## CSS figé et composants tiers
-
-Les feuilles de style de `css/` sont **figées** (Bootstrap 4.3.1) : la chaîne node-sass/Yarn est
-retirée, elle ne s'installe plus sur les Node et Python actuels. `scss/` reste en référence. Pour
-adapter l'apparence, écrire des surcharges dans `local/bootstrap_darkroom/custom.css` (chargé en
-dernier par le thème) ou dans un thème enfant.
-
-Les composants tiers (`node_modules/`, fichiers d'exécution seulement) sont décrits dans
-`tools/vendor.json`. Python 3 suffit, ni npm ni Yarn :
-
-```
-python tools/vendor.py check                      # le manifeste correspond-il aux fichiers versionnés ?
-python tools/vendor.py outdated                   # versions plus récentes (même majeure) et avis connus
-python tools/vendor.py update popper.js 1.16.1    # simulation : montre ce qui changerait
-python tools/vendor.py update popper.js 1.16.1 --apply
-python -m unittest discover -s tools/tests        # tests de l'outil
-```
-
-`update` n'écrit rien sans `--apply`. Après une mise à jour : `git diff`, puis ouvrir sur une
-galerie l'accueil, une photo (PhotoSwipe), le carrousel de miniatures (Slick), la recherche
-(Selectize), les gestes tactiles, la notation et le nuage de tags.
-
-## Licence et attribution
-
-Thème original de Thomas Kuther, sous licence Apache 2.0 — voir [LICENSE.txt](LICENSE.txt).
-Fork maintenu par [Gotcha](https://github.com/Gotcha26).
+##### Liens rapides :
+- Projet : https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux
+- Auteur : Gotcha (Julien Moreau) — https://julien-moreau.fr
