@@ -1,84 +1,44 @@
+![Bootstrap Darkroom (redux)](assets/logos/bootstrapDarkroom-banner.fr@2x.webp)
+
 # Bootstrap Darkroom (redux)
 
-Un thème [Piwigo](https://piwigo.org) adapté aux mobiles, fondé sur [Bootstrap 4](https://getbootstrap.com).
+Bootstrap Darkroom (redux) est un thème Piwigo adapté aux mobiles, fondé sur Bootstrap 4, avec par défaut un style sombre inspiré de Lightroom.  
+C'est pour les galeries qui veulent montrer leurs photos sur un fond sombre et calme, sur tous les écrans.
 
-Un fork autonome de [Bootstrap Darkroom](https://github.com/Piwigo/piwigo-bootstrap-darkroom) de Thomas Kuther, avec ses propres correctifs et évolutions. Gratuit, et vendu nulle part. Il évolue à son propre rythme : les apports utiles du projet d'origine y sont repris au cas par cas.
+---
 
-## Fonctionnalités
+## 🎯 À quoi ça sert, et pourquoi
 
-* Plusieurs styles de couleurs
-  * [Bootswatch](https://bootswatch.com)
-  * [Bootstrap Material Design](https://github.com/FezVrasta/bootstrap-material-design)
-  * Darkroom : une palette sombre à faible contraste, inspirée des couleurs de Lightroom® (par défaut)
-* En-tête de page facultatif : image pleine largeur, ou bandeau jumbotron
-* Plusieurs dispositions possibles pour la page de détail d'une photo
-* Lecture vidéo avec le lecteur HTML 5 natif
-* Diaporama plein écran avec [PhotoSwipe](https://photoswipe.com)
-  * lecture automatique
-  * vidéo HTML5
-  * les miniatures d'album peuvent ouvrir PhotoSwipe directement (comme smartpocket)
-* Carrousel de navigation dans l'album, configurable, sur la page d'une photo, avec [slick slider](https://kenwheeler.github.io/slick/)
-* 100 % adapté aux mobiles
-  * barres de navigation, carrousel, diaporama PhotoSwipe et vidéos entièrement adaptatifs
-  * chargement asynchrone / à la demande du carrousel et de PhotoSwipe, choix adaptatif de la taille d'image, gestes de balayage et de toucher
-* De nombreuses options de configuration
-* Personnalisation facile par surcharges CSS ou thème enfant (voir *Personnalisation*)
+Une galerie se consulte surtout sur téléphone et tablette, et une photo est mise en valeur par un
+fond sombre neutre. ***Bootstrap Darkroom (redux)*** est un thème adaptatif pensé pour cela, avec
+un diaporama plein écran, un carrousel sur la page d'une photo et un choix de styles de couleurs.
 
-## Installation — à lire en premier
+C'est un fork autonome de Bootstrap Darkroom de Thomas Kuther, avec ses propres correctifs et
+évolutions. Il s'installe sous le même nom de dossier que l'original et le **remplace donc à
+l'identique** : thème sélectionné, réglages et thèmes enfants sont conservés.
 
-Ce thème est un **remplacement à l'identique**. Il s'installe dans `themes/bootstrap_darkroom`, le même dossier que l'original, et conserve délibérément le même identifiant de thème.
+## ✨ Ce que vous y trouvez
 
-C'est ce qui rend la bascule transparente : votre galerie garde son thème sélectionné, ses réglages et ses thèmes enfants, sans rien à reconfigurer. Cela implique aussi que les deux ne peuvent pas cohabiter — ce fork prend la place du thème officiel. Conservez une copie de votre `themes/bootstrap_darkroom` actuel **hors** de `themes/` avant de basculer, pour pouvoir revenir en arrière.
+- **Des styles de couleurs** : Bootswatch, Bootstrap Material Design, et Darkroom — une palette sombre à faible contraste (par défaut).
+- **Un diaporama plein écran** avec PhotoSwipe, lecture automatique et vidéo HTML5 comprises.
+- **Un carrousel** pour parcourir l'album depuis la page d'une photo, et un en-tête facultatif en image pleine largeur ou jumbotron.
+- **Entièrement adaptatif** : barres de navigation, carrousel, diaporama et vidéo s'ajustent à l'écran, avec gestes de balayage et de toucher.
+- **Une personnalisation facile** par surcharges CSS dans `local/bootstrap_darkroom/custom.css`, ou par thème enfant.
 
-1. Copiez le thème dans le dossier `themes/bootstrap_darkroom` de votre installation Piwigo.
-2. Activez Bootstrap Darkroom dans **Administration → Thèmes**.
-3. Désactivez le thème smartpocket (activé par défaut). C'est nécessaire pour que Bootstrap Darkroom soit aussi le thème par défaut sur mobile.
+## 🛠️ Installation
 
-Prérequis : les mêmes que le thème d'origine. Rien d'autre n'est nécessaire.
+1. Conservez une copie de votre `themes/bootstrap_darkroom` actuel hors de `themes/`, puis copiez ce thème dans `themes/bootstrap_darkroom` de votre installation Piwigo.
+2. Activez-le depuis **Administration → Thèmes**.
+3. Désactivez le thème smartpocket (activé par défaut), pour que Bootstrap Darkroom soit aussi le thème par défaut sur mobile.
 
-## Mises à jour
+Ce thème n'est pas référencé dans le dépôt d'extensions Piwigo : Piwigo ne vous proposera jamais de le mettre à jour, ni ne l'écrasera par la version officielle.
 
-Ce thème n'est pas référencé dans le dépôt d'extensions Piwigo : Piwigo ne vous proposera donc jamais de le mettre à jour — et, surtout, ne l'écrasera jamais par la version officielle. Les mises à jour se récupèrent depuis le dépôt indiqué dans *Projet et licence* ci-dessous.
+## 📜 Origine et licence
 
-## Boutons des plugins
+Thème original de Thomas Kuther, publié sous licence Apache 2.0 — voir [`LICENSE.txt`](LICENSE.txt). Fork maintenu par Gotcha.
 
-Les boutons que les plugins ajoutent aux barres de navigation sont gérés de façon générique, quel que soit le plugin :
+---
 
-* les icônes standard de Piwigo (`pwg-icon-*`) sont affichées sous leur équivalent Font Awesome ;
-* les icônes qu'un plugin dessine déjà avec Font Awesome sont conservées ;
-* quand l'icône n'est pas reconnue, le bouton affiche son libellé en texte, ou une icône neutre s'il n'en a pas ;
-* les images utilisées comme icônes sont calées sur la hauteur des autres icônes ;
-* les menus `switchBox` deviennent de vrais menus déroulants.
-
-## Personnalisation
-
-Les feuilles de style de `css/` sont compilées et figées (Bootstrap 4.3.1). Pour adapter l'apparence, écrivez des surcharges dans `local/bootstrap_darkroom/custom.css` (chargé en dernier par le thème) ou dans un thème enfant.
-
-## Problèmes connus
-
-* Sous IE11, les barres de navigation ne s'affichent correctement qu'avec la mise en page en largeur fluide.
-* Sous iOS, le plein écran de PhotoSwipe n'est pas pris en charge : sur iPhone il ne fonctionne qu'en paysage, sur iPad pas du tout. C'est un défaut d'iOS ; Android fonctionne normalement.
-* Les vidéos en mode portrait (téléphones, par exemple) doivent être ré-encodées en orientation portrait réelle : les balises de rotation ne sont pas prises en compte.
-* Le thème n'embarque plus jQuery : il utilise celui du cœur de Piwigo, soit **jQuery 1.11.3 (2015), obsolète** et visé par des avis de sécurité connus. Sa mise à jour relève de Piwigo, pas du thème.
-
-## Aperçu
-
-![Aperçu](screenshot.png)
-
-## Composants
-
-Les composants tiers redistribués, avec leurs versions, origines et licences, sont listés dans la fenêtre de crédits du panneau d'administration du thème et sur sa page publique « À propos » ; ce fichier ne les répète pas.
-
-## Remerciements
-
-* Phil Bayfield, pour son travail sur le thème Bootstrap Default, sur lequel ce thème s'est d'abord appuyé en tant que thème enfant. Il a grandi depuis.
-* L'équipe Piwigo, pour un excellent logiciel de galerie.
-* L'équipe de traduction de Piwigo.
-
-## Projet et licence
-
-https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux
-
-Thème original de Thomas Kuther — https://github.com/Piwigo/piwigo-bootstrap-darkroom. Fork maintenu par Gotcha — https://github.com/Gotcha26.
-
-Publié sous licence Apache 2.0 — voir [LICENSE.txt](LICENSE.txt). Copyright 2017 Thomas Kuther.
+##### Liens rapides :
+- Projet : https://github.com/Gotcha26/piwigo-bootstrap-darkroom_redux
+- Auteur : Gotcha (Julien Moreau) — https://julien-moreau.fr
