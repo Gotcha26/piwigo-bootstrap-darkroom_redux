@@ -102,9 +102,6 @@ if (!function_exists('bd_admin_config_import')) {
    * @return bool True on success (the shared block answers save_failed otherwise).
    */
   function bd_admin_config_import(array $data) {
-    if (!is_admin()) {
-      return false;
-    }
     $config = new \BootstrapDarkroom\Config();
     $config->fromPost(bd_admin_import_post($data, bd_admin_config_snapshot()));
     $config->save();
@@ -129,7 +126,7 @@ if (!function_exists('bd_admin_expimp_methods')) {
         'schema_version' => \BootstrapDarkroom\Config::CONF_VERSION,
         'snapshot'       => 'bd_admin_config_snapshot',
         // No 'licensed' hook: its refusal reads "Pro licence required". The admin
-        // page is admin-only, and the save hook checks is_admin() again.
+        // page is gated by jm_access_gate('admin') before the dispatcher runs.
         'save'           => 'bd_admin_config_import',
       ),
     ));
