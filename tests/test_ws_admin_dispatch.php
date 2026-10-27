@@ -7,9 +7,14 @@
  * there is unknown to a webmaster browsing with another theme. The admin page loads
  * admin/admin.inc.php for any installed theme, and the alert buttons post to it.
  *
+ * The theme has ONE access level, 'admin' (piwigo_local#1433): jm_access_gate() at
+ * the top of admin.inc.php refuses a non-administrator before the dispatcher, and
+ * an administrator who is not the webmaster may both save AND reset.
+ *
  * METHOD: a sandbox copy of the theme (admin/*.php, include/*.php) whose include/
- * receives the hub commons jm-ws.php, jm-vendor-pins.php and jm-vendor.php, as the
- * build would inject them. One child process per scenario includes the REAL
+ * receives the hub commons jm-access.php, jm-ws.php, jm-vendor-pins.php and
+ * jm-vendor.php, as the build would inject them (read from the hub, never written
+ * into the working tree). One child process per scenario includes the REAL
  * admin.inc.php under a simulated POST. admin.inc.php loads the commons ITSELF: if
  * jm-vendor.php were loaded after the dispatcher, or the alert block missing from
  * the table passed to it, the page would render (RENDER_REACHED) instead of answering.
@@ -31,7 +36,7 @@ function bd_assert($c, $m) {
 $root = dirname(__DIR__);
 require_once __DIR__ . '/_hub.php';
 $hub  = jm_test_hub_root();
-foreach (array('jm-ws.php', 'jm-vendor-pins.php', 'jm-vendor.php') as $common) {
+foreach (array('jm-access.php', 'jm-ws.php', 'jm-vendor-pins.php', 'jm-vendor.php') as $common) {
   if (!is_readable($hub . '/include/' . $common)) {
     fwrite(STDERR, "FAIL: hub common not found ($hub/include/$common)\n");
     exit(1);
@@ -69,33 +74,41 @@ foreach (array('admin', 'include') as $dir) {
     copy($file, $box . '/' . $dir . '/' . basename($file));
   }
 }
-foreach (array('jm-ws.php', 'jm-vendor-pins.php', 'jm-vendor.php') as $common) {
+foreach (array('jm-access.php', 'jm-ws.php', 'jm-vendor-pins.php', 'jm-vendor.php') as $common) {
   copy($hub . '/include/' . $common, $box . '/include/' . $common);
 }
 
 /**
  * @param  array $post
  * @param  bool  $webmaster
- * @return array{raw:string, json:?array, session:?string, render:bool}
+ * @param  bool  $admin     False: a user who is not an administrator at all.
+ * @return array{raw:string, json:?array, session:?string, conf:?string, render:bool, denied:bool}
  */
-function bd_run_post(array $post, $webmaster = true) {
+function bd_run_post(array $post, $webmaster = true, $admin = true) {
   global $box, $core, $tmp;
   $out = $tmp . '/out_' . uniqid();
+  $conf = $tmp . '/conf_' . uniqid();
   putenv('BD_T_ROOT=' . $box);
   putenv('BD_T_CORE=' . $core);
   putenv('BD_T_OUT=' . $out);
+  putenv('BD_T_CONF=' . $conf);
   putenv('BD_T_POST=' . json_encode($post));
   putenv('BD_T_WEBMASTER=' . ($webmaster ? '1' : '0'));
+  putenv('BD_T_ADMIN=' . ($admin ? '1' : '0'));
   $lines = array();
   exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/_ws_admin_dispatch_child.php') . ' 2>&1', $lines);
   $raw = implode("\n", $lines);
   $session = is_file($out) ? file_get_contents($out) : null;
+  $written = is_file($conf) ? file_get_contents($conf) : null;
   @unlink($out);
+  @unlink($conf);
   return array(
     'raw'     => $raw,
     'json'    => json_decode($raw, true),
     'session' => $session,
+    'conf'    => $written,
     'render'  => strpos($raw, 'RENDER_REACHED') !== false,
+    'denied'  => strpos($raw, 'ACCESS_DENIED') !== false,
   );
 }
 
@@ -115,7 +128,8 @@ $r = bd_run_post(array_merge($dismiss, array('pwg_token' => 'WRONG')));
 bd_assert(isset($r['json']['err']) && $r['json']['err'] === 403 && $r['session'] === null && !$r['render'],
   'scenario 2: vendorDismiss with a wrong token -> 403, nothing stored');
 
-// 3. Administrator who is not the webmaster -> 403, nothing stored.
+// 3. Administrator who is not the webmaster -> 403, nothing stored. This refusal
+// belongs to the fleet-wide asset store (hub jm-vendor.php), not to the theme.
 $r = bd_run_post($dismiss, false);
 bd_assert(isset($r['json']['message']) && $r['json']['message'] === 'forbidden_not_webmaster' && $r['session'] === null,
   'scenario 3: vendorDismiss by a non-webmaster -> 403 forbidden_not_webmaster, nothing stored');
@@ -137,11 +151,42 @@ $r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_toke
 bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403 && $r['json']['message'] === 'invalid_token',
   'scenario 6: settingsReset is served by the dispatcher (wrong token -> 403 invalid_token)');
 
-// 7. Reset by an administrator who is not the webmaster -> 403, before any write
-// (the callback refuses before building the Config, which this harness cannot load).
+// 7. Reset by an administrator who is not the webmaster -> allowed, settings written
+// (the theme's level is 'admin', with no exception: whoever may save may reset).
 $r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'TOKEN_OK'), false);
-bd_assert(!$r['render'] && isset($r['json']['message']) && $r['json']['message'] === 'forbidden_not_webmaster',
-  'scenario 7: settingsReset by a non-webmaster -> 403 forbidden_not_webmaster (output: ' . substr($r['raw'], 0, 160) . ')');
+bd_assert(!$r['render'] && !$r['denied'] && isset($r['json']['stat']) && $r['json']['stat'] === 'ok'
+  && isset($r['json']['result']['reset']) && $r['json']['result']['reset'] === true
+  && $r['conf'] !== null && strpos($r['conf'], 'bootstrap_darkroom=') === 0,
+  'scenario 7: settingsReset by an administrator who is not the webmaster -> ok, settings written (output: ' . substr($r['raw'], 0, 160) . ')');
+
+// 8. Save by an administrator who is not the webmaster -> allowed, settings written.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsSave', 'pwg_token' => 'TOKEN_OK'), false);
+bd_assert(!$r['render'] && !$r['denied'] && isset($r['json']['stat']) && $r['json']['stat'] === 'ok'
+  && isset($r['json']['result']['saved']) && $r['json']['result']['saved'] === true
+  && $r['conf'] !== null && strpos($r['conf'], 'bootstrap_darkroom=') === 0,
+  'scenario 8: settingsSave by an administrator who is not the webmaster -> ok, settings written (output: ' . substr($r['raw'], 0, 160) . ')');
+
+// 9. Wrong CSRF token on a reset by that same administrator -> still refused.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'WRONG'), false);
+bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403 && $r['json']['message'] === 'invalid_token'
+  && $r['conf'] === null,
+  'scenario 9: settingsReset with a wrong token by a non-webmaster administrator -> 403 invalid_token, nothing written');
+
+// 10. A user who is not an administrator: refused by the access gate, BEFORE the
+// dispatcher (no JSON, nothing written), even with a valid token.
+foreach (array('settingsSave', 'settingsReset') as $bd_m) {
+  $r = bd_run_post(array('method' => 'bootstrap_darkroom.' . $bd_m, 'pwg_token' => 'TOKEN_OK'), false, false);
+  bd_assert($r['denied'] && $r['json'] === null && $r['conf'] === null && !$r['render'],
+    "scenario 10: $bd_m by a non-administrator -> access_denied() before the dispatcher, nothing written (output: " . substr($r['raw'], 0, 160) . ')');
+}
+
+// 11. The gate is the entry's first statement, before the dispatcher, never defensive.
+$bd_entry = php_strip_whitespace($root . '/admin/admin.inc.php');
+$bd_gate = strpos($bd_entry, "jm_access_gate('admin')");
+$bd_disp = strpos($bd_entry, 'jm_ws_admin_page_dispatch(');
+bd_assert($bd_gate !== false && $bd_disp !== false && $bd_gate < $bd_disp
+  && preg_match("/function_exists\\s*\\(\\s*'jm_access_/", $bd_entry) === 0,
+  "scenario 11: admin.inc.php calls jm_access_gate('admin') before the dispatcher, unguarded");
 
 // --- Client side: the reset goes through the admin page, never a form POST ---
 $js_all = file_get_contents($root . '/admin/assets/js/bd-admin.js');

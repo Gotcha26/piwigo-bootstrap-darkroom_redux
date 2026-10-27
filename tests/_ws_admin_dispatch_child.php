@@ -11,25 +11,36 @@
  *   BD_T_ROOT       sandbox root (its include/ holds the hub commons)
  *   BD_T_CORE       fake Piwigo core (include/ws_core.inc.php defines PwgError)
  *   BD_T_OUT        file where pwg_set_session_var() records what it is asked to store
+ *   BD_T_CONF       file where conf_update_param() records the settings it writes
  *   BD_T_POST       the $_POST, as JSON
  *   BD_T_WEBMASTER  "0" for an administrator who is not the webmaster
+ *   BD_T_ADMIN      "0" for a user who is not an administrator at all
  *
- * Doubles: only the Piwigo boundary (token, rights, language, URL, session).
- * admin.inc.php loads the commons itself; the dispatcher, its CSRF guard, the
- * method table and the callbacks are the REAL ones.
+ * Doubles: only the Piwigo boundary (token, rights, refusal page, language, URL,
+ * session, config row). admin.inc.php loads the commons itself; the access gate,
+ * the dispatcher, its CSRF guard, the method table and the callbacks are the REAL ones.
  */
 
 $root = getenv('BD_T_ROOT');
 define('PHPWG_ROOT_PATH', rtrim(getenv('BD_T_CORE'), '/') . '/');
+define('PWG_LOCAL_DIR', 'local/');
 
 function get_pwg_token() {
   return 'TOKEN_OK';
 }
 function is_webmaster() {
-  return getenv('BD_T_WEBMASTER') !== '0';
+  return getenv('BD_T_WEBMASTER') !== '0' && getenv('BD_T_ADMIN') !== '0';
 }
 function is_admin() {
-  return true;
+  return getenv('BD_T_ADMIN') !== '0';
+}
+function access_denied() {
+  echo "\nACCESS_DENIED\n";
+  exit;
+}
+$conf = array();
+function conf_update_param($param, $value) {
+  file_put_contents(getenv('BD_T_CONF'), $param . '=' . stripslashes($value));
 }
 function load_language() {
 }

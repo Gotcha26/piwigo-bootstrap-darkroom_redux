@@ -1,6 +1,14 @@
 <?php
 defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
 
+// --- 0. Access level: any administrator manages the theme (piwigo_local#1433) ---
+// One level for the whole theme, applied before any of its code runs, the save
+// dispatcher included: settings, reset, export and import share it, and no
+// callback adds a level of its own. Deliberately NOT defensive: without this
+// common the page fails instead of opening unguarded.
+require_once dirname(dirname(__FILE__)) . '/include/jm-access.php';
+jm_access_gate('admin');
+
 /**
  * Entry point of the theme's admin panel, included by the core's admin/theme.php
  * (which has already built $themes) for any installed theme.
@@ -9,8 +17,9 @@ defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
  * very page, answered by jm_ws_admin_page_dispatch() before anything is rendered:
  * see admin/save.php for why a theme cannot use ws.php.
  *
- * The commons are injected at build time and absent from a fresh clone: every
- * one of them is loaded defensively, and the page still renders without them.
+ * The commons are injected at build time and absent from a fresh clone. Apart
+ * from jm-access.php (step 0), every one of them is loaded defensively, and the
+ * page still renders without them.
  */
 
 global $template, $themes;

@@ -61,16 +61,15 @@ if (!function_exists('bd_admin_save_methods')) {
 if (!function_exists('bd_admin_settings_reset')) {
   /**
    * Resets the whole theme to its defaults, except the content listed in
-   * Config::$preserve_on_reset. The CSRF token is already checked by the dispatcher.
+   * Config::$preserve_on_reset. The CSRF token is already checked by the dispatcher;
+   * the access level is the theme's own, applied by jm_access_gate() in
+   * admin.inc.php: whoever may save may reset.
    *
    * @param  array $params  pwg_token only.
    * @param  mixed $service Unused (no ws service on the admin page).
    * @return array|PwgError
    */
   function bd_admin_settings_reset($params, &$service) {
-    if (!is_webmaster()) {
-      return new PwgError(403, 'forbidden_not_webmaster');
-    }
     $config = new \BootstrapDarkroom\Config();
     $config->reset();
     return array('reset' => true);
@@ -79,7 +78,8 @@ if (!function_exists('bd_admin_settings_reset')) {
 
 if (!function_exists('bd_admin_settings_save')) {
   /**
-   * Saves the posted settings. The CSRF token is already checked by the dispatcher.
+   * Saves the posted settings. The CSRF token is already checked by the dispatcher;
+   * the access level is applied by jm_access_gate() in admin.inc.php.
    *
    * Values arrive slashed by Piwigo, as fromPost() expects (it strips them).
    * A non-string value (a field posted as an array) is dropped, never passed on.
@@ -89,9 +89,6 @@ if (!function_exists('bd_admin_settings_save')) {
    * @return array|PwgError
    */
   function bd_admin_settings_save($params, &$service) {
-    if (!is_admin()) {
-      return new PwgError(403, 'forbidden');
-    }
     $post = array();
     foreach (bd_admin_config_keys() as $key) {
       if (isset($params[$key]) && is_string($params[$key])) {
