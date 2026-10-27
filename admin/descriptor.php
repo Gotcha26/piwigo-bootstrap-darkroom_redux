@@ -146,8 +146,13 @@ if (!function_exists('bd_admin_js_strings')) {
    */
   function bd_admin_js_strings() {
     return array(
-      'saved' => l10n('bd_msg_saved'),
-      'error' => l10n('bd_msg_error'),
+      'saved'        => l10n('bd_msg_saved'),
+      'error'        => l10n('bd_msg_error'),
+      'resetTitle'   => l10n('bd_msg_reset_title'),
+      'resetConfirm' => l10n('bd_msg_reset_confirm'),
+      'resetCancel'  => l10n('bd_msg_reset_cancel'),
+      'resetDone'    => l10n('bd_msg_reset_done'),
+      'resetError'   => l10n('bd_msg_reset_error'),
     );
   }
 }

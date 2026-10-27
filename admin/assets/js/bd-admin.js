@@ -7,7 +7,8 @@
  * jm.Credits, jm.modal, jm.helpWip, jm.flash, jm.flashServerMessages,
  * jm.createDirtyTracker, jm.createFormSave, jm.formSaveButtonState, jm.ws,
  * jm.createDataActionRouter, jm.createCodeEditor, jm.createAccordionModeControl,
- * jm.createUiPref, jm.createSegmentedControl, jm.exportImport, jm.vendorAlert.
+ * jm.createUiPref, jm.createSegmentedControl, jm.exportImport, jm.vendorAlert,
+ * jm.confirmReset, jm.registerResetConfirmVariant.
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
  * jm_ws_admin_page_dispatch() answers: a theme has no reliable ws.php method.
@@ -150,6 +151,47 @@
     });
   }
 
+  /* "Reset settings" brick of the Maintenance section: 'bd-admin-page' confirmation
+     variant. No form POST (the form has no action, and the admin page answers JSON
+     methods only): after confirmation, settingsReset is posted to the admin page,
+     like the save. The page then reloads, so the form shows the defaults. The
+     handler never submits the form: the save engine is not bound to its submit
+     event, and no __jmResetPending check is needed. */
+  function resetViaAdminPage(e, button) {
+    if (e && e.preventDefault) e.preventDefault();
+    var s = A.strings || {};
+    function run() {
+      jm.ws('bootstrap_darkroom.settingsReset', {}, { getToken: function () { return A.pwgToken; }, wsUrl: A.saveUrl })
+        .then(function () {
+          if (jm.flash) jm.flash(s.resetDone || '', 'success');
+          setTimeout(function () { window.location.reload(); }, 1200);
+        })
+        .catch(function () {
+          if (jm.flash) jm.flash(s.resetError || '', 'error');
+        });
+    }
+    var body = s.resetConfirm || (button && button.getAttribute('data-reset-confirm')) || '';
+    if (jm.modal && typeof jm.modal.confirm === 'function' && s.resetTitle && s.resetCancel) {
+      jm.modal.confirm({
+        title: s.resetTitle,
+        body: body,
+        confirmLabel: (button && button.textContent.replace(/^\s+|\s+$/g, '')) || s.resetTitle,
+        cancelLabel: s.resetCancel,
+        level: 'danger',
+        onConfirm: run
+      });
+    } else if (window.confirm(body)) {
+      run();
+    }
+  }
+
+  function initReset() {
+    var button = document.getElementById('jm-maint-reset-btn');
+    if (!button || !jm.confirmReset || !jm.registerResetConfirmVariant || typeof jm.ws !== 'function') return;
+    jm.registerResetConfirmVariant('bd-admin-page', resetViaAdminPage);
+    jm.confirmReset(button);
+  }
+
   /* "Third-party asset bundle not installed" alert, rendered by the shared shell.
      Its two methods are answered by jm_ws_admin_page_dispatch() on this admin page
      (BDAdmin.saveUrl), never by ws.php. Bound before the form guard: the alert does
@@ -198,6 +240,7 @@
     if (css && jm.createCodeEditor) jm.createCodeEditor(css, { mode: 'text/css', theme: 'bd-jm' });
     var save = initSave(form);
     var expimp = initExportImport();
+    initReset();
     if (jm.createDataActionRouter) {
       jm.createDataActionRouter({
         click: {
