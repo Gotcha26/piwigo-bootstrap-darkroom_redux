@@ -9,7 +9,9 @@
  *
  * The theme has ONE access level, 'admin' (piwigo_local#1433): jm_access_gate() at
  * the top of admin.inc.php refuses a non-administrator before the dispatcher, and
- * an administrator who is not the webmaster may both save AND reset.
+ * an administrator who is not the webmaster may save, reset AND dismiss the alert.
+ * Only vendorRetry stays the webmaster's: installing an extension is reserved to
+ * the webmaster by the Piwigo core (jm_ws_extension_install_denied()).
  *
  * METHOD: a sandbox copy of the theme (admin/*.php, include/*.php) whose include/
  * receives the hub commons jm-access.php, jm-ws.php, jm-vendor-pins.php and
@@ -128,11 +130,31 @@ $r = bd_run_post(array_merge($dismiss, array('pwg_token' => 'WRONG')));
 bd_assert(isset($r['json']['err']) && $r['json']['err'] === 403 && $r['session'] === null && !$r['render'],
   'scenario 2: vendorDismiss with a wrong token -> 403, nothing stored');
 
-// 3. Administrator who is not the webmaster -> 403, nothing stored. This refusal
-// belongs to the fleet-wide asset store (hub jm-vendor.php), not to the theme.
+// 3. Administrator who is not the webmaster -> dismissed (the theme's level is
+// 'admin'). The hub common sets no level of its own (piwigo_local#1441): the
+// theme's gate, jm_access_gate('admin'), decides; dismissing only touches the session.
 $r = bd_run_post($dismiss, false);
-bd_assert(isset($r['json']['message']) && $r['json']['message'] === 'forbidden_not_webmaster' && $r['session'] === null,
-  'scenario 3: vendorDismiss by a non-webmaster -> 403 forbidden_not_webmaster, nothing stored');
+bd_assert(!$r['denied'] && !$r['render'] && isset($r['json']['stat']) && $r['json']['stat'] === 'ok'
+  && isset($r['json']['result']['success']) && $r['json']['result']['success'] === true
+  && $r['session'] === 'jm_vendor_alert_dismissed=unreachable',
+  'scenario 3: vendorDismiss by an administrator who is not the webmaster -> ok, cause stored in the session (output: ' . substr($r['raw'], 0, 160) . ')');
+
+// 3b. vendorRetry by that same administrator -> 403 forbidden_not_webmaster. A CORE
+// exception, not the theme's level: Piwigo reserves installing extensions to the
+// webmaster (jm_ws_extension_install_denied()). The gate let it through (no
+// ACCESS_DENIED): the callback refuses, before any network access.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.vendorRetry', 'pwg_token' => 'TOKEN_OK'), false);
+bd_assert(!$r['denied'] && !$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403
+  && $r['json']['message'] === 'forbidden_not_webmaster',
+  'scenario 3b: vendorRetry by an administrator who is not the webmaster -> 403 forbidden_not_webmaster (output: ' . substr($r['raw'], 0, 160) . ')');
+
+// 3c. A user who is not an administrator: both alert methods refused by the access
+// gate, BEFORE the dispatcher, even with a valid token; nothing stored.
+foreach (array('vendorDismiss' => $dismiss, 'vendorRetry' => array('method' => 'bootstrap_darkroom.vendorRetry', 'pwg_token' => 'TOKEN_OK')) as $bd_m => $bd_post) {
+  $r = bd_run_post($bd_post, false, false);
+  bd_assert($r['denied'] && $r['json'] === null && $r['session'] === null && !$r['render'],
+    "scenario 3c: $bd_m by a non-administrator -> access_denied() before the dispatcher, nothing stored");
+}
 
 // 4. vendorRetry is DECLARED (wrong token: refused before any network access).
 // Undeclared, the dispatcher would ignore it and the page would render.
