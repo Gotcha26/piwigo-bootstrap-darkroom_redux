@@ -48,7 +48,32 @@ if (!function_exists('bd_admin_save_methods')) {
         'description' => 'Saves the Bootstrap Darkroom settings.',
         'params'      => $params,
       ),
+      // "Reset settings" brick of the Maintenance section: same channel as the save.
+      'settingsReset' => array(
+        'callback'    => 'bd_admin_settings_reset',
+        'description' => 'Resets the Bootstrap Darkroom settings to their defaults, typed content kept.',
+        'params'      => array(),
+      ),
     );
+  }
+}
+
+if (!function_exists('bd_admin_settings_reset')) {
+  /**
+   * Resets the whole theme to its defaults, except the content listed in
+   * Config::$preserve_on_reset. The CSRF token is already checked by the dispatcher.
+   *
+   * @param  array $params  pwg_token only.
+   * @param  mixed $service Unused (no ws service on the admin page).
+   * @return array|PwgError
+   */
+  function bd_admin_settings_reset($params, &$service) {
+    if (!is_webmaster()) {
+      return new PwgError(403, 'forbidden_not_webmaster');
+    }
+    $config = new \BootstrapDarkroom\Config();
+    $config->reset();
+    return array('reset' => true);
   }
 }
 

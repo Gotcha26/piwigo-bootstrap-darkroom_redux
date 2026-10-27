@@ -147,6 +147,25 @@ class Config {
       self::KEY_THUMBNAIL_NB_IMAGES => self::TYPE_BOOL,
   );
 
+  /**
+   * Content typed by the admin, kept by reset() (fleet doctrine CONFIG-MANAGER,
+   * "_preserve_on_reset"). Everything else is a setting and goes back to its
+   * default. Never a key of $defaults: it is not a setting, and must never be
+   * stored.
+   *
+   * - custom_css: free CSS, stored as local/bootstrap_darkroom/custom.css.
+   * - logo_image_path, page_header_image: paths / URLs of the gallery's own
+   *   images. Their switches (logo_image_enabled, page_header...) are reset.
+   * - comments_disqus_shortname: the gallery's Disqus account. comments_type is
+   *   reset, so Disqus is no longer used until it is selected again.
+   */
+  private $preserve_on_reset = array(
+      self::KEY_CUSTOM_CSS,
+      self::KEY_LOGO_IMAGE_PATH,
+      self::KEY_PAGE_HEADER_IMAGE,
+      self::KEY_COMMENTS_DISQUS_SHORTNAME,
+  );
+
   private $config = array();
 
   private $files = array();
@@ -255,6 +274,33 @@ class Config {
     //
     // Proposed upstream as Piwigo/piwigo-bootstrap-darkroom#422.
     conf_update_param(self::CONF_PARAM, addslashes(json_encode($this->config)));
+  }
+
+  /**
+   * Back to the defaults, for the whole theme, then saved: every setting is reset,
+   * except the content listed in $preserve_on_reset. A preserved stored value is
+   * copied back over its default; a preserved file is left untouched, a file that
+   * is not preserved is deleted (its default is "no file").
+   */
+  public function reset() {
+    $kept = array();
+    foreach ($this->preserve_on_reset as $key) {
+      if ($this->types[$key] !== self::TYPE_FILE && array_key_exists($key, $this->config)) {
+        $kept[$key] = $this->config[$key];
+      }
+    }
+    foreach ($this->types as $key => $type) {
+      // file_exists(): saveFile() would create an empty file where there is none.
+      if ($type === self::TYPE_FILE && !in_array($key, $this->preserve_on_reset, true)
+          && file_exists($this->files[$key])) {
+        $this->saveFile($key, null);
+      }
+    }
+    $this->createDefaultConfig();
+    foreach ($kept as $key => $value) {
+      $this->config[$key] = $value;
+    }
+    $this->save();
   }
 
   private function createDefaultConfig() {

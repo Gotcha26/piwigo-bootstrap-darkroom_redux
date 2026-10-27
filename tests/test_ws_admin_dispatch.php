@@ -131,6 +131,31 @@ $r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsSave', 'pwg_token
 bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403,
   'scenario 5: settingsSave is still served by the same dispatcher');
 
+// 6. The reset is DECLARED in the same table (wrong token: nothing written).
+// Undeclared, the dispatcher would ignore it and the page would render.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'WRONG'));
+bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403 && $r['json']['message'] === 'invalid_token',
+  'scenario 6: settingsReset is served by the dispatcher (wrong token -> 403 invalid_token)');
+
+// 7. Reset by an administrator who is not the webmaster -> 403, before any write
+// (the callback refuses before building the Config, which this harness cannot load).
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'TOKEN_OK'), false);
+bd_assert(!$r['render'] && isset($r['json']['message']) && $r['json']['message'] === 'forbidden_not_webmaster',
+  'scenario 7: settingsReset by a non-webmaster -> 403 forbidden_not_webmaster (output: ' . substr($r['raw'], 0, 160) . ')');
+
+// --- Client side: the reset goes through the admin page, never a form POST ---
+$js_all = file_get_contents($root . '/admin/assets/js/bd-admin.js');
+$js_code = preg_replace('#/\*.*?\*/#s', '', $js_all);
+bd_assert(strpos($js_code, "jm.registerResetConfirmVariant('bd-admin-page', resetViaAdminPage)") !== false
+  && strpos($js_code, "jm.confirmReset(button)") !== false,
+  'bd-admin.js registers the bd-admin-page variant, then binds jm.confirmReset');
+bd_assert(preg_match("/jm\\.ws\\('bootstrap_darkroom\\.settingsReset',[^\\n]*wsUrl:\\s*A\\.saveUrl/", $js_code) === 1,
+  'bd-admin.js posts settingsReset to the admin page (wsUrl: A.saveUrl)');
+$admin_src = file_get_contents($root . '/admin/admin.inc.php');
+bd_assert(preg_match("/'brick' => 'reset'.*'form_id' => 'bd-settings-form'.*'confirm_variant' => 'bd-admin-page'/s", $admin_src) === 1
+  && strpos(file_get_contents($root . '/admin/template/bd-body.tpl'), '<form id="bd-settings-form"') !== false,
+  'admin.inc.php declares the reset brick on the real form id, with the bd-admin-page variant');
+
 // --- Client side: the alert posts to the admin page, with the save's token ---
 $js = file_get_contents($root . '/admin/assets/js/bd-admin.js');
 $code = preg_replace('#/\*.*?\*/#s', '', $js);

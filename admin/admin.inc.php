@@ -184,16 +184,22 @@ if (function_exists('jm_credits_boot')) {
 }
 
 // --- 11b. "Maintenance & advanced options", at the end of the Appearance tab (#22) ---
-// Settings export / import, then the accordion mode. The section joins the tab's
-// exclusive group, like the other Appearance sections. jm_maintenance_prepare() loads
-// the labels the export brick reads, so it runs first; the export messages of the
-// shared script come from jm-export-import.lang.php (bd_admin_expimp_js_strings()).
+// Settings export / import, reset, then the accordion mode. The section joins the
+// tab's exclusive group, like the other Appearance sections. jm_maintenance_prepare()
+// loads the labels the export brick reads, so it runs first; the export messages of
+// the shared script come from jm-export-import.lang.php (bd_admin_expimp_js_strings()).
+// Reset without a form POST: the 'bd-admin-page' confirmation variant (bd-admin.js)
+// calls settingsReset on this admin page, like the save.
 bd_admin_require('jm-maintenance.php', $bd_root . '/include');
 if (function_exists('jm_maintenance_prepare') && function_exists('jm_export_import_brick_assign')) {
   jm_maintenance_prepare($template, array(
     array('partial' => $bd_tpl . 'jm-brick-export-import.tpl', 'group' => 'maintenance'),
+    array('brick' => 'reset', 'group' => 'maintenance', 'form_id' => 'bd-settings-form',
+      'confirm_variant' => 'bd-admin-page'),
     array('brick' => 'accordion-mode', 'group' => 'advanced'),
   ), array('tpl_dir' => $bd_tpl, 'accordion_group' => 'bd-appearance'));
+  // The shared description says "this plugin" and nothing of the kept content.
+  $template->assign('JM_MAINT_RESET_DESC', htmlspecialchars(l10n('bd_desc_reset')));
   jm_export_import_brick_assign($template, array(
     'label'       => l10n('jm_maint_export_import_label'),
     'tip'         => l10n('jm_maint_export_import_tip'),
