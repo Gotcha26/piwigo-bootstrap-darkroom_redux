@@ -198,8 +198,6 @@ if (function_exists('jm_maintenance_prepare') && function_exists('jm_export_impo
       'confirm_variant' => 'bd-admin-page'),
     array('brick' => 'accordion-mode', 'group' => 'advanced'),
   ), array('tpl_dir' => $bd_tpl, 'accordion_group' => 'bd-appearance'));
-  // The shared description says "this plugin" and nothing of the kept content.
-  $template->assign('JM_MAINT_RESET_DESC', htmlspecialchars(l10n('bd_desc_reset')));
   jm_export_import_brick_assign($template, array(
     'label'       => l10n('jm_maint_export_import_label'),
     'tip'         => l10n('jm_maint_export_import_tip'),
