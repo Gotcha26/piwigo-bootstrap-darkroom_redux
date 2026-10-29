@@ -17,8 +17,9 @@ class ThemeController {
     add_event_handler('init', array($this, 'checkLineage'));
 
     if ($this->config->bootstrap_theme === 'darkroom' || $this->config->bootstrap_theme === 'material' || $this->config->bootstrap_theme === 'bootswatch') {
+      // In memory only: init runs on every request. The stored value is
+      // rewritten at the next explicit save (#61).
       $this->config->bootstrap_theme = 'bootstrap-darkroom';
-      $this->config->save();
       add_event_handler('loc_begin_page_header', array($this, 'showUpgradeWarning'));
     }
 

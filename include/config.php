@@ -191,12 +191,13 @@ class Config {
       return;
     }
 
-    // Invalid or old config, recreate
+    // Invalid or old config: rebuild it in memory (defaults + stored values).
+    // Construction is a read, and this runs on every public request: the row is
+    // rewritten at the next explicit save(), never here (#61).
     $this->createDefaultConfig();
     if (is_array($loaded)) {
       $this->populateConfig($loaded);
     }
-    $this->save();
   }
 
   private function initFiles() {
