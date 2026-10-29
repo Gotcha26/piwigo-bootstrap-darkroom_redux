@@ -9,6 +9,7 @@ Author URI: https://github.com/Gotcha26
 */
 require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/themecontroller.php');
 require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/config.php');
+require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/lineage.php');
 
 $themeconf = array(
     'name' => 'bootstrap_darkroom',

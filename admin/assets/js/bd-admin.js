@@ -229,7 +229,9 @@
     if (jm.tooltip) jm.tooltip();
     if (jm.Credits) jm.Credits.init();
     if (jm.helpWip) jm.helpWip();
-    if (jm.flashServerMessages) jm.flashServerMessages();
+    // Server-rendered boxes only (the AJAX saves flash on their own). The notice of a
+    // build taken over in place is a full sentence: the 3 s default is too short to read it.
+    if (jm.flashServerMessages) jm.flashServerMessages({ successDuration: 15000 });
 
     var form = document.getElementById('bd-settings-form');
     if (!form) return;

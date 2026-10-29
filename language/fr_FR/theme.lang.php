@@ -209,3 +209,6 @@ $lang['bd_credits_group_fonts'] = 'Polices et icônes';
 $lang['bd_credits_group_admin'] = 'Panneau d\'administration';
 $lang['bd_credits_note_privacy'] = 'Tous les thèmes de couleur servent leurs polices depuis votre propre serveur, et les avatars des commentaires sont une image locale. Aucune police ni aucun avatar n\'est demandé à un tiers comme Google Fonts ou Gravatar.';
 $lang['bd_credits_note_jquery'] = 'jQuery n\'est pas livré avec ce thème : il est fourni par Piwigo lui-même, dont la version est ancienne (1.11.3, 2015) et obsolète. Sa mise à jour relève de Piwigo.';
+$lang['bd_lineage_adopted'] = 'Terminé : Bootstrap Darkroom (redux) est en place et vos réglages sont conservés. Votre galerie utilise maintenant la nouvelle version du thème.';
+$lang['bd_lineage_upgraded'] = 'Terminé : Bootstrap Darkroom (redux) a été mis à jour et vos réglages sont conservés. Votre galerie utilise maintenant la nouvelle version.';
+$lang['bd_lineage_pending'] = 'Bootstrap Darkroom (redux) est installé et vos réglages sont conservés. Il reste une dernière étape : <a class="alert-link" href="%s">terminer la mise en place</a> (webmestre uniquement).';

@@ -113,6 +113,16 @@ if (function_exists('jm_ws_admin_page_dispatch')) {
 // --- 4. Language ---
 load_language('theme.lang', $bd_root . '/', array('force_fallback' => 'en_UK'));
 
+// --- 4b. Files swapped in place under this installation (issue #59) ---
+// This page is the only code of the theme the core loads in the admin zone
+// (themeconf.inc.php never runs there). Purge, stamp and notice are the
+// webmaster's alone: the guard lives in Lineage::apply(), below the theme's
+// admin level, as the fleet access doctrine asks for the actions the core
+// reserves to the webmaster. After the dispatcher (an AJAX save has no page to
+// carry a notice) and after the language (the notice is a translated string).
+require_once $bd_root . '/include/lineage.php';
+\BootstrapDarkroom\Lineage::apply($bd_root . '/themeconf.inc.php');
+
 // --- 5. Settings added after 2024-12: store their default once (PHP 8 notices) ---
 $bd_config = new \BootstrapDarkroom\Config();
 $bd_class = new ReflectionClass('\BootstrapDarkroom\Config');
