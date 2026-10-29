@@ -46,6 +46,7 @@ class bootstrap_darkroom_maintain extends ThemeMaintain {
 
   public function activate($theme_version, &$errors = array()) {
     $this->ensureVendorStore();
+    $this->recordLineage();
   }
 
   public function deactivate() {
@@ -56,6 +57,18 @@ class bootstrap_darkroom_maintain extends ThemeMaintain {
   public function delete() {
     // The 'bootstrap_darkroom' configuration is kept, as it always was: the theme
     // is a drop-in replacement, and a reinstall must find its settings back.
+  }
+
+  /**
+   * Stamps the files version the installation now runs (issue #59). The core
+   * controls this path, so no guard of ours; fail-soft like the vendor store.
+   */
+  private function recordLineage() {
+    $lineage = $this->inc() . '/lineage.php';
+    if (is_readable($lineage) && function_exists('conf_update_param')) {
+      require_once $lineage;
+      \BootstrapDarkroom\Lineage::recordActivation(dirname(dirname(__FILE__)) . '/themeconf.inc.php');
+    }
   }
 
   /**

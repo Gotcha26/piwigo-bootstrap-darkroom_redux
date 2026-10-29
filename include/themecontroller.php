@@ -14,6 +14,7 @@ class ThemeController {
 
     add_event_handler('init', array($this, 'assignConfig'));
     add_event_handler('init', array($this, 'setInitValues'));
+    add_event_handler('init', array($this, 'checkLineage'));
 
     if ($this->config->bootstrap_theme === 'darkroom' || $this->config->bootstrap_theme === 'material' || $this->config->bootstrap_theme === 'bootswatch') {
       $this->config->bootstrap_theme = 'bootstrap-darkroom';
@@ -38,6 +39,11 @@ class ThemeController {
       // also needed on index.tpl for compatibility with GThumb+/GDThumb
       add_event_handler('loc_end_index', array($this, 'getAllThumbnailsInCategory'));
     }
+  }
+
+  /** Files swapped in place: tells the webmaster who browses the gallery (read-only, see Lineage). */
+  public function checkLineage() {
+    Lineage::notifyPending(PHPWG_THEMES_PATH . 'bootstrap_darkroom/themeconf.inc.php');
   }
 
   public function assignConfig() {
