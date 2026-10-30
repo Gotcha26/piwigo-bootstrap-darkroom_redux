@@ -206,10 +206,13 @@ bd_assert($pos_gate !== false && $pos_apply !== false && $pos_apply > $pos_gate,
   'admin.inc.php: Lineage::apply() runs behind the theme\'s access gate');
 // Found by the webmaster on the lab: the confirmation vanished before it could be read. The admin
 // page turns every server-rendered box into a 3 s toast (jm.flashServerMessages, SERVER-MESSAGES
-// Voie B); a notice of this length needs a finite duration long enough to read it.
+// Voie B). The common now computes the duration from the text length (jm.flash, piwigo_local#1479):
+// the page must not pin a fixed successDuration, which would switch that computation off.
 $admin_js = file_get_contents(dirname(__DIR__) . '/admin/assets/js/bd-admin.js');
-$dur = preg_match('/flashServerMessages\(\s*\{[^}]*successDuration:\s*(\d+)/', $admin_js, $m_dur) ? (int) $m_dur[1] : 0;
-bd_assert($dur >= 10000, 'bd-admin.js: server-rendered notices stay at least 10 s (successDuration ' . $dur . ')');
+bd_assert(strpos($admin_js, 'jm.flashServerMessages()') !== false,
+  'bd-admin.js: server-rendered notices are flashed without a fixed duration (the common computes it)');
+bd_assert(!preg_match('/flashServerMessages\(\s*\{[^}]*successDuration/', $admin_js),
+  'bd-admin.js: no fixed successDuration left on flashServerMessages()');
 
 foreach (array('en_UK', 'fr_FR') as $lang_dir) {
   $lang_src = file_get_contents(dirname(__DIR__) . '/language/' . $lang_dir . '/theme.lang.php');

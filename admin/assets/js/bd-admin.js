@@ -230,8 +230,8 @@
     if (jm.Credits) jm.Credits.init();
     if (jm.helpWip) jm.helpWip();
     // Server-rendered boxes only (the AJAX saves flash on their own). The notice of a
-    // build taken over in place is a full sentence: the 3 s default is too short to read it.
-    if (jm.flashServerMessages) jm.flashServerMessages({ successDuration: 15000 });
+    // build taken over in place is a full sentence: the common computes its duration from its length.
+    if (jm.flashServerMessages) jm.flashServerMessages();
 
     var form = document.getElementById('bd-settings-form');
     if (!form) return;
