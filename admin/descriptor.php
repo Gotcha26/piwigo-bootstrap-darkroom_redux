@@ -38,6 +38,7 @@ if (!function_exists('bd_admin_descriptor')) {
         'accordion_group' => 'bd-appearance',
       ),
       'credits' => array(
+        'since'        => 2026,
         'kind'         => 'theme',
         'license_url'  => $theme_url . 'LICENSE.txt',
         'license_label' => l10n('bd_credits_license'),
