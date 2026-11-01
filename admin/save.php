@@ -102,6 +102,54 @@ if (!function_exists('bd_admin_settings_save')) {
   }
 }
 
+if (!function_exists('bd_free_update_descriptor')) {
+  /**
+   * Identity fragment read by the Free update channel (jm-free-update.php): the panel
+   * (jm_free_update_boot) and the install ws method share it. The dispatcher answers
+   * BEFORE the language is loaded and the full descriptor built, hence a function of its
+   * own, with no l10n. conf_prefix is short on purpose: the channel's config keys are
+   * capped at 40 characters, which "bootstrap_darkroom" would overflow.
+   *
+   * @return array {conf_prefix, header: {version}, update: {...}}
+   */
+  function bd_free_update_descriptor() {
+    global $themes;
+    $version = isset($themes->fs_themes['bootstrap_darkroom']['version'])
+      ? $themes->fs_themes['bootstrap_darkroom']['version'] : '';
+    return array(
+      'conf_prefix' => 'bd',
+      'header'      => array('version' => $version),
+      'update'      => array(
+        'slug' => 'bootstrap-darkroom',
+        'dir'  => dirname(dirname(__FILE__)),
+        'type' => 'theme',
+        'eid'  => 1122,
+      ),
+    );
+  }
+}
+
+if (!function_exists('bd_admin_free_update_methods')) {
+  /**
+   * Method table of the Free update channel for jm_ws_admin_page_dispatch():
+   * bootstrap_darkroom.freeUpdateInstall, built by the shared jm-free-update.php. The
+   * callable resolves the descriptor at run time. Common absent (clone without a build):
+   * no method, and no announcement either.
+   *
+   * @return array
+   */
+  function bd_admin_free_update_methods() {
+    if (!function_exists('jm_ws_methods_free_update')) {
+      return array();
+    }
+    return jm_ws_methods_free_update(array(
+      'cfg' => function () {
+        return jm_free_update_cfg(bd_free_update_descriptor());
+      },
+    ));
+  }
+}
+
 if (!function_exists('bd_admin_vendor_methods')) {
   /**
    * Method table of the "third-party asset bundle not installed" alert, for

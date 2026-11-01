@@ -103,10 +103,12 @@ jm_boot_require_one('jm-vendor-pins.php', $bd_root . '/include');
 jm_boot_require_one('jm-vendor.php', $bd_root . '/include');
 bd_admin_require('jm-ws.php', $bd_root . '/include');
 bd_admin_require('jm-export-import.php', $bd_root . '/include');
+// Loaded BEFORE the dispatcher: the Free update install method is in the table it serves.
+bd_admin_require('jm-free-update.php', $bd_root . '/include');
 if (function_exists('jm_ws_admin_page_dispatch')) {
   jm_ws_admin_page_dispatch(
     'bootstrap_darkroom',
-    bd_admin_save_methods() + bd_admin_expimp_methods() + bd_admin_vendor_methods()
+    bd_admin_save_methods() + bd_admin_expimp_methods() + bd_admin_vendor_methods() + bd_admin_free_update_methods()
   );
 }
 
@@ -184,6 +186,12 @@ $template->assign(array(
 // otherwise render it outside the tabs, under every one of them. bd-body.tpl includes
 // it at the end of Appearance, after "Maintenance & advanced options".
 // The else is not decorative: without it the template includes an unassigned partial.
+// Free update channel: lays down the "Check for updates" button, the announcement and the
+// confirmation card, and returns the descriptor completed with support.recheck_url.
+$bd_descriptor = array_replace($bd_descriptor, array_diff_key(bd_free_update_descriptor(), array('header' => 1)));
+if (function_exists('jm_free_update_boot')) {
+  $bd_descriptor = jm_free_update_boot($template, $bd_descriptor);
+}
 bd_admin_require('jm-help-support.php', $bd_root . '/include');
 if (function_exists('jm_help_support_boot')) {
   jm_help_support_boot($template, $bd_descriptor, array('inline' => false));

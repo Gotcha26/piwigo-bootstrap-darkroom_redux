@@ -8,7 +8,8 @@
  * jm.createDirtyTracker, jm.createFormSave, jm.formSaveButtonState, jm.ws,
  * jm.createDataActionRouter, jm.createCodeEditor, jm.createAccordionModeControl,
  * jm.createUiPref, jm.createSegmentedControl, jm.exportImport, jm.vendorAlert,
- * jm.confirmReset, jm.registerResetConfirmVariant, jm.stubLicenseError
+ * jm.confirmReset, jm.registerResetConfirmVariant, jm.freeUpdate (confirmation card of
+ * the Free update channel), jm.stubLicenseError
  * (transitive de jm.createFormSave : codes d'erreur des communs, piwigo_local#1446).
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
