@@ -53,6 +53,8 @@ Un thème Piwigo qui met vos photos au premier plan : un style sombre et calme i
 
 > **⚠️ IMPORTANT : le dossier doit s'appeler `bootstrap_darkroom`**, jamais `redux`. Ce nom est l'identité du thème pour Piwigo.
 
+**Connexion sortante :** depuis sa page d'administration uniquement, le thème vérifie ses mises à jour auprès de pro.julien-moreau.fr. [Ce qui est transmis](https://pro.julien-moreau.fr/legal/confidentialite.php#extensions-gratuites)
+
 ## Vous venez de Bootstrap Darkroom d'origine ?
 
 Bootstrap Darkroom (redux) est un fork autonome de Bootstrap Darkroom de Thomas Kuther. Il est conçu pour **reprendre la place de l'original sur site : rien n'est perdu** — thème sélectionné, réglages, préférences des utilisateurs et thèmes enfants sont conservés.

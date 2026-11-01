@@ -53,6 +53,8 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 
 > **⚠️ IMPORTANT : the folder must be named `bootstrap_darkroom`**, never `redux`. That name is the theme's identity for Piwigo.
 
+**Outbound connection:** from its administration page only, the theme checks for its updates with pro.julien-moreau.fr. [What is transmitted](https://pro.julien-moreau.fr/legal/confidentialite.php?lang=en#extensions-gratuites)
+
 ## Coming from the original Bootstrap Darkroom?
 
 Bootstrap Darkroom (redux) is an independent fork of Bootstrap Darkroom by Thomas Kuther. It is built to **take over from the original in place: nothing is lost** — theme selection, settings, user preferences and child themes carry over.
