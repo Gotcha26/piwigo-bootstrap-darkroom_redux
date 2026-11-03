@@ -172,12 +172,17 @@ $template->assign(array(
 $template->assign('JM_SECTION_HEADER_PARTIAL', $bd_tpl . 'jm-section-header.tpl');
 
 // --- 9. "?" button: "documentation in progress" placeholder, no help drawer yet ---
+// The Close label is a shared key (jm_help_wip_close): the catalogue is injected, with no
+// engine behind it, so it is included here, after load_language() and before it is read.
+if (is_readable($bd_root . '/include/jm-help-wip.lang.php')) {
+  include_once $bd_root . '/include/jm-help-wip.lang.php';
+}
 $template->assign(array(
   'JM_HELP_WIP'             => true,
   'JM_HELP_WIP_TITLE'       => l10n('bd_help_wip_title'),
   'JM_HELP_WIP_LINE1'       => l10n('bd_help_wip_line1'),
   'JM_HELP_WIP_LINE2'       => l10n('bd_help_wip_line2'),
-  'JM_HELP_WIP_CLOSE_LABEL' => l10n('bd_help_wip_close'),
+  'JM_HELP_WIP_CLOSE_LABEL' => l10n('jm_help_wip_close'),
   'JM_HELP_WIP_PARTIAL'     => $bd_tpl . 'jm-help-wip.tpl',
 ));
 
