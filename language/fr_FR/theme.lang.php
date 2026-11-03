@@ -105,7 +105,6 @@ $lang['bd_tab_social'] = 'Réseaux sociaux';
 $lang['bd_help_wip_title'] = 'Aide : Bootstrap Darkroom';
 $lang['bd_help_wip_line1'] = 'La documentation est en cours de rédaction.';
 $lang['bd_help_wip_line2'] = 'Merci de revenir prochainement.';
-$lang['bd_help_wip_close'] = 'Fermer';
 $lang['bd_msg_saved'] = 'Vos paramètres de configuration sont enregistrés';
 $lang['bd_msg_error'] = 'Les paramètres n\'ont pas pu être enregistrés.';
 $lang['bd_msg_reset_title'] = 'Réinitialiser les réglages du thème';

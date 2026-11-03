@@ -84,7 +84,6 @@ $lang['bd_tab_social'] = 'Social media';
 $lang['bd_help_wip_title'] = 'Help: Bootstrap Darkroom';
 $lang['bd_help_wip_line1'] = 'The documentation is being written.';
 $lang['bd_help_wip_line2'] = 'Please check back soon.';
-$lang['bd_help_wip_close'] = 'Close';
 $lang['bd_msg_saved'] = 'Your configuration settings are saved';
 $lang['bd_msg_error'] = 'The settings could not be saved.';
 $lang['bd_msg_reset_title'] = 'Reset the theme settings';
