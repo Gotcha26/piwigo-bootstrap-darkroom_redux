@@ -57,6 +57,15 @@ class bootstrap_darkroom_maintain extends ThemeMaintain {
   public function delete() {
     // The 'bootstrap_darkroom' configuration is kept, as it always was: the theme
     // is a drop-in replacement, and a reinstall must find its settings back.
+    //
+    // The free update channel's keys are not settings but a discovery cache and a
+    // dismissal date, written under the theme's name by the jm-free-update common:
+    // they go with the theme (piwigo_local#1514). Narrow prefix on purpose: 'bd' is
+    // too short to be a namespace, and nothing else of the theme must be purged.
+    if (jm_boot_require_one('jm-config-purge.php', $this->inc())
+        && function_exists('jm_purge_plugin_config')) {
+      jm_purge_plugin_config('bd_free_update_');
+    }
   }
 
   /**
