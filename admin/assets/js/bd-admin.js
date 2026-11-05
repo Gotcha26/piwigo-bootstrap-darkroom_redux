@@ -126,6 +126,9 @@
         };
       }
     }) : null;
+    // jm.formParams : sérialisation par défaut du formulaire dans le commun de save
+    // (piwigo_local#1558). Cette mention l'embarque dans ce fichier — l'auto-inclusion
+    // n'est pas transitive.
     return jm.createFormSave({
       form: form,
       btn: saveButton(),
