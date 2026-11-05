@@ -114,17 +114,11 @@
 
   function initSave(form) {
     if (!jm.createFormSave) return null;
+    // Capture et déclencheurs du traqueur commun (piwigo_local#1564) : jm.formParams du
+    // formulaire, la charge exacte que le save ci-dessous envoie.
     var dirty = jm.createDirtyTracker ? jm.createDirtyTracker({
-      capture: function () { return new URLSearchParams(new FormData(form)).toString(); },
-      target: saveButton,
-      triggers: function (h) {
-        form.addEventListener('input', h.onChange);
-        form.addEventListener('change', h.onChange);
-        return function () {
-          form.removeEventListener('input', h.onChange);
-          form.removeEventListener('change', h.onChange);
-        };
-      }
+      form: form,
+      target: saveButton
     }) : null;
     // jm.formParams : sérialisation par défaut du formulaire dans le commun de save
     // (piwigo_local#1558). Cette mention l'embarque dans ce fichier — l'auto-inclusion
