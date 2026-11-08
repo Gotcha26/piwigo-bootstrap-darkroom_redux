@@ -538,13 +538,40 @@ body {
   }
 }
 
+/* List view: image on the left spanning the full card height; body and
+   footer stacked in the right column. The footer stays inside the card
+   whatever the length of the description (the body is clipped, not the
+   footer). */
+.content-list .col-outer .card > .h-100 {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.content-list .col-outer .card > .h-100 > a {
+  display: block;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content-list .col-outer .card .card-img-left {
+  float: none;
+  display: block;
+  margin-bottom: 0;
+}
+
 .content-list .col-outer .card .card-body {
-  min-height: 80%;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .content-list .col-outer .card .card-footer {
-  max-height: 20%;
-  min-height: 20%;
+  grid-column: 2;
+  grid-row: 2;
 }
 
 @media (min-width: 992px) {
