@@ -210,6 +210,8 @@
 
 </div>
 
+{* Generic plugin slots framing the album description, rendered even without a description (#73). *}
+{if !empty($PLUGIN_INDEX_CONTENT_BEFORE_DESCRIPTION)}{$PLUGIN_INDEX_CONTENT_BEFORE_DESCRIPTION}{/if}
 {if !empty($CONTENT_DESCRIPTION)}
     <div id="content-description" class="py-3{if $theme_config->thumbnail_cat_desc == 'simple'} text-center{/if}">
 {if $theme_config->thumbnail_cat_desc == 'simple'}
@@ -219,6 +221,7 @@
 {/if}
     </div>
 {/if}
+{if !empty($PLUGIN_INDEX_CONTENT_AFTER_DESCRIPTION)}{$PLUGIN_INDEX_CONTENT_AFTER_DESCRIPTION}{/if}
     <div id="content" class="{if $bd_view == 'list'}content-list{else}content-grid{/if}{if empty($CONTENT_DESCRIPTION)} pt-3{/if}">
 {if !empty($CONTENT)}
     <!-- Start of content -->
