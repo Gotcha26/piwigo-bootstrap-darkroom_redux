@@ -4,7 +4,9 @@ namespace BootstrapDarkroom;
 class Config {
 
   const CONF_PARAM = 'bootstrap_darkroom';
-  const CONF_VERSION = 20;
+  // 21: view_default and view_toggle. A row stored at 20 is completed with their
+  // defaults in memory (populateConfig), never rewritten at boot (#61).
+  const CONF_VERSION = 21;
 
   const TYPE_BOOL = 'bool';
   const TYPE_STRING = 'string';
@@ -45,6 +47,8 @@ class Config {
   const KEY_CAT_DESCRIPTIONS = 'cat_descriptions';
   const KEY_CAT_NB_IMAGES = 'cat_nb_images';
   const KEY_THUMBNAIL_NB_IMAGES = 'thumbnail_nb_images';
+  const KEY_VIEW_DEFAULT = 'view_default';
+  const KEY_VIEW_TOGGLE = 'view_toggle';
 
   const KEY_SOCIAL_ENABLED = 'social_enabled';
   const KEY_SOCIAL_BUTTONS = 'social_buttons';
@@ -101,6 +105,8 @@ class Config {
       self::KEY_TAG_CLOUD_TYPE => 'basic',
       self::KEY_CUSTOM_CSS => null,
       self::KEY_THUMBNAIL_NB_IMAGES => false,
+      self::KEY_VIEW_DEFAULT => 'grid',
+      self::KEY_VIEW_TOGGLE => true,
   );
 
   private $types = array(
@@ -145,6 +151,8 @@ class Config {
       self::KEY_TAG_CLOUD_TYPE => self::TYPE_STRING,
       self::KEY_CUSTOM_CSS => self::TYPE_FILE,
       self::KEY_THUMBNAIL_NB_IMAGES => self::TYPE_BOOL,
+      self::KEY_VIEW_DEFAULT => self::TYPE_STRING,
+      self::KEY_VIEW_TOGGLE => self::TYPE_BOOL,
   );
 
   /**
@@ -251,6 +259,29 @@ class Config {
    */
   public function toArray() {
     return $this->config;
+  }
+
+  /**
+   * The view the public pages render: 'list', 'grid', or '' (grid, nothing chosen yet).
+   *
+   * - Toggle hidden: the view is imposed. The configured default applies and the
+   *   visitor's 'view' cookie is ignored, whatever an earlier visit left in it.
+   * - Toggle shown: the visitor's cookie wins over the default, which only applies
+   *   when there is no cookie. A default of 'grid' with no cookie stays '', the
+   *   markup the theme has always produced for a visitor who never clicked.
+   *
+   * @param  mixed $cookie The raw 'view' cookie, null when absent.
+   * @return string 'list', 'grid' or ''.
+   */
+  public function effectiveView($cookie) {
+    $default = (isset($this->config[self::KEY_VIEW_DEFAULT]) && $this->config[self::KEY_VIEW_DEFAULT] === 'list') ? 'list' : 'grid';
+    if (isset($this->config[self::KEY_VIEW_TOGGLE]) && !$this->config[self::KEY_VIEW_TOGGLE]) {
+      return $default;
+    }
+    if (is_string($cookie) && $cookie !== '') {
+      return $cookie === 'list' ? 'list' : 'grid';
+    }
+    return $default === 'list' ? 'list' : '';
   }
 
   public function fromPost(array $post) {

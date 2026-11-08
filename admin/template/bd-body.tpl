@@ -140,6 +140,29 @@
   <div class="jm-section-body">
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-view_default">{'Default view'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_view_default'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_view_default'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls">
+        <select class="jm-select" id="bd-f-view_default" name="view_default">
+          <option value="grid"{if $theme_config->view_default != 'list'} selected{/if}>{'Grid view'|@translate}</option>
+          <option value="list"{if $theme_config->view_default == 'list'} selected{/if}>{'List view'|@translate}</option>
+        </select>
+      </div>
+    </div>
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-view_toggle">{'Let visitors switch between grid and list'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_view_toggle'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_view_toggle'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls"><label class="jm-switch"><input type="checkbox" id="bd-f-view_toggle" name="view_toggle" value="1"{if $theme_config->view_toggle} checked{/if}><span class="jm-switch-track"></span></label></div>
+    </div>
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
         <label class="jm-field-label" for="bd-f-category_wells">{'Display categories as Bootstrap media wells'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_category_wells'|@translate}</span></span>
         </label>

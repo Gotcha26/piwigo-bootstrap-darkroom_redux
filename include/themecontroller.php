@@ -64,6 +64,9 @@ class ThemeController {
     }
 
     $template->assign('theme_config', $this->config);
+    // The templates never read the 'view' cookie themselves: a hidden toggle
+    // means an imposed view, and only the config knows that.
+    $template->assign('bd_view', $this->config->effectiveView(isset($_COOKIE['view']) ? $_COOKIE['view'] : null));
   }
 
   // Component list of the About page, generated from tools/vendor.json (the
