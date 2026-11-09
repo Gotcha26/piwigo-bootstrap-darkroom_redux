@@ -54,8 +54,9 @@ if (!function_exists('bd_admin_descriptor')) {
         // Grouped by family, most important first (#28): a group marker opens each
         // family. The generated families come from tools/vendor.json; the shared
         // catalogue slugs stay literal here, where the toolkit's credits guard reads
-        // them. Admin panel: shell fonts and icons (jm-fonts.tpl, bd-common.css) and
-        // CodeMirror (Custom CSS editor), served by the shared asset store.
+        // them. Admin panel: shell fonts and icons (jm-fonts.tpl, bd-common.css),
+        // CodeMirror (Custom CSS editor) and CKEditor 5 (legal notice of the About
+        // page, #75), both served by the shared asset store, never shipped.
         'components'   => array_merge(
           array(array('group' => l10n('bd_credits_group_core')), 'piwigo'),
           $family('core'),
@@ -65,7 +66,7 @@ if (!function_exists('bd_admin_descriptor')) {
           $family('scripts'),
           array(array('group' => l10n('bd_credits_group_fonts'))),
           $family('fonts'),
-          array(array('group' => l10n('bd_credits_group_admin')), 'source-sans-3', 'outfit', 'simple-icons', 'codemirror')
+          array(array('group' => l10n('bd_credits_group_admin')), 'source-sans-3', 'outfit', 'simple-icons', 'codemirror', 'ckeditor5')
         ),
         'notes'        => array(
           l10n('bd_credits_note_privacy'),

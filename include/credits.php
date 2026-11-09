@@ -5,7 +5,6 @@ defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
 
 return array(
   'core' => array(
-    array('name' => 'Bootstrap Darkroom', 'url' => 'https://github.com/Piwigo/piwigo-bootstrap-darkroom', 'author' => 'Thomas Kuther (upstream project)', 'license' => 'Apache-2.0'),
     array('name' => 'Bootstrap 4.3.1', 'url' => 'https://getbootstrap.com', 'author' => 'The Bootstrap Authors', 'license' => 'MIT'),
     array('name' => 'Bootswatch 4.3.1', 'url' => 'https://bootswatch.com', 'author' => 'Thomas Park', 'license' => 'MIT'),
     array('name' => 'Bootstrap Material Design 4.1.2', 'url' => 'https://fezvrasta.github.io/bootstrap-material-design', 'author' => 'Federico Zivolo', 'license' => 'MIT'),

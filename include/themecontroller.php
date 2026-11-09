@@ -28,7 +28,8 @@ class ThemeController {
       add_event_handler('blockmanager_apply', array($this, 'hideMenus'));                                                                                                
     }
 
-    add_event_handler('loc_begin_about', array($this, 'assignCredits'));
+    add_event_handler('loc_begin_about', array($this, 'assignAbout'));
+    add_event_handler('blockmanager_apply', array($this, 'renameAboutLink'));
     add_event_handler('loc_begin_page_header', array($this, 'checkIfHomepage'));
     add_event_handler('loc_after_page_header', array($this, 'stripBreadcrumbs'));
     add_event_handler('format_exif_data', array($this, 'exifReplacements'));
@@ -70,11 +71,31 @@ class ThemeController {
     $template->assign('bd_view', $this->config->effectiveView(isset($_COOKIE['view']) ? $_COOKIE['view'] : null));
   }
 
-  // Component list of the About page, generated from tools/vendor.json (the
-  // admin credits modal reads the same file).
-  public function assignCredits() {
-    global $template;
+  /** Name of the About page: the webmaster's title, or the default one. */
+  private function aboutTitle() {
+    $title = About::normalizeTitle($this->config->about_title);
+    return $title !== '' ? $title : l10n('bd_about_default_title');
+  }
 
+  /**
+   * The About page (#75), assembled here so that about.tpl only lays it out:
+   * title (breadcrumb, header and browser tab), legal notice, lineage of the theme
+   * in use, mention of Piwigo, and the component list.
+   *
+   * A child theme adds its own lineage and components through the
+   * bd_about_lineage and bd_about_credits events, never by overriding about.tpl:
+   * see include/about.php.
+   */
+  public function assignAbout() {
+    global $template, $title;
+
+    $page_title = $this->aboutTitle();
+    // about.php set $title ('About Piwigo') before this event; page_header.php
+    // reads it afterwards for the <title> of the page.
+    $title = $page_title;
+
+    // Component list, generated from tools/vendor.json (the admin credits modal
+    // reads the same file, plus its admin-only families).
     $credits = include PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/credits.php';
     $groups = array();
     foreach (array('core', 'viewers', 'scripts', 'fonts') as $id) {
@@ -82,7 +103,38 @@ class ThemeController {
         $groups[] = array('title' => l10n('bd_credits_group_' . $id), 'items' => $credits[$id]);
       }
     }
-    $template->assign('bd_credits', $groups);
+
+    $lineage = trigger_change('bd_about_lineage', array(About::themeEntry()));
+    $groups = trigger_change('bd_about_credits', $groups);
+
+    $template->assign('BD_ABOUT', array(
+      'title'   => $page_title,
+      'notice'  => About::renderNotice($this->config->about_notice),
+      'piwigo'  => About::normalizePiwigoMode($this->config->about_piwigo),
+      'lineage' => About::lineageHtml($lineage, array(
+        'by'         => l10n('bd_about_by'),
+        'fork_of'    => l10n('bd_about_fork_of'),
+        'fork_of_by' => l10n('bd_about_fork_of_by'),
+        'license'    => l10n('bd_about_license'),
+        'theme'      => l10n('bd_about_theme_line'),
+      )),
+      'credits' => About::normalizeCredits($groups),
+    ));
+  }
+
+  /**
+   * The menu link to the About page carries the page's name. The core builds it
+   * with 'About' and 'About Piwigo'; the menu template prints both unescaped.
+   */
+  public function renameAboutLink($menus) {
+    $menu = &$menus[0];
+    $block = $menu->get_block('mbMenu');
+    if ($block === null || !isset($block->data['about']) || !is_array($block->data['about'])) {
+      return;
+    }
+    $name = htmlspecialchars($this->aboutTitle(), ENT_QUOTES, 'UTF-8');
+    $block->data['about']['NAME'] = $name;
+    $block->data['about']['TITLE'] = $name;
   }
 
   public function showUpgradeWarning() {
