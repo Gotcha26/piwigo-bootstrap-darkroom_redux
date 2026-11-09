@@ -34,6 +34,7 @@ class ThemeController {
     add_event_handler('format_exif_data', array($this, 'exifReplacements'));
     add_event_handler('loc_end_picture', array($this, 'registerPictureTemplates'), 1000);
     add_event_handler('loc_begin_index_thumbnails', array($this, 'returnPageStart'));
+    add_event_handler('loc_end_index', array($this, 'trimDescription'));
 
     if ($this->config->slick_enabled === true || $this->config->photoswipe === true) {
       add_event_handler('loc_end_picture', array($this, 'getAllThumbnailsInCategory'));
@@ -160,6 +161,53 @@ class ThemeController {
     $template->parse_picture_buttons();
     $template->parse_index_buttons();
     $template->assign_var_from_handle('PICTURE_NAV', 'picture_nav');
+  }
+
+  /**
+   * Drops empty paragraphs at the start and end of the album description.
+   *
+   * A description saved by a rich editor often ends with a blank line
+   * (<p>&nbsp;</p>, <p><br></p>…): invisible on its own, it still takes a line
+   * plus its margins, and unbalances the block as soon as it is framed (a
+   * child theme painting a background behind it shows far more room below the
+   * text than above). Display only: the stored description is untouched.
+   *
+   * loc_end_index runs after the core assigns CONTENT_DESCRIPTION and before
+   * index.tpl is parsed. A description made only of blank lines ends up empty,
+   * so the template's {if !empty($CONTENT_DESCRIPTION)} skips the block.
+   */
+  public function trimDescription() {
+    global $template;
+    $description = $template->get_template_vars('CONTENT_DESCRIPTION');
+    if (is_string($description) && $description !== '') {
+      $template->assign('CONTENT_DESCRIPTION', self::trimEmptyParagraphs($description));
+    }
+  }
+
+  /**
+   * Removes leading and trailing empty <p> / <div> blocks from an HTML fragment.
+   *
+   * "Empty" means nothing but whitespace, non-breaking spaces (raw, &nbsp; or
+   * &#160;) and <br> tags. Blank blocks BETWEEN paragraphs are left alone: they
+   * may be a deliberate spacing choice of the author.
+   *
+   * A block carrying an `id` or a `data-*` attribute is never treated as blank:
+   * it may be a container that a plugin appended to the description and that
+   * its script fills later (a map, a widget).
+   *
+   * @param  string $html
+   * @return string The fragment, trimmed; unchanged if it is not valid UTF-8.
+   */
+  public static function trimEmptyParagraphs($html) {
+    $blank = '(?:\s|\x{00A0}|&nbsp;|&#160;|&#xa0;|<br\s*\/?>)*';
+    $attrs = '(?:\s(?![^>]*\b(?:id|data-[\w-]+)\s*=)[^>]*)?';
+    $block = '<(p|div)' . $attrs . '>' . $blank . '<\/\1\s*>';
+    $out = preg_replace(
+      array('/^(?:\s*' . $block . ')+\s*/iu', '/\s*(?:' . $block . '\s*)+$/iu'),
+      '',
+      $html
+    );
+    return is_string($out) ? $out : $html;
   }
 
   public function stripBreadcrumbs() {
