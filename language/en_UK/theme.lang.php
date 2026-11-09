@@ -209,6 +209,7 @@ $lang['bd_about_preview_label'] = 'Preview';
 $lang['bd_desc_about_preview'] = 'Opens the public page in a new tab, to see how it looks.';
 $lang['bd_tip_about_preview'] = 'The page shows what is saved: save your changes first.<br>It is displayed with the theme of your own account, which may not be this one.';
 $lang['bd_about_preview'] = 'View the page';
+$lang['bd_about_theme_line'] = 'Theme: %s';
 $lang['bd_about_by'] = '%1$s by %2$s';
 $lang['bd_about_fork_of'] = 'fork of %1$s';
 $lang['bd_about_fork_of_by'] = 'fork of %1$s by %2$s';

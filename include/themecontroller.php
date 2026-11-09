@@ -116,6 +116,7 @@ class ThemeController {
         'fork_of'    => l10n('bd_about_fork_of'),
         'fork_of_by' => l10n('bd_about_fork_of_by'),
         'license'    => l10n('bd_about_license'),
+        'theme'      => l10n('bd_about_theme_line'),
       )),
       'credits' => About::normalizeCredits($groups),
     ));

@@ -230,6 +230,7 @@ $lang['bd_about_preview_label'] = 'Aperçu';
 $lang['bd_desc_about_preview'] = 'Ouvre la page publique dans un nouvel onglet, pour voir son rendu.';
 $lang['bd_tip_about_preview'] = 'La page montre ce qui est enregistré : enregistrez d\'abord vos modifications.<br>Elle s\'affiche avec le thème de votre propre compte, qui peut ne pas être celui-ci.';
 $lang['bd_about_preview'] = 'Voir la page';
+$lang['bd_about_theme_line'] = 'Thème : %s';
 $lang['bd_about_by'] = '%1$s par %2$s';
 $lang['bd_about_fork_of'] = 'fork de %1$s';
 $lang['bd_about_fork_of_by'] = 'fork de %1$s par %2$s';

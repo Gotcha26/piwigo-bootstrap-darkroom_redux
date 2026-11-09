@@ -138,6 +138,13 @@ bd_assert(strpos($lines[0], 'Jane &quot;J&quot;') !== false && strpos($lines[0],
 bd_assert(strpos($lines[0], 'href="https://example.org/?a=1&amp;b=2"') !== false, 'lineage: a safe URL is linked, escaped');
 bd_assert(About::lineageHtml('nope', $strings) === array(), 'lineage: a non-list declaration gives nothing');
 
+// Every line is presented as a theme, the child's and the parent's alike.
+$lines = About::lineageHtml(array($child, About::themeEntry()), $strings + array('theme' => 'Thème : %s'));
+bd_assert(count($lines) === 2 && strpos($lines[0], 'Thème : BC-BG by ') === 0 && strpos($lines[1], 'Thème : <a href=') === 0,
+  'lineage: each line is introduced as a theme');
+bd_assert(strpos(file_get_contents($root . '/include/themecontroller.php'), "'theme'      => l10n('bd_about_theme_line')") !== false,
+  'lineage: the page passes the translated theme pattern');
+
 // --- 6. Component families ---
 $groups = About::normalizeCredits(array(
   array('title' => 'Core', 'items' => array(

@@ -216,7 +216,9 @@ class About {
    * child theme added). Every value is escaped here: a declaration is data.
    *
    * @param  mixed $entries List of entries (see the class docblock).
-   * @param  array $strings Sentence patterns: by, fork_of, license (sprintf, %1$s / %2$s).
+   * @param  array $strings Sentence patterns: by, fork_of, fork_of_by, license (sprintf,
+   *                        %1$s / %2$s), and theme, optional, which wraps the whole line
+   *                        ("Theme: %s"): every declared entry is a theme.
    * @return string[]
    */
   public static function lineageHtml($entries, array $strings) {
@@ -252,7 +254,7 @@ class About {
       if ($license !== '') {
         $line .= ' ' . sprintf($strings['license'], htmlspecialchars($license, ENT_QUOTES, 'UTF-8'));
       }
-      $lines[] = $line;
+      $lines[] = isset($strings['theme']) ? sprintf($strings['theme'], $line) : $line;
     }
     return $lines;
   }
