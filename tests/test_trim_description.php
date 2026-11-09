@@ -42,6 +42,6 @@ bd_assert($trim("<p>caf\xE9</p><p> </p>") === "<p>caf\xE9</p><p> </p>", 'invalid
 
 $src = (string) file_get_contents(dirname(__DIR__) . '/include/themecontroller.php');
 bd_assert(strpos($src, "add_event_handler('loc_end_index', array(\$this, 'trimDescription'))") !== false,
-          'trimDescription hooked on loc_end_index');
+  'trimDescription hooked on loc_end_index');
 
 exit($fail === 0 ? 0 : 1);
