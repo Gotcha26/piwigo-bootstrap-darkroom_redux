@@ -131,6 +131,62 @@
     color: var(--jm-muted);
   }
 
+  // Legal notice of the About page (#75): read-only view of the stored HTML, which
+  // opens the shared rich editor. The textarea, the view and its button swap through
+  // the hidden attribute (bd-admin.js): it must win over any display rule.
+  #bd-f-about_notice[hidden],
+  .bd-notice-view[hidden],
+  .bd-notice-actions[hidden] {
+    display: none;
+  }
+
+  .bd-notice-view {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 56px;
+    max-height: 320px;
+    overflow: auto;
+    padding: 10px 12px;
+    border: 1px solid var(--jm-border);
+    border-radius: var(--jm-radius);
+    color: var(--jm-fg);
+    background: var(--jm-surface-raised);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+
+    // The content comes from the editor: reading margins for its blocks.
+    p,
+    ul,
+    ol,
+    blockquote,
+    table {
+      margin: 0 0 0.6em;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.4em;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    &.is-empty {
+      color: var(--jm-muted);
+      font-style: italic;
+    }
+  }
+
+  .bd-notice-actions {
+    margin-top: var(--jm-gap-sm, 8px);
+  }
+
   .bd-shell-missing {
     padding: var(--jm-gap-md, 12px);
   }

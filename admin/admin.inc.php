@@ -144,6 +144,18 @@ $bd_cm_css = function_exists('jm_vendor_url') ? jm_vendor_url('codemirror/codemi
 if ($bd_cm_css !== null && $bd_cm_css !== '') {
   $template->append('head_elements', '<link rel="stylesheet" href="' . htmlspecialchars($bd_cm_css, ENT_QUOTES) . '">');
 }
+// Shared rich editor (CKEditor 5 from the shared asset store) for the About page's
+// legal notice (#75). After jm-vendor.php (step 3), which resolves its assets. The
+// shell partial is assigned only when the editor's config is: without them, the
+// notice stays a plain textarea (bd-admin.js finds no jm.richEditor).
+bd_admin_require('jm-rich-editor.php', $bd_root . '/include');
+if (function_exists('jm_rich_editor_assign') && is_file($bd_tpl . 'jm-rich-editor-modal.tpl')) {
+  jm_rich_editor_assign($template);
+  $template->assign(array(
+    'JM_RICH_EDITOR_PARTIAL' => $bd_tpl . 'jm-rich-editor-modal.tpl',
+    'JM_RE_ID'               => 'bdNoticeEditorOverlay',
+  ));
+}
 $bd_theme = 'clear';
 bd_admin_require('jm-theme-detector.php', $bd_root . '/include');
 if (class_exists('JM_ThemeDetector')) {
@@ -280,6 +292,8 @@ $bd_json = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
 $bd_js = 'admin/assets/js/bd-admin.js';
 $template->assign(array(
   'theme_config'     => $bd_config,
+  // Read-only view of the legal notice: sanitized again before display (#75).
+  'BD_ABOUT_NOTICE_HTML' => \BootstrapDarkroom\About::renderNotice($bd_config->about_notice),
   'BD_THEME'         => $bd_theme,
   'BD_VARIANTS'      => bd_admin_variants($bd_config->bootstrap_theme),
   // Unassigned, Smarty would render an empty token and every save would be refused.

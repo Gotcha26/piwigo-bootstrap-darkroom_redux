@@ -275,6 +275,56 @@
   </div>
 </section>
 
+{* About page (#75). The legal notice is edited in the shared rich editor
+   (jm.richEditor, CKEditor 5 from the shared asset store). The textarea is the
+   field that is posted: visible as long as the editor is not there (no build, no
+   script), hidden by bd-admin.js once it is, which then shows the read-only view
+   and its Edit button instead. The view holds the stored notice, sanitized again
+   for display (About::renderNotice). *}
+<section class="jm-section" data-section-id="bd-about" data-accordion-group="bd-appearance">
+  {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_about'|@translate icon_glyph='&#8505;&#65038;' expanded=false}
+  <div class="jm-section-body">
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-about_title">{'bd_label_about_title'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_about_title'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_about_title'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-about_title" name="about_title" maxlength="80" value="{$theme_config->about_title|escape:'html'}" placeholder="{'About'|@translate|escape:'html'}"></div>
+    </div>
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-about_piwigo">{'bd_label_about_piwigo'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_about_piwigo'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_about_piwigo'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls">
+        <select class="jm-select" id="bd-f-about_piwigo" name="about_piwigo">
+          <option value="simple"{if $theme_config->about_piwigo != 'original' && $theme_config->about_piwigo != 'none'} selected{/if}>{'bd_about_piwigo_simple'|@translate}</option>
+          <option value="original"{if $theme_config->about_piwigo == 'original'} selected{/if}>{'bd_about_piwigo_original'|@translate}</option>
+          <option value="none"{if $theme_config->about_piwigo == 'none'} selected{/if}>{'bd_about_piwigo_none'|@translate}</option>
+        </select>
+      </div>
+    </div>
+    <div class="jm-field">
+      <div class="jm-field-header">
+        <label class="jm-field-label" for="bd-f-about_notice">{'bd_label_about_notice'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_about_notice'|@translate}</span></span>
+        </label>
+      </div>
+      <span class="jm-field-desc">{'bd_desc_about_notice'|@translate|escape}</span>
+      <div class="bd-notice-view{if $BD_ABOUT_NOTICE_HTML == ''} is-empty{/if}" id="bd-about-notice-view" role="button" tabindex="0"
+        data-action="about-notice-edit" data-bd-empty="{'bd_about_notice_empty'|@translate|escape:'html'}"
+        aria-label="{'bd_label_about_notice'|@translate|escape:'html'}" hidden>{if $BD_ABOUT_NOTICE_HTML != ''}{$BD_ABOUT_NOTICE_HTML}{else}{'bd_about_notice_empty'|@translate|escape:'html'}{/if}</div>
+      <div class="bd-notice-actions" hidden><button type="button" class="jm-btn" data-action="about-notice-edit">{'bd_about_notice_edit'|@translate}</button></div>
+      <textarea class="jm-input jm-input--wide" id="bd-f-about_notice" name="about_notice" rows="8">{$theme_config->about_notice|escape:'html'}</textarea>
+    </div>
+    {if isset($JM_RICH_EDITOR_PARTIAL)}{include file=$JM_RICH_EDITOR_PARTIAL}{/if}
+  </div>
+</section>
+
 <section class="jm-section" data-section-id="bd-css" data-accordion-group="bd-appearance">
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_css'|@translate icon_glyph='&#10100;&#10101;' expanded=false}
   <div class="jm-section-body">

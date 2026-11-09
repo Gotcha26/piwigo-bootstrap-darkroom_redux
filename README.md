@@ -36,6 +36,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 
 - **A settings panel in tabs**, with a caption and a tooltip on every setting. Settings that depend on another one appear only when relevant.
 - **A built-in editor for your own CSS**, plus a maintenance section for the advanced cases.
+- **An About page that is yours**: rename it (for example "Legal notice"), write your legal notice in a rich text editor, and choose how much of Piwigo's own presentation it shows: one line, the original text, or nothing.
 - **Customization that survives updates**: overrides live in `local/bootstrap_darkroom/custom.css`, outside the theme folder — or build a child theme.
 
 ### Respectful by design
@@ -151,7 +152,11 @@ English (`en_UK`) and French (`fr_FR`).
 ## Credits
 
 Original theme by **Thomas Kuther**. Fork maintained by Gotcha (Julien Moreau) — https://julien-moreau.fr  
-Third-party components and their licences are listed in the theme's admin panel.
+Third-party components and their licences are listed in the theme's admin panel and on the public About page.
+
+### For child theme authors
+
+A child theme does not override `about.tpl`: it declares what it brings, and Bootstrap Darkroom renders it. From the child's `themeconf.inc.php`, add a lineage line through the `bd_about_lineage` event, and extra component families through `bd_about_credits`. Every value is plain text, escaped by the parent. The data shape is documented at the top of [`include/about.php`](include/about.php).
 
 ## License
 

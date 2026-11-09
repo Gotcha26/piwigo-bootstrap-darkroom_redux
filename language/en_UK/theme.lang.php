@@ -37,11 +37,6 @@ $lang['Site logo'] = 'Site logo';
 $lang['Social integration'] = 'Social integration';
 $lang['Basic'] = 'Basic';
 $lang['HTML 5 canvas'] = 'HTML 5 canvas';
-$lang['By'] = 'By';
-$lang['A mobile-ready theme based on Bootstrap 4'] = 'A mobile-ready theme based on Bootstrap 4';
-$lang['If you find any issues, please report them to the'] = 'If you find any issues, please report them to the';
-$lang['Issue tracker'] = 'Issue tracker';
-$lang['Bug reports and feature requests'] = 'Bug reports and feature requests';
 $lang['Display category description in grid view'] = 'Display category description in grid view';
 $lang['Fullscreen'] = 'Fullscreen';
 $lang['Grid view'] = 'Grid view';
@@ -72,9 +67,6 @@ $lang['AutoPlay'] = 'AutoPlay';
 $lang['Previous (arrow left)'] = 'Previous (arrow left)';
 $lang['Next (arrow right)'] = 'Next (arrow right)';
 $lang['Display number of images in breadcrumb'] = 'Display number of images in breadcrumb';
-
-// About tab — credits & licences
-$lang['Source'] = 'Source';
 
 // Admin panel on the shared jm-* shell (#17).
 $lang['bd_subtitle'] = 'A mobile-ready theme based on Bootstrap 4';
@@ -184,7 +176,6 @@ $lang['bd_desc_social_vk'] = 'Adds a VK share button.';
 $lang['bd_tip_social_vk'] = 'Opens VK\'s share page in a small window, with the link to the photo.';
 $lang['bd_desc_social_buttons'] = 'Shows share buttons in each network\'s colour, with its name, instead of plain icons.';
 $lang['bd_tip_social_buttons'] = 'Icons are more discreet; coloured buttons are easier to spot.';
-$lang['bd_about_theme'] = 'Bootstrap Darkroom (redux), a fork of Bootstrap Darkroom by Thomas Kuther.';
 $lang['bd_credits_license'] ='Distributed under the Apache License 2.0.';
 $lang['bd_credits_group_core'] = 'Foundations';
 $lang['bd_credits_group_viewers'] = 'Photo viewers';
@@ -196,3 +187,26 @@ $lang['bd_credits_note_jquery'] = 'jQuery is not shipped with this theme: it is 
 $lang['bd_lineage_adopted'] = 'Done: Bootstrap Darkroom (redux) is in place and your settings have been kept. Your gallery now uses the new version of the theme.';
 $lang['bd_lineage_upgraded'] = 'Done: Bootstrap Darkroom (redux) has been updated and your settings have been kept. Your gallery now uses the new version.';
 $lang['bd_lineage_pending'] = 'Bootstrap Darkroom (redux) is installed and your settings have been kept. One last step remains: <a class="alert-link" href="%s">finish the setup</a> (webmaster only).';
+
+// About page (#75): admin section, then the public page.
+$lang['bd_section_about'] = 'About page';
+$lang['bd_label_about_title'] = 'Page title';
+$lang['bd_desc_about_title'] = 'The name of the About page, in the menu, the breadcrumb, the page header and the browser tab.';
+$lang['bd_tip_about_title'] = 'Empty: the default name, "About", in each visitor\'s language.<br>A name typed here is shown as is, in every language.<br>Example: <code>Legal notice</code>';
+$lang['bd_label_about_piwigo'] = 'Mention of Piwigo';
+$lang['bd_desc_about_piwigo'] = 'What the page says about Piwigo, the software that runs the gallery.';
+$lang['bd_tip_about_piwigo'] = 'Simplified: one line, "Powered by Piwigo", with a link.<br>Original: the full presentation text Piwigo ships, unchanged.<br>None: Piwigo is not mentioned.';
+$lang['bd_about_piwigo_simple'] = 'Simplified (one line)';
+$lang['bd_about_piwigo_original'] = 'Original Piwigo text';
+$lang['bd_about_piwigo_none'] = 'None';
+$lang['bd_label_about_notice'] = 'Legal notice';
+$lang['bd_desc_about_notice'] = 'Your own text, at the top of the About page: legal notice, publisher, host, terms of use…';
+$lang['bd_tip_about_notice'] = 'Click the text, or Edit, to open the editor. Any formatting is allowed; scripts and embedded frames are removed when saving.<br>Saved to <code>local/bootstrap_darkroom/about-notice.html</code>, which theme updates leave alone. An empty text deletes the file, and the block leaves the page.';
+$lang['bd_about_notice_empty'] = 'No legal notice yet.';
+$lang['bd_about_notice_edit'] = 'Edit';
+$lang['bd_about_by'] = '%1$s by %2$s';
+$lang['bd_about_fork_of'] = 'fork of %1$s';
+$lang['bd_about_fork_of_by'] = 'fork of %1$s by %2$s';
+$lang['bd_about_license'] = 'Licence: %s.';
+$lang['bd_about_powered_by'] = 'Powered by %s.';
+$lang['bd_about_components'] = 'Third-party components';

@@ -1,12 +1,15 @@
 <?php
 namespace BootstrapDarkroom;
 
+require_once __DIR__ . '/about.php';
+
 class Config {
 
   const CONF_PARAM = 'bootstrap_darkroom';
-  // 21: view_default and view_toggle. A row stored at 20 is completed with their
-  // defaults in memory (populateConfig), never rewritten at boot (#61).
-  const CONF_VERSION = 21;
+  // 22: about_title, about_piwigo (and the about_notice file). A row stored at 21
+  // is completed with their defaults in memory (populateConfig), never rewritten
+  // at boot (#61).
+  const CONF_VERSION = 22;
 
   const TYPE_BOOL = 'bool';
   const TYPE_STRING = 'string';
@@ -63,6 +66,11 @@ class Config {
 
   const KEY_CUSTOM_CSS = 'custom_css';
 
+  // About page (#75).
+  const KEY_ABOUT_TITLE = 'about_title';
+  const KEY_ABOUT_PIWIGO = 'about_piwigo';
+  const KEY_ABOUT_NOTICE = 'about_notice';
+
   private $defaults = array(
       self::KEY_FLUID_WIDTH => false,
       self::KEY_FLUID_WIDTH_COL_XXL => true,
@@ -107,6 +115,9 @@ class Config {
       self::KEY_THUMBNAIL_NB_IMAGES => false,
       self::KEY_VIEW_DEFAULT => 'grid',
       self::KEY_VIEW_TOGGLE => true,
+      self::KEY_ABOUT_TITLE => null,
+      self::KEY_ABOUT_PIWIGO => About::PIWIGO_SIMPLE,
+      self::KEY_ABOUT_NOTICE => null,
   );
 
   private $types = array(
@@ -153,6 +164,21 @@ class Config {
       self::KEY_THUMBNAIL_NB_IMAGES => self::TYPE_BOOL,
       self::KEY_VIEW_DEFAULT => self::TYPE_STRING,
       self::KEY_VIEW_TOGGLE => self::TYPE_BOOL,
+      self::KEY_ABOUT_TITLE => self::TYPE_STRING,
+      self::KEY_ABOUT_PIWIGO => self::TYPE_STRING,
+      // A file, like the Custom CSS: a legal notice may outgrow the conf row (a
+      // TEXT column shared by every setting, once JSON-escaped).
+      self::KEY_ABOUT_NOTICE => self::TYPE_FILE,
+  );
+
+  /**
+   * Values cleaned before they are stored, by key (About:: methods). The notice is
+   * HTML from the rich editor: sanitized here, and again before display.
+   */
+  private $normalizers = array(
+      self::KEY_ABOUT_TITLE => 'normalizeTitle',
+      self::KEY_ABOUT_PIWIGO => 'normalizePiwigoMode',
+      self::KEY_ABOUT_NOTICE => 'cleanNotice',
   );
 
   /**
@@ -166,12 +192,16 @@ class Config {
    *   images. Their switches (logo_image_enabled, page_header...) are reset.
    * - comments_disqus_shortname: the gallery's Disqus account. comments_type is
    *   reset, so Disqus is no longer used until it is selected again.
+   * - about_title, about_notice: the About page's title and legal notice, both
+   *   written by the webmaster. about_piwigo is a setting: it is reset.
    */
   private $preserve_on_reset = array(
       self::KEY_CUSTOM_CSS,
       self::KEY_LOGO_IMAGE_PATH,
       self::KEY_PAGE_HEADER_IMAGE,
       self::KEY_COMMENTS_DISQUS_SHORTNAME,
+      self::KEY_ABOUT_TITLE,
+      self::KEY_ABOUT_NOTICE,
   );
 
   private $config = array();
@@ -210,10 +240,14 @@ class Config {
 
   private function initFiles() {
     $this->files[self::KEY_CUSTOM_CSS] = PHPWG_ROOT_PATH . PWG_LOCAL_DIR . 'bootstrap_darkroom/custom.css';
+    $this->files[self::KEY_ABOUT_NOTICE] = PHPWG_ROOT_PATH . PWG_LOCAL_DIR . 'bootstrap_darkroom/about-notice.html';
   }
 
   public function __set($key, $value) {
     if (array_key_exists($key, $this->defaults)) {
+      if (isset($this->normalizers[$key])) {
+        $value = call_user_func(array(__NAMESPACE__ . '\About', $this->normalizers[$key]), $value);
+      }
       switch ($this->types[$key]) {
         case self::TYPE_STRING:
           $this->config[$key] = !empty($value) ? $value : null;
@@ -353,8 +387,11 @@ class Config {
     if (!file_exists($dir)) {
       mkdir($dir, 0755, true);
     }
-    if (empty($content) && file_exists($file)) {
-      unlink($file);
+    if (empty($content)) {
+      // No content, no file: never an empty one left behind.
+      if (file_exists($file)) {
+        unlink($file);
+      }
     } else {
       file_put_contents($file, $content);
     }

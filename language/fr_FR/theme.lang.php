@@ -57,10 +57,6 @@ $lang['Site logo'] = 'Logo du site';
 $lang['Social integration'] = 'Intégration des réseaux sociaux';
 $lang['Basic'] = 'Basique';
 $lang['HTML 5 canvas'] = 'HTML 5';
-$lang['By'] = 'De ';
-$lang['If you find any issues, please report them to the'] = 'Si vous rencontrez des problèmes, veuillez les signaler sur le';
-$lang['Issue tracker'] = 'Bug Tracker.';
-$lang['Bug reports and feature requests'] = 'Rapports de bugs et demandes de fonctionnalités';
 $lang['Grid view'] = 'Grille';
 $lang['List view'] = 'Liste';
 $lang['Display category description in grid view'] = 'Afficher les descriptions des albums dans une grille';
@@ -81,7 +77,6 @@ $lang['Page header'] = 'En-tête de page';
 $lang['Display number of images in album and subalbums'] = 'Afficher le nombre d\'images dans les albums et sous-albums';
 $lang['Card grid below the image'] = 'Grille sous l\'image';
 $lang['Description display style'] = 'Style d\'affichage de la description';
-$lang['A mobile-ready theme based on Bootstrap 4'] = 'Un thème pour mobile en Bootstrap 4';
 $lang['Banner style'] = 'Style de bannière';
 $lang['Advanced'] = 'Avancé';
 $lang['Close (Esc)'] = 'Fermer (Esc)';
@@ -93,9 +88,6 @@ $lang['AutoPlay'] = 'Lecture automatique';
 $lang['Previous (arrow left)'] = 'Précédent (flèche gauche)';
 $lang['Next (arrow right)'] = 'Suivant (flèche droite)';
 $lang['Display number of images in breadcrumb'] = 'Afficher le nombre d\'images dans le fil d\'arianne';
-
-// About tab — credits & licences
-$lang['Source'] = 'Sources';
 
 // Panneau d'admin sur le socle commun jm-* (#17).
 $lang['bd_subtitle'] = 'Un thème adapté aux mobiles, basé sur Bootstrap 4';
@@ -205,7 +197,6 @@ $lang['bd_desc_social_vk'] = 'Ajoute un bouton de partage VK.';
 $lang['bd_tip_social_vk'] = 'Ouvre la page de partage de VK dans une petite fenêtre, avec le lien vers la photo.';
 $lang['bd_desc_social_buttons'] = 'Affiche des boutons de partage aux couleurs de chaque réseau, avec son nom, au lieu de simples icônes.';
 $lang['bd_tip_social_buttons'] = 'Les icônes sont plus discrètes ; les boutons colorés se repèrent mieux.';
-$lang['bd_about_theme'] = 'Bootstrap Darkroom (redux), un fork de Bootstrap Darkroom de Thomas Kuther.';
 $lang['bd_credits_license'] ='Distribué sous licence Apache 2.0.';
 $lang['bd_credits_group_core'] = 'Socle';
 $lang['bd_credits_group_viewers'] = 'Visionneuses';
@@ -217,3 +208,26 @@ $lang['bd_credits_note_jquery'] = 'jQuery n\'est pas livré avec ce thème : il
 $lang['bd_lineage_adopted'] = 'Terminé : Bootstrap Darkroom (redux) est en place et vos réglages sont conservés. Votre galerie utilise maintenant la nouvelle version du thème.';
 $lang['bd_lineage_upgraded'] = 'Terminé : Bootstrap Darkroom (redux) a été mis à jour et vos réglages sont conservés. Votre galerie utilise maintenant la nouvelle version.';
 $lang['bd_lineage_pending'] = 'Bootstrap Darkroom (redux) est installé et vos réglages sont conservés. Il reste une dernière étape : <a class="alert-link" href="%s">terminer la mise en place</a> (webmestre uniquement).';
+
+// Page « À propos » (#75) : section d'admin, puis la page publique.
+$lang['bd_section_about'] = 'Page « À propos »';
+$lang['bd_label_about_title'] = 'Titre de la page';
+$lang['bd_desc_about_title'] = 'Le nom de la page « À propos », dans le menu, le fil d\'Ariane, l\'en-tête de la page et l\'onglet du navigateur.';
+$lang['bd_tip_about_title'] = 'Vide : le nom par défaut, « À propos », dans la langue de chaque visiteur.<br>Un nom saisi ici s\'affiche tel quel, dans toutes les langues.<br>Exemple : <code>Mentions légales</code>';
+$lang['bd_label_about_piwigo'] = 'Mention de Piwigo';
+$lang['bd_desc_about_piwigo'] = 'Ce que la page dit de Piwigo, le logiciel qui fait tourner la galerie.';
+$lang['bd_tip_about_piwigo'] = 'Simplifiée : une ligne, « Propulsé par Piwigo », avec un lien.<br>Originale : le texte de présentation complet fourni par Piwigo, tel quel.<br>Aucune : Piwigo n\'est pas mentionné.';
+$lang['bd_about_piwigo_simple'] = 'Simplifiée (une ligne)';
+$lang['bd_about_piwigo_original'] = 'Texte original de Piwigo';
+$lang['bd_about_piwigo_none'] = 'Aucune';
+$lang['bd_label_about_notice'] = 'Mentions légales';
+$lang['bd_desc_about_notice'] = 'Votre propre texte, en tête de la page « À propos » : mentions légales, éditeur, hébergeur, conditions d\'utilisation…';
+$lang['bd_tip_about_notice'] = 'Cliquez sur le texte, ou sur Modifier, pour ouvrir l\'éditeur. Toute mise en forme est permise ; les scripts et les cadres intégrés sont retirés à l\'enregistrement.<br>Enregistré dans <code>local/bootstrap_darkroom/about-notice.html</code>, que les mises à jour du thème ne touchent pas. Un texte vide supprime le fichier, et le bloc quitte la page.';
+$lang['bd_about_notice_empty'] = 'Aucune mention légale pour l\'instant.';
+$lang['bd_about_notice_edit'] = 'Modifier';
+$lang['bd_about_by'] = '%1$s par %2$s';
+$lang['bd_about_fork_of'] = 'fork de %1$s';
+$lang['bd_about_fork_of_by'] = 'fork de %1$s par %2$s';
+$lang['bd_about_license'] = 'Licence : %s.';
+$lang['bd_about_powered_by'] = 'Propulsé par %s.';
+$lang['bd_about_components'] = 'Composants tiers';

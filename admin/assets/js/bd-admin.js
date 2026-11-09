@@ -10,7 +10,8 @@
  * jm.createUiPref, jm.createSegmentedControl, jm.exportImport, jm.vendorAlert,
  * jm.confirmReset, jm.registerResetConfirmVariant, jm.freeUpdate (confirmation card of
  * the Free update channel), jm.stubLicenseError
- * (transitive de jm.createFormSave : codes d'erreur des communs, piwigo_local#1446).
+ * (transitive de jm.createFormSave : codes d'erreur des communs, piwigo_local#1446),
+ * jm.richEditor (legal notice of the About page, #75; it depends on jm.modal, cited above).
  *
  * Saving posts to the theme's own admin page (BDAdmin.saveUrl), which
  * jm_ws_admin_page_dispatch() answers: a theme has no reliable ws.php method.
@@ -106,6 +107,69 @@
       if (name === 'photoswipe') syncLinkTo(form);
       syncDependents(form);
     });
+  }
+
+  /* Legal notice of the About page (#75), edited in the shared rich editor
+     (jm.richEditor: CKEditor 5 from the shared asset store), preset 'prose', its
+     richest toolbar. No formatting limit here: the server strips active content
+     before storage and again before display.
+     The textarea stays the posted field: the validated HTML is written to it and
+     `input` fired, which the dirty tracker listens to. Without the editor (no
+     build, no asset config), nothing changes: the textarea stays visible. */
+  var NOTICE_OVERLAY = '#bdNoticeEditorOverlay';
+
+  /** An editor left "<p>&nbsp;</p>" behind: no text and no image is an empty notice. */
+  function noticeBlank(html) {
+    if (/<img\b/i.test(html || '')) return false;
+    var probe = document.createElement('div');
+    probe.innerHTML = html || '';
+    return String(probe.textContent || '').replace(/[\s ]+/g, '') === '';
+  }
+
+  function initNotice() {
+    var field = document.getElementById('bd-f-about_notice');
+    var view = document.getElementById('bd-about-notice-view');
+    var re = jm.richEditor;
+    if (!field || !view || !re || typeof re.openModal !== 'function' || !document.querySelector(NOTICE_OVERLAY)) {
+      return null;
+    }
+    var actions = view.parentNode.querySelector('.bd-notice-actions');
+    field.hidden = true;
+    view.hidden = false;
+    if (actions) actions.hidden = false;
+
+    function render(html) {
+      var empty = noticeBlank(html);
+      view.classList.toggle('is-empty', empty);
+      // The editor's own output, in the webmaster's own session: the server
+      // sanitizes it on save, and the page reloads the view from the stored value.
+      if (empty) view.textContent = view.getAttribute('data-bd-empty') || '';
+      else view.innerHTML = html;
+    }
+
+    function open(trigger) {
+      re.openModal({
+        title: view.getAttribute('aria-label') || '',
+        html: field.value,
+        preset: 'prose',
+        trigger: trigger || view,
+        overlay: NOTICE_OVERLAY,
+        onValidate: function (html) {
+          var value = noticeBlank(html) ? '' : html;
+          field.value = value;
+          field.dispatchEvent(new Event('input', { bubbles: true }));
+          render(value);
+        }
+      });
+    }
+
+    // The view is a role="button": Enter and Space open it, like a real button.
+    view.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      open(view);
+    });
+    return { open: open };
   }
 
   function saveButton() {
@@ -239,12 +303,14 @@
     // which the dirty tracker already listens to. No-op without CodeMirror.
     var css = document.getElementById('bd-f-custom_css');
     if (css && jm.createCodeEditor) jm.createCodeEditor(css, { mode: 'text/css', theme: 'bd-jm' });
+    var notice = initNotice();
     var save = initSave(form);
     var expimp = initExportImport();
     initReset();
     if (jm.createDataActionRouter) {
       jm.createDataActionRouter({
         click: {
+          'about-notice-edit': function (el) { if (notice) notice.open(el); },
           'config-save': function () { if (save) save.save(); },
           'config-export': function () { if (expimp) expimp.exportConfig(); }
         },
