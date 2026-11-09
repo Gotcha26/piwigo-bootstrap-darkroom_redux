@@ -49,7 +49,7 @@ bd_assert(mb_strlen(About::normalizeTitle(str_repeat('é', 200)), 'UTF-8') === A
 
 // --- 2. Mention of Piwigo ---
 bd_assert(About::normalizePiwigoMode('original') === 'original' && About::normalizePiwigoMode('none') === 'none', 'piwigo: known modes kept');
-bd_assert(About::normalizePiwigoMode('bogus') === 'simple' && About::normalizePiwigoMode(null) === 'simple', 'piwigo: anything else is the simplified line');
+bd_assert(About::normalizePiwigoMode('bogus') === 'original' && About::normalizePiwigoMode(null) === 'original', 'piwigo: anything else is the default, the original text');
 
 // --- 3. Legal notice: no formatting limit, no active content ---
 $rich = '<h2 style="color: red">Publisher</h2><p><strong>Jane</strong> <u>Doe</u></p>'
@@ -81,7 +81,7 @@ $config->fromPost(array(
 $config->save();
 $stored = json_decode($conf['bootstrap_darkroom'], true);
 bd_assert($stored['about_title'] === 'Mentions légales', 'config: title stored cleaned');
-bd_assert($stored['about_piwigo'] === 'simple', 'config: an unknown mode is stored as the default');
+bd_assert($stored['about_piwigo'] === 'original', 'config: an unknown mode is stored as the default');
 bd_assert(!isset($stored['about_notice']), 'config: the notice is a file, its text never in the conf row');
 bd_assert(is_file($file) && strpos(file_get_contents($file), 'Éditeur') !== false
   && stripos(file_get_contents($file), 'script') === false && stripos(file_get_contents($file), 'onclick') === false,
@@ -101,18 +101,18 @@ bd_assert(!file_exists($file), 'config: no empty file created when there is no n
 
 // Reset keeps the typed content, resets the mention of Piwigo.
 $config = new Config();
-$config->fromPost(array('about_title' => 'Legal', 'about_piwigo' => 'original', 'about_notice' => '<p>Kept</p>'));
+$config->fromPost(array('about_title' => 'Legal', 'about_piwigo' => 'simple', 'about_notice' => '<p>Kept</p>'));
 $config->save();
 $config = new Config();
 $config->reset();
 $stored = json_decode($conf['bootstrap_darkroom'], true);
 bd_assert($stored['about_title'] === 'Legal' && is_file($file), 'reset: title and notice kept');
-bd_assert($stored['about_piwigo'] === 'simple', 'reset: the mention of Piwigo goes back to its default');
+bd_assert($stored['about_piwigo'] === 'original', 'reset: the mention of Piwigo goes back to its default');
 
 // A row stored before #75 (conf_version 21) gets the defaults in memory.
 $conf['bootstrap_darkroom'] = json_encode(array('conf_version' => 21, 'bootstrap_theme' => 'bootswatch-cosmo'));
 $old = new Config();
-bd_assert($old->about_piwigo === 'simple' && $old->about_title === null && $old->bootstrap_theme === 'bootswatch-cosmo',
+bd_assert($old->about_piwigo === 'original' && $old->about_title === null && $old->bootstrap_theme === 'bootswatch-cosmo',
   'config: an older row is completed with the About defaults');
 
 // --- 5. Lineage ---
@@ -177,6 +177,14 @@ bd_assert(preg_match("/\\{if \\\$BD_ABOUT\\.piwigo == 'original'\\}\\s*<div clas
   "about.tpl: Piwigo's own text only in 'original' mode");
 bd_assert(strpos($tpl, '$about_msgs') !== false, 'about.tpl: the plugin slot is kept');
 bd_assert(preg_match('/\{\$(item|group)\.(name|title|author|license|url)\}/', $tpl) === 0, 'about.tpl: every credit value is escaped');
+
+$body = file_get_contents($root . '/admin/template/bd-body.tpl');
+bd_assert(preg_match('/<a class="jm-btn" href="\{\$BD_ABOUT_URL\|escape:\'html\'\}" target="_blank" rel="noopener">/', $body) === 1,
+  'admin: the preview button opens the public page in a new tab');
+bd_assert(strpos(file_get_contents($root . '/admin/admin.inc.php'), "'BD_ABOUT_URL'         => get_root_url() . 'about.php'") !== false,
+  'admin: the preview URL is the public about.php');
+bd_assert(strpos(file_get_contents($root . '/include/themecontroller.php'), "l10n('bd_about_default_title')") !== false,
+  'public: the default title is the translated "Legal notice"');
 
 $used = array();
 foreach (array('template/about.tpl', 'include/themecontroller.php', 'admin/template/bd-body.tpl') as $rel) {

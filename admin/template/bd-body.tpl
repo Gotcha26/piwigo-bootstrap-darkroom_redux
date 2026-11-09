@@ -291,7 +291,7 @@
         </label>
         <span class="jm-field-desc">{'bd_desc_about_title'|@translate|escape}</span>
       </div>
-      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-about_title" name="about_title" maxlength="80" value="{$theme_config->about_title|escape:'html'}" placeholder="{'About'|@translate|escape:'html'}"></div>
+      <div class="jm-field-controls"><input type="text" class="jm-input jm-input--wide" id="bd-f-about_title" name="about_title" maxlength="80" value="{$theme_config->about_title|escape:'html'}" placeholder="{'bd_about_default_title'|@translate|escape:'html'}"></div>
     </div>
     <div class="jm-field jm-field--row">
       <div class="jm-field-label-col">
@@ -302,8 +302,8 @@
       </div>
       <div class="jm-field-controls">
         <select class="jm-select" id="bd-f-about_piwigo" name="about_piwigo">
-          <option value="simple"{if $theme_config->about_piwigo != 'original' && $theme_config->about_piwigo != 'none'} selected{/if}>{'bd_about_piwigo_simple'|@translate}</option>
-          <option value="original"{if $theme_config->about_piwigo == 'original'} selected{/if}>{'bd_about_piwigo_original'|@translate}</option>
+          <option value="original"{if $theme_config->about_piwigo != 'simple' && $theme_config->about_piwigo != 'none'} selected{/if}>{'bd_about_piwigo_original'|@translate}</option>
+          <option value="simple"{if $theme_config->about_piwigo == 'simple'} selected{/if}>{'bd_about_piwigo_simple'|@translate}</option>
           <option value="none"{if $theme_config->about_piwigo == 'none'} selected{/if}>{'bd_about_piwigo_none'|@translate}</option>
         </select>
       </div>
@@ -320,6 +320,17 @@
         aria-label="{'bd_label_about_notice'|@translate|escape:'html'}" hidden>{if $BD_ABOUT_NOTICE_HTML != ''}{$BD_ABOUT_NOTICE_HTML}{else}{'bd_about_notice_empty'|@translate|escape:'html'}{/if}</div>
       <div class="bd-notice-actions" hidden><button type="button" class="jm-btn" data-action="about-notice-edit">{'bd_about_notice_edit'|@translate}</button></div>
       <textarea class="jm-input jm-input--wide" id="bd-f-about_notice" name="about_notice" rows="8">{$theme_config->about_notice|escape:'html'}</textarea>
+    </div>
+    {* Opens the public page as saved, in a new tab. A plain link, not a form
+       control: it carries no name, the save and the dirty tracker never see it. *}
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <span class="jm-field-label">{'bd_about_preview_label'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_about_preview'|@translate}</span></span>
+        </span>
+        <span class="jm-field-desc">{'bd_desc_about_preview'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls"><a class="jm-btn" href="{$BD_ABOUT_URL|escape:'html'}" target="_blank" rel="noopener">{'bd_about_preview'|@translate} &#8599;&#65038;</a></div>
     </div>
     {if isset($JM_RICH_EDITOR_PARTIAL)}{include file=$JM_RICH_EDITOR_PARTIAL}{/if}
   </div>

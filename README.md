@@ -36,7 +36,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 
 - **A settings panel in tabs**, with a caption and a tooltip on every setting. Settings that depend on another one appear only when relevant.
 - **A built-in editor for your own CSS**, plus a maintenance section for the advanced cases.
-- **An About page that is yours**: rename it (for example "Legal notice"), write your legal notice in a rich text editor, and choose how much of Piwigo's own presentation it shows: one line, the original text, or nothing.
+- **An About page that is yours**: called "Legal notice" by default and renamed as you wish, it holds your legal notice, written in a rich text editor, and as much of Piwigo's own presentation as you choose: the original text, one line, or nothing. A button in the panel opens it in a new tab.
 - **Customization that survives updates**: overrides live in `local/bootstrap_darkroom/custom.css`, outside the theme folder — or build a child theme.
 
 ### Respectful by design

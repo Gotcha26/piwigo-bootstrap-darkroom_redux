@@ -74,7 +74,7 @@ class ThemeController {
   /** Name of the About page: the webmaster's title, or the default one. */
   private function aboutTitle() {
     $title = About::normalizeTitle($this->config->about_title);
-    return $title !== '' ? $title : l10n('About');
+    return $title !== '' ? $title : l10n('bd_about_default_title');
   }
 
   /**

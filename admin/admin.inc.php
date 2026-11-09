@@ -294,6 +294,8 @@ $template->assign(array(
   'theme_config'     => $bd_config,
   // Read-only view of the legal notice: sanitized again before display (#75).
   'BD_ABOUT_NOTICE_HTML' => \BootstrapDarkroom\About::renderNotice($bd_config->about_notice),
+  // "View the page" button of the same section: the public page, in a new tab.
+  'BD_ABOUT_URL'         => get_root_url() . 'about.php',
   'BD_THEME'         => $bd_theme,
   'BD_VARIANTS'      => bd_admin_variants($bd_config->bootstrap_theme),
   // Unassigned, Smarty would render an empty token and every save would be refused.

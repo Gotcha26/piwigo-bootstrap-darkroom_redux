@@ -77,7 +77,7 @@ class About {
    */
   public static function normalizePiwigoMode($value) {
     $modes = array(self::PIWIGO_SIMPLE, self::PIWIGO_ORIGINAL, self::PIWIGO_NONE);
-    return in_array($value, $modes, true) ? $value : self::PIWIGO_SIMPLE;
+    return in_array($value, $modes, true) ? $value : self::PIWIGO_ORIGINAL;
   }
 
   /**

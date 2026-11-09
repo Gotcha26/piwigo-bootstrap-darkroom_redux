@@ -116,7 +116,7 @@ class Config {
       self::KEY_VIEW_DEFAULT => 'grid',
       self::KEY_VIEW_TOGGLE => true,
       self::KEY_ABOUT_TITLE => null,
-      self::KEY_ABOUT_PIWIGO => About::PIWIGO_SIMPLE,
+      self::KEY_ABOUT_PIWIGO => About::PIWIGO_ORIGINAL,
       self::KEY_ABOUT_NOTICE => null,
   );
 
