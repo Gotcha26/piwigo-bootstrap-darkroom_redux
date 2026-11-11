@@ -31,6 +31,7 @@ Un thème Piwigo qui met vos photos au premier plan : un style sombre et calme i
 - **Un carrousel sur la page d'une photo** pour passer d'une image à la suivante sans retourner à l'album.
 - **Entièrement adaptatif** : barres de navigation, carrousel, diaporama et vidéo s'ajustent à l'écran. Le contenu du carrousel et du diaporama se charge à la demande, avec la taille d'image choisie pour l'appareil.
 - **Des boutons de plugins qui trouvent leur place** : les boutons ajoutés à la barre par des plugins reçoivent un repli raisonnable au lieu de casser la barre.
+- **Des lignes de plugins dans le panneau d'informations d'une photo** : un plugin peut y ajouter ses propres lignes (par exemple l'auteur de l'ajout) juste après « Ajoutée le », dans les dispositions cartes, barre latérale et onglets.
 
 ### À configurer à votre main
 
@@ -152,6 +153,10 @@ L'anglais (`en_UK`) et le français (`fr_FR`).
 
 Thème original de **Thomas Kuther**. Fork maintenu par Gotcha (Julien Moreau) — https://julien-moreau.fr  
 Les composants tiers et leurs licences sont listés dans le panneau d'administration du thème.
+
+### Pour les auteurs de thèmes enfants
+
+Les plugins peuvent ajouter des lignes au panneau d'informations d'une photo par la variable de gabarit `PLUGIN_PICTURE_INFO` : une liste de `{id, label, value}`. `label` est du texte brut, échappé par le thème ; `value` est du HTML rendu tel quel, c'est donc au plugin de le garantir sûr. Les lignes viennent juste après « Ajoutée le » (`#datepost`) dans les trois variantes (cartes, barre latérale, onglets), et rien n'est rendu si la variable est vide. Un thème enfant qui surcharge un gabarit `picture_info_*.tpl` doit reprendre la boucle `PLUGIN_PICTURE_INFO`.
 
 ## Licence
 
