@@ -29,6 +29,15 @@
                 <dd>{$INFO_POSTED_DATE}</dd>
             </div>
 {/if}
+{* Plugin rows: [{id, label (plain text, escaped here), value (safe HTML, as is)}] *}
+{if !empty($PLUGIN_PICTURE_INFO)}
+{foreach from=$PLUGIN_PICTURE_INFO item=row}
+            <div id="{$row.id|escape}" class="imageInfo">
+                <dt>{$row.label|escape}</dt>
+                <dd>{$row.value}</dd>
+            </div>
+{/foreach}
+{/if}
 {if $display_info.visits}
             <div id="visits" class="imageInfo">
                 <dt>{'Visits'|@translate}</dt>

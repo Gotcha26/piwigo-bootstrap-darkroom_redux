@@ -114,6 +114,15 @@
                     <td><div id="datepost" class="imageInfo">{$INFO_POSTED_DATE}</div></td>
                   </tr>
 {/if}
+{* Plugin rows: [{id, label (plain text, escaped here), value (safe HTML, as is)}] *}
+{if !empty($PLUGIN_PICTURE_INFO)}
+{foreach from=$PLUGIN_PICTURE_INFO item=row}
+                  <tr>
+                    <th scope="row">{$row.label|escape}</th>
+                    <td><div id="{$row.id|escape}" class="imageInfo">{$row.value}</div></td>
+                  </tr>
+{/foreach}
+{/if}
 {if $display_info.visits}
                   <tr>
                     <th scope="row">{'Visits'|@translate}</th>
