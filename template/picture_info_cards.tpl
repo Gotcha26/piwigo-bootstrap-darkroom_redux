@@ -105,6 +105,17 @@
               </dl>
             </div>
 {/if}
+{* Plugin rows: [{id, label (plain text, escaped here), value (safe HTML, as is)}] *}
+{if !empty($PLUGIN_PICTURE_INFO)}
+{foreach from=$PLUGIN_PICTURE_INFO item=row}
+            <div id="{$row.id|escape}" class="imageInfo">
+              <dl class="row mb-0">
+                <dt class="col-sm-5">{$row.label|escape}</dt>
+                <dd class="col-sm-7">{$row.value}</dd>
+              </dl>
+            </div>
+{/foreach}
+{/if}
 {if $display_info.visits}
             <div id="visits" class="imageInfo">
               <dl class="row mb-0">

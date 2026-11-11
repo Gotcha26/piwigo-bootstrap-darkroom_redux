@@ -31,6 +31,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 - **A carousel on the photo page** to hop from one picture to the next without going back to the album.
 - **Fully responsive**: navbars, carousel, slideshow and video adapt to the screen. Carousel and slideshow content loads on demand, with the image size picked to fit the device.
 - **Plugin buttons that find their place**: buttons added to the navbar by plugins get a sensible fallback instead of breaking the bar.
+- **Plugin rows in the photo information panel**: a plugin can add its own lines (for example who contributed the photo) right after "Posted on", in the cards, sidebar and tabs layouts.
 
 ### Yours to configure
 
@@ -157,6 +158,8 @@ Third-party components and their licences are listed in the theme's admin panel 
 ### For child theme authors
 
 A child theme does not override `about.tpl`: it declares what it brings, and Bootstrap Darkroom renders it. From the child's `themeconf.inc.php`, add a lineage line through the `bd_about_lineage` event, and extra component families through `bd_about_credits`. Every value is plain text, escaped by the parent. The data shape is documented at the top of [`include/about.php`](include/about.php).
+
+Plugins can add rows to the photo information panel through the `PLUGIN_PICTURE_INFO` template variable: a list of `{id, label, value}`. `label` is plain text, escaped by the theme; `value` is HTML rendered as is, so the plugin is responsible for it being safe. Rows come right after "Posted on" (`#datepost`) in the three variants (cards, sidebar, tabs), and nothing is rendered when the variable is empty. A child theme that overrides a `picture_info_*.tpl` template must keep the `PLUGIN_PICTURE_INFO` loop.
 
 ## License
 
