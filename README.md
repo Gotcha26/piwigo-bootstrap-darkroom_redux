@@ -54,7 +54,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 
 > **⚠️ IMPORTANT : the folder must be named `bootstrap_darkroom`**, never `redux`. That name is the theme's identity for Piwigo.
 
-**Outbound connection:** from its administration page only, the theme checks for its updates with pro.julien-moreau.fr. [What is transmitted](https://pro.julien-moreau.fr/legal/confidentialite.php?lang=en#extensions-gratuites)
+**Outbound connection:** from its administration page, the theme checks for its updates with pro.julien-moreau.fr. On activation and on update, it also downloads its bundle of shared components from there (`/commons/`); if that bundle is missing, the administrator's browser loads `marked` and `mermaid` (help drawer) from jsDelivr. [What is transmitted](https://pro.julien-moreau.fr/legal/confidentialite.php?lang=en#extensions-gratuites)
 
 ## Coming from the original Bootstrap Darkroom?
 
