@@ -192,6 +192,8 @@
     {include file=$FILE_CHRONOLOGY_VIEW}
 {/if}
 
+{* Rendered only when it holds something: an empty wrapper still costs its 2 x 20px margins. *}
+{if (isset($SEARCH_IN_SET_BUTTON) and $SEARCH_IN_SET_BUTTON) or isset($COMBINABLE_TAGS)}
 <div class="action-buttons">
 
 {if isset($SEARCH_IN_SET_BUTTON) and $SEARCH_IN_SET_BUTTON}
@@ -209,6 +211,7 @@
 {/if}
 
 </div>
+{/if}
 
 {* Generic plugin slots framing the album description, rendered even without a description (#73). *}
 {if !empty($PLUGIN_INDEX_CONTENT_BEFORE_DESCRIPTION)}{$PLUGIN_INDEX_CONTENT_BEFORE_DESCRIPTION}{/if}
