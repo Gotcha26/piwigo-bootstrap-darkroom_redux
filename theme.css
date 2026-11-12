@@ -574,6 +574,38 @@ body {
   grid-row: 2;
 }
 
+/* List view on phones: the two-column card leaves the text ~110px. Below sm,
+   stack it: the thumbnail takes the full card width, title and footer follow
+   below, the height is free. */
+@media (max-width: 575.98px) {
+  .content-list .col-outer .card {
+    height: auto;
+  }
+  .content-list .col-outer .card > .h-100 {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+  .content-list .col-outer .card > .h-100 > a {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .content-list .col-outer .card .card-img-left {
+    width: 100%;
+    height: auto;
+    padding-right: 0;
+    border-top-right-radius: calc(.25rem - 1px);
+  }
+  .content-list .col-outer .card .card-body {
+    grid-column: auto;
+    grid-row: auto;
+    overflow: visible;
+  }
+  .content-list .col-outer .card .card-footer {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
 @media (min-width: 992px) {
   .container-fluid #content, .container-fluid #content-description {
     padding: 0 1rem;
