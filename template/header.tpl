@@ -18,7 +18,7 @@
    prefers dark, light otherwise) and reload only when it differs and the cookie
    stuck, never in a loop with cookies off. *}
 {if isset($bd_color) && $bd_color.toggle && !$bd_color.known}
-    <script>{literal}(function(){try{if(/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))return;var m=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.cookie='mode='+m+';max-age=2592000;path=/;SameSite=Lax';if(m!=={/literal}'{$bd_color.mode}'{literal}&&/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))window.location.reload();}catch(e){}})();{/literal}</script>
+    <script>{literal}(function(){try{if(/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))return;var m=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.cookie='mode='+m+';max-age=2592000;path=/;SameSite=Lax';if(m!=={/literal}'{$bd_color.mode|escape:'javascript'}'{literal}&&/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))window.location.reload();}catch(e){}})();{/literal}</script>
 {/if}
 {if $meta_ref_enabled}
 {if isset($INFO_AUTHOR)}
