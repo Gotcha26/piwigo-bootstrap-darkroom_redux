@@ -89,7 +89,13 @@ class ThemeController {
    * The templates write the cookie themselves, under the name and lifetime of
    * Skins::COOKIE / COOKIE_DAYS ('mode', 30 days).
    *
-   * @return array {toggle: bool, mode: string, next: string, known: bool, icons: 'gallery'|'fa'}
+   * 'scheme' is the scheme of the skin actually served, read by header.tpl for the
+   * data-bd-scheme attribute, the public contract of child themes. It can differ
+   * from 'mode' (the visitor's choice, read by the switch) when a slot is empty
+   * and the single skin is served instead.
+   *
+   * @return array {toggle: bool, mode: string, next: string, known: bool,
+   *               icons: 'gallery'|'fa', scheme: 'light'|'dark'}
    */
   private function colorSwitchData() {
     $pair = $this->config->isPairMode();
@@ -108,6 +114,7 @@ class ThemeController {
       'next'   => $mode === Skins::DARK ? Skins::LIGHT : Skins::DARK,
       'known'  => $this->colorModeKnown,
       'icons'  => $icons,
+      'scheme' => Skins::scheme($this->config->bootstrap_theme),
     );
   }
 

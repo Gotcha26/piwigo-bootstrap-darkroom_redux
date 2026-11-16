@@ -200,6 +200,22 @@ bd_assert($writes === 0, 'public requests never write the configuration');
 bd_store(array('color_mode' => 'pair', 'bootstrap_theme' => 'material-teal', 'bootstrap_theme_dark' => ''));
 $r = bd_request('dark');
 bd_assert($r['config']->bootstrap_theme === 'material-teal', 'pair, empty dark slot: the single skin is kept');
+bd_assert($r['switch']['mode'] === 'dark' && $r['switch']['scheme'] === 'light', 'pair, empty dark slot: data-bd-scheme tells the skin served (light), not the request (dark)');
+
+// --- 8. data-bd-scheme, the child themes' contract: the scheme of the skin served ---
+bd_store(array('bootstrap_theme' => 'bootswatch-darkly'));
+$r = bd_request('light');
+bd_assert($r['switch']['scheme'] === 'dark', 'single dark skin: data-bd-scheme is dark, whatever the cookie');
+bd_store(array('bootstrap_theme' => 'material-teal'));
+$r = bd_request(null);
+bd_assert($r['switch']['scheme'] === 'light', 'single light skin: data-bd-scheme is light');
+bd_store(array('color_mode' => 'pair'));
+$r = bd_request('dark');
+bd_assert($r['switch']['scheme'] === 'dark', 'pair, dark: data-bd-scheme is dark');
+$r = bd_request('light');
+bd_assert($r['switch']['scheme'] === 'light', 'pair, light: data-bd-scheme is light');
+$header = file_get_contents(dirname(__DIR__) . '/template/header.tpl');
+bd_assert(strpos($header, 'data-bd-scheme="{$bd_color.scheme}"') !== false, 'header.tpl writes data-bd-scheme on <html> from bd_color.scheme');
 
 ob_end_flush();
 if (is_dir($tmp)) {

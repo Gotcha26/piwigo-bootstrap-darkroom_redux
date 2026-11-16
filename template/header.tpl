@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="{$lang_info.code}" dir="{$lang_info.direction}">
+{* data-bd-scheme (#81): scheme of the skin served to this request, 'light' or 'dark',
+   in both modes (single skin and light / dark pair). PUBLIC CONTRACT for child themes
+   (BC-BG): their CSS writes its variants under [data-bd-scheme="light"] /
+   [data-bd-scheme="dark"]. Keep the name and the two values stable. *}
+<html lang="{$lang_info.code}" dir="{$lang_info.direction}"{if isset($bd_color.scheme)} data-bd-scheme="{$bd_color.scheme}"{/if}>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset={$CONTENT_ENCODING}">
     <meta name="generator" content="Piwigo (aka PWG), see piwigo.org">
