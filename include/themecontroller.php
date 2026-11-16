@@ -4,8 +4,118 @@ namespace BootstrapDarkroom;
 class ThemeController {
   private $config;
 
+  /** Mode served to this visitor (Skins::LIGHT / DARK), set by resolveColorScheme(). */
+  private $colorMode = null;
+
+  /** False when nothing told the visitor's mode yet: header.tpl then asks matchMedia. */
+  private $colorModeKnown = true;
+
   public function __construct() {
     $this->config = new Config();
+  }
+
+  /**
+   * Picks the skin of this request and returns its colour scheme (#81). Called by
+   * themeconf.inc.php BEFORE it sets $themeconf['colorscheme'], and before init():
+   * every template then reads the resolved skin from theme_config.
+   *
+   * - Light / dark mode: the visitor's mode (Skins::requested()) selects one of the
+   *   two skins and its navbar set. The OS preference is asked for with the
+   *   Sec-CH-Prefers-Color-Scheme client hint; when it arrives without a cookie, it
+   *   becomes the cookie.
+   * - Single mode: the admin's skin, whatever the cookie says. When the gallery
+   *   uses the core standard pages, the core 'mode' cookie is aligned with that
+   *   skin, so that they
+   *   (identification, register, password, profile) open in the gallery's scheme:
+   *   our themeconf runs before the core swaps to themes/standard_pages, and the
+   *   cookie set here reaches the browser before standard_pages.js reads it.
+   *
+   * No header and no cookie on ws.php calls, nor once output has started.
+   *
+   * @return string 'clear' or 'dark', the $themeconf['colorscheme'] values.
+   */
+  public function resolveColorScheme() {
+    $cookie = isset($_COOKIE[Skins::COOKIE]) ? $_COOKIE[Skins::COOKIE] : null;
+    $can_write = !defined('IN_WS') && !headers_sent();
+
+    if ($this->config->isPairMode()) {
+      $hint = isset($_SERVER['HTTP_SEC_CH_PREFERS_COLOR_SCHEME']) ? $_SERVER['HTTP_SEC_CH_PREFERS_COLOR_SCHEME'] : null;
+      $requested = Skins::requested($cookie, $hint);
+      $this->colorMode = $requested['mode'] !== null ? $requested['mode'] : Skins::LIGHT;
+      $this->colorModeKnown = $requested['source'] !== null;
+      $this->config->applyColorMode($this->colorMode);
+      if ($can_write) {
+        // Ask for the OS preference on the next requests (supporting browsers only).
+        header('Accept-CH: Sec-CH-Prefers-Color-Scheme');
+        header('Vary: Sec-CH-Prefers-Color-Scheme', false);
+        if ($requested['source'] === 'hint') {
+          $this->writeModeCookie($this->colorMode);
+        }
+      }
+    } else {
+      $this->colorMode = Skins::scheme($this->config->bootstrap_theme);
+      // Only useful to the core standard pages: no cookie for galleries without them.
+      if ($can_write && $this->standardPagesInUse() && Skins::normalizeMode($cookie) !== $this->colorMode) {
+        $this->writeModeCookie($this->colorMode);
+      }
+    }
+
+    return Skins::scheme($this->config->bootstrap_theme) === Skins::LIGHT ? 'clear' : 'dark';
+  }
+
+  /**
+   * Whether the core serves its standard pages instead of the theme's templates.
+   * The theme never asks for them ('use_standard_pages' => false in its themeconf):
+   * only the gallery's $conf['use_standard_pages'] does (include/template.class.php).
+   */
+  private function standardPagesInUse() {
+    global $conf;
+    return !empty($conf['use_standard_pages']);
+  }
+
+  /** The core 'mode' cookie, written as standard_pages.js writes it (path /, 30 days). */
+  private function writeModeCookie($mode) {
+    setcookie(Skins::COOKIE, $mode, array(
+      'expires'  => time() + Skins::COOKIE_DAYS * 86400,
+      'path'     => '/',
+      'samesite' => 'Lax',
+    ));
+    $_COOKIE[Skins::COOKIE] = $mode;
+  }
+
+  /**
+   * Data of the navbar switch (menubar.tpl) and of the first-visit script (header.tpl).
+   *
+   * The templates write the cookie themselves, under the name and lifetime of
+   * Skins::COOKIE / COOKIE_DAYS ('mode', 30 days).
+   *
+   * 'scheme' is the scheme of the skin actually served, read by header.tpl for the
+   * data-bd-scheme attribute, the public contract of child themes. It can differ
+   * from 'mode' (the visitor's choice, read by the switch) when a slot is empty
+   * and the single skin is served instead.
+   *
+   * @return array {toggle: bool, mode: string, next: string, known: bool,
+   *               icons: 'gallery'|'fa', scheme: 'light'|'dark'}
+   */
+  private function colorSwitchData() {
+    $pair = $this->config->isPairMode();
+    $mode = $this->colorMode !== null ? $this->colorMode : Skins::scheme($this->config->bootstrap_theme);
+    // Piwigo's own moon / sun (core fontello set, Piwigo 15+), Font Awesome otherwise.
+    $icons = 'fa';
+    if ($pair) {
+      $css = PHPWG_ROOT_PATH . 'themes/default/vendor/fontello/css/gallery-icon.css';
+      if (is_file($css) && strpos((string) file_get_contents($css), 'gallery-icon-moon') !== false) {
+        $icons = 'gallery';
+      }
+    }
+    return array(
+      'toggle' => $pair,
+      'mode'   => $mode,
+      'next'   => $mode === Skins::DARK ? Skins::LIGHT : Skins::DARK,
+      'known'  => $this->colorModeKnown,
+      'icons'  => $icons,
+      'scheme' => Skins::scheme($this->config->bootstrap_theme),
+    );
   }
 
   public function init() {
@@ -66,6 +176,7 @@ class ThemeController {
     }
 
     $template->assign('theme_config', $this->config);
+    $template->assign('bd_color', $this->colorSwitchData());
     // The templates never read the 'view' cookie themselves: a hidden toggle
     // means an imposed view, and only the config knows that.
     $template->assign('bd_view', $this->config->effectiveView(isset($_COOKIE['view']) ? $_COOKIE['view'] : null));

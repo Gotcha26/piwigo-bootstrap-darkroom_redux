@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="{$lang_info.code}" dir="{$lang_info.direction}">
+{* data-bd-scheme (#81): scheme of the skin served to this request, 'light' or 'dark',
+   in both modes (single skin and light / dark pair). PUBLIC CONTRACT for child themes
+   (BC-BG): their CSS writes its variants under [data-bd-scheme="light"] /
+   [data-bd-scheme="dark"]. Keep the name and the two values stable. *}
+<html lang="{$lang_info.code}" dir="{$lang_info.direction}"{if isset($bd_color.scheme)} data-bd-scheme="{$bd_color.scheme}"{/if}>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset={$CONTENT_ENCODING}">
     <meta name="generator" content="Piwigo (aka PWG), see piwigo.org">
@@ -8,6 +12,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{* Light / dark mode, first visit (#81): nothing told the server the visitor's mode
+   (no 'mode' cookie, no client hint), so the page was served light. Store the OS
+   preference in the core 'mode' cookie (as standard_pages.js does: dark when the OS
+   prefers dark, light otherwise) and reload only when it differs and the cookie
+   stuck, never in a loop with cookies off. *}
+{if isset($bd_color) && $bd_color.toggle && !$bd_color.known}
+    <script>{literal}(function(){try{if(/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))return;var m=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.cookie='mode='+m+';max-age=2592000;path=/;SameSite=Lax';if(m!=={/literal}'{$bd_color.mode}'{literal}&&/(?:^|;\s*)mode=(light|dark)(?:;|$)/.test(document.cookie))window.location.reload();}catch(e){}})();{/literal}</script>
+{/if}
 {if $meta_ref_enabled}
 {if isset($INFO_AUTHOR)}
     <meta name="author" content="{$INFO_AUTHOR|@strip_tags:false|@replace:'"':' '}">
@@ -70,6 +82,10 @@
     {combine_css path='themes/bootstrap_darkroom/node_modules/@fortawesome/fontawesome-free/css/all.min.css' order=-14}
     {combine_css path='themes/bootstrap_darkroom/assets/photography-icons/css/PhotographyIcons.css' order=-13}
     {combine_css path='themes/bootstrap_darkroom/node_modules/bootstrap-social/bootstrap-social.css' order=-12}
+{* Piwigo's own moon / sun for the light / dark switch (#81): the core icon font *}
+{if isset($bd_color) && $bd_color.toggle && $bd_color.icons == 'gallery'}
+    {combine_css path='themes/default/vendor/fontello/css/gallery-icon.css' order=-11}
+{/if}
 {foreach from=$themes item=theme}
 {if $theme.load_css}
     {combine_css path="themes/`$theme.id`/theme.css" order=-10}

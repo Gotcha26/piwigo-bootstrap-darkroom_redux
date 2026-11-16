@@ -114,6 +114,8 @@
 {/if}
 {if isset($PLUGIN_PICTURE_BUTTONS)}{foreach from=$PLUGIN_PICTURE_BUTTONS item=button}{$button}{/foreach}{/if}
 {if isset($PLUGIN_PICTURE_ACTIONS)}{$PLUGIN_PICTURE_ACTIONS}{/if}
+{* Light / dark switch (#81), last item: the photo page has no main navbar. *}
+{include file='_mode_switch.tpl'}
             </ul>
         </div>
     </div>

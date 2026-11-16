@@ -34,5 +34,7 @@
 {include file=$block->template|@get_extent:$id }
 {/if}
 {/foreach}
+{* Light / dark switch (#81), last item. *}
+{include file='_mode_switch.tpl'}
 </ul>
 <!-- End of menubar.tpl -->

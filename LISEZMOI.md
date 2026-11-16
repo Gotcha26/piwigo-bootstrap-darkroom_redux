@@ -22,6 +22,7 @@ Un thème Piwigo qui met vos photos au premier plan : un style sombre et calme i
 
 - **Darkroom, le style par défaut** : une palette sombre à faible contraste tirée des couleurs de Lightroom. Pas d'éblouissement, pas de cadre qui rivalise avec vos images.
 - **Plus de 30 styles de couleurs** si le sombre n'est pas votre goût : Bootswatch, Bootstrap Material Design et Darkroom. On choisit dans une grille de vignettes, pas dans une liste de noms.
+- **Une bascule clair / foncé pour les visiteurs**, si vous le souhaitez : choisissez un style clair et un style foncé, et un bouton lune / soleil apparaît dans la barre de navigation. Un nouveau visiteur reçoit celui qui correspond à son système, et la page d'identification suit le mode en cours.
 - **Un en-tête facultatif** : une image de fond pleine largeur en fondu, ou un jumbotron, pour une galerie qui s'ouvre sur une déclaration.
 - **Des cartes alignées** : les vignettes d'albums et de photos s'alignent rangée par rangée, quelle que soit la longueur de leurs titres.
 

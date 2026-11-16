@@ -84,10 +84,14 @@ if (!function_exists('bd_admin_variants')) {
    * A stored value that is in no group (a variant dropped from the list) gets an
    * "Other" group of its own, so that it stays checked and is saved unchanged.
    *
-   * @param  string|null $current Stored bootstrap_theme value.
+   * With a scheme (light / dark mode, #81), only the skins of that scheme are
+   * listed, and an empty family is left out.
+   *
+   * @param  string|null $current Stored value of the grid's setting.
+   * @param  string|null $scheme  \BootstrapDarkroom\Skins::LIGHT or DARK, null for all.
    * @return array List of {title, items: [{value, label, img}]}.
    */
-  function bd_admin_variants($current) {
+  function bd_admin_variants($current, $scheme = null) {
     $families = array(
       'Bootstrap' => array(
         'bootstrap-darkroom' => 'Bootstrap Darkroom',
@@ -122,6 +126,9 @@ if (!function_exists('bd_admin_variants')) {
     foreach ($families as $title => $variants) {
       $items = array();
       foreach ($variants as $value => $label) {
+        if ($scheme !== null && \BootstrapDarkroom\Skins::scheme($value) !== $scheme) {
+          continue;
+        }
         $items[] = array(
           'value' => $value,
           'label' => $label,
@@ -129,7 +136,9 @@ if (!function_exists('bd_admin_variants')) {
         );
         $known = $known || $value === $current;
       }
-      $groups[] = array('title' => $title, 'items' => $items);
+      if ($items) {
+        $groups[] = array('title' => $title, 'items' => $items);
+      }
     }
     if (!$known && is_string($current) && $current !== '') {
       $groups[] = array('title' => l10n('bd_variant_other'), 'items' => array(

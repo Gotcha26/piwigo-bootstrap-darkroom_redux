@@ -22,6 +22,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 
 - **Darkroom, the default style**: a dark, low-contrast scheme drawn from Lightroom's colours. No glare, no frame fighting your pictures.
 - **Over 30 colour styles** if dark is not your taste: Bootswatch, Bootstrap Material Design and Darkroom. Pick one from a thumbnail grid, not from a drop-down of names.
+- **A light / dark switch for visitors**, if you want one: choose a light style and a dark style, and a moon / sun button appears in the navigation bar. First-time visitors get the one that matches their system, and the login page follows the mode in use.
 - **An optional hero header**: a full-width fading background image, or a jumbotron banner, for a gallery that opens with a statement.
 - **Even cards**: album and photo thumbnails line up row by row, whatever the length of their titles.
 
