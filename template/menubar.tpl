@@ -34,17 +34,7 @@
 {include file=$block->template|@get_extent:$id }
 {/if}
 {/foreach}
-{* Light / dark switch (#81), last item, light / dark mode only. The moon offers the
-   dark mode, the sun the light one, as on the core standard pages. It writes the core
-   'mode' cookie (Skins::COOKIE) and reloads: the server picks the skin. *}
-{if isset($bd_color) && $bd_color.toggle}
-{if $bd_color.next == 'dark'}{assign var=bd_mode_label value='bd_switch_to_dark'|@translate}{else}{assign var=bd_mode_label value='bd_switch_to_light'|@translate}{/if}
-    <li class="nav-item bd-mode-switch">
-        <button type="button" class="nav-link bd-mode-switch__btn" id="bd-mode-switch" data-mode="{$bd_color.next}" title="{$bd_mode_label|escape:'html'}" aria-label="{$bd_mode_label|escape:'html'}">
-            <i class="{if $bd_color.icons == 'gallery'}gallery-icon-{else}fas fa-{/if}{if $bd_color.mode == 'dark'}sun{else}moon{/if}" aria-hidden="true"></i><span class="bd-mode-switch__label">{$bd_mode_label|escape:'html'}</span>
-        </button>
-        <script>{literal}(function(){var b=document.getElementById('bd-mode-switch');if(!b)return;b.addEventListener('click',function(){document.cookie='mode='+b.getAttribute('data-mode')+';max-age=2592000;path=/;SameSite=Lax';window.location.reload();});})();{/literal}</script>
-    </li>
-{/if}
+{* Light / dark switch (#81), last item. *}
+{include file='_mode_switch.tpl'}
 </ul>
 <!-- End of menubar.tpl -->
