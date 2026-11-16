@@ -38,47 +38,8 @@ $conf['file_ext'] = array_merge ($conf['file_ext'], $video_ext, array_map('strto
 $controller = new \BootstrapDarkroom\ThemeController();
 
 
-// Define if skin is clear or dark
-$clear_skins = array(
-    'bootstrap-default',
-    'material-amber',
-    'material-blue',
-    'material-brown',
-    'material-deep-orange',
-    'material-deep-purple',
-    'material-indigo',
-    'material-light-green',
-    'material-lime',
-    'material-purple',
-    'material-indigo',
-    'material-red',
-    'material-teal',
-    'bootswatch-cerulean',
-    'bootswatch-cosmo',
-    'bootswatch-flatly',
-    'bootswatch-journal',
-    'bootswatch-litera',
-    'bootswatch-lumen',
-    'bootswatch-lux',
-    'bootswatch-materia',
-    'bootswatch-minty',
-    'bootswatch-pulse',
-    'bootswatch-sandstone',
-    'bootswatch-simplex',
-    'bootswatch-sketchy',
-    'bootswatch-spacelab',
-    'bootswatch-united',
-    'bootswatch-yeti',
-);
-// Get value of bootstrap theme and set themeconf to clear or leave as default (dark)
-$closure = \Closure::bind(function &(\BootstrapDarkroom\ThemeController $controller) {
-  return $controller->config;
-}, null, \BootstrapDarkroom\ThemeController::class);
-
-$config = &$closure($controller);
-
-if (in_array($config->bootstrap_theme, $clear_skins)) {
-  $themeconf['colorscheme'] = 'clear';
-}
+// Skin of this request (single skin, or the visitor's light / dark choice, #81)
+// and its colour scheme. The light / dark split lives in include/skins.php.
+$themeconf['colorscheme'] = $controller->resolveColorScheme();
 
 $controller->init();

@@ -23,7 +23,24 @@
 <section class="jm-section is-open" data-section-id="bd-colour" data-accordion-group="bd-appearance">
   {include file=$JM_SECTION_HEADER_PARTIAL title='bd_section_colour'|@translate icon_glyph='&#9680;&#65038;' expanded=true}
   <div class="jm-section-body">
-    <div class="jm-field">
+    {* Light / dark mode (#81): one skin for everyone, or a light and a dark one the
+       visitor switches between from the navbar. The grids of the mode not in use
+       stay in the POST (hidden, never disabled): their values are kept. *}
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-color_mode">{'bd_label_color_mode'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_color_mode'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_color_mode'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls">
+        <select class="jm-select" id="bd-f-color_mode" name="color_mode">
+          <option value="single"{if $theme_config->color_mode != 'pair'} selected{/if}>{'bd_color_mode_single'|@translate}</option>
+          <option value="pair"{if $theme_config->color_mode == 'pair'} selected{/if}>{'bd_color_mode_pair'|@translate}</option>
+        </select>
+      </div>
+    </div>
+    <div class="jm-field" data-bd-when="color_mode=single"{if $theme_config->color_mode == 'pair'} hidden{/if}>
       <div class="jm-field-header">
         <span class="jm-field-label">{'Color theme'|@translate}
           <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_bootstrap_theme'|@translate}</span></span>
@@ -34,11 +51,41 @@
         {include file=$JM_CHOICE_GRID_PARTIAL name='bootstrap_theme' groups=$BD_VARIANTS value=$theme_config->bootstrap_theme label='Color theme'|@translate}
       </div>
     </div>
-    {* Derived from the variant by bd-admin.js, as before. *}
+    <div class="jm-field" data-bd-when="color_mode=pair"{if $theme_config->color_mode != 'pair'} hidden{/if}>
+      <div class="jm-field-header">
+        <span class="jm-field-label">{'bd_label_theme_light'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_theme_light'|@translate}</span></span>
+        </span>
+      </div>
+      <span class="jm-field-desc">{'bd_desc_theme_light'|@translate|escape}</span>
+      <div class="jm-field-controls">
+        {include file=$JM_CHOICE_GRID_PARTIAL name='bootstrap_theme_light' groups=$BD_VARIANTS_LIGHT value=$theme_config->bootstrap_theme_light label='bd_label_theme_light'|@translate}
+      </div>
+    </div>
+    <div class="jm-field" data-bd-when="color_mode=pair"{if $theme_config->color_mode != 'pair'} hidden{/if}>
+      <div class="jm-field-header">
+        <span class="jm-field-label">{'bd_label_theme_dark'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_theme_dark'|@translate}</span></span>
+        </span>
+      </div>
+      <span class="jm-field-desc">{'bd_desc_theme_dark'|@translate|escape}</span>
+      <div class="jm-field-controls">
+        {include file=$JM_CHOICE_GRID_PARTIAL name='bootstrap_theme_dark' groups=$BD_VARIANTS_DARK value=$theme_config->bootstrap_theme_dark label='bd_label_theme_dark'|@translate}
+      </div>
+    </div>
+    {* Derived from the variant by bd-admin.js, as before: one set per skin field. *}
     <input type="hidden" name="navbar_main_style" value="{$theme_config->navbar_main_style|escape:'html'}">
     <input type="hidden" name="navbar_main_bg" value="{$theme_config->navbar_main_bg|escape:'html'}">
     <input type="hidden" name="navbar_contextual_style" value="{$theme_config->navbar_contextual_style|escape:'html'}">
     <input type="hidden" name="navbar_contextual_bg" value="{$theme_config->navbar_contextual_bg|escape:'html'}">
+    <input type="hidden" name="navbar_main_style_light" value="{$theme_config->navbar_main_style_light|escape:'html'}">
+    <input type="hidden" name="navbar_main_bg_light" value="{$theme_config->navbar_main_bg_light|escape:'html'}">
+    <input type="hidden" name="navbar_contextual_style_light" value="{$theme_config->navbar_contextual_style_light|escape:'html'}">
+    <input type="hidden" name="navbar_contextual_bg_light" value="{$theme_config->navbar_contextual_bg_light|escape:'html'}">
+    <input type="hidden" name="navbar_main_style_dark" value="{$theme_config->navbar_main_style_dark|escape:'html'}">
+    <input type="hidden" name="navbar_main_bg_dark" value="{$theme_config->navbar_main_bg_dark|escape:'html'}">
+    <input type="hidden" name="navbar_contextual_style_dark" value="{$theme_config->navbar_contextual_style_dark|escape:'html'}">
+    <input type="hidden" name="navbar_contextual_bg_dark" value="{$theme_config->navbar_contextual_bg_dark|escape:'html'}">
     {* No control left for these two: carried as is, so that a save does not reset them. *}
     <input type="hidden" name="bootswatch_theme" value="{$theme_config->bootswatch_theme|escape:'html'}">
     <input type="hidden" name="material_color" value="{$theme_config->material_color|escape:'html'}">

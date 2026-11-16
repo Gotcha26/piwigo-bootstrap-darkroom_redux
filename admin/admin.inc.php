@@ -134,6 +134,19 @@ if (!isset($bd_config->thumbnail_nb_images)) {
   $bd_config->save();
 }
 
+// --- 5b. Light / dark mode never saved yet (#81): its pickers start from the gallery ---
+// The current skin and its navbar set go in the slot of their scheme, so that switching
+// to "Light and dark" keeps the gallery's look on that side. In memory only, AFTER the
+// save above: stored at the webmaster's next save, like every other field of the form.
+if (!$bd_config->isStored(\BootstrapDarkroom\Config::KEY_COLOR_MODE)
+    && is_string($bd_config->bootstrap_theme) && $bd_config->bootstrap_theme !== '') {
+  $bd_slot = \BootstrapDarkroom\Skins::scheme($bd_config->bootstrap_theme);
+  $bd_config->{'bootstrap_theme_' . $bd_slot} = $bd_config->bootstrap_theme;
+  foreach (array('navbar_main_style', 'navbar_main_bg', 'navbar_contextual_style', 'navbar_contextual_bg') as $bd_key) {
+    $bd_config->{$bd_key . '_' . $bd_slot} = $bd_config->$bd_key;
+  }
+}
+
 // --- 6. Shared asset store (loaded in step 3) and admin theme (light / dark) ---
 if (function_exists('jm_vendor_assign')) {
   jm_vendor_assign($template);
@@ -298,6 +311,9 @@ $template->assign(array(
   'BD_ABOUT_URL'         => get_root_url() . 'about.php',
   'BD_THEME'         => $bd_theme,
   'BD_VARIANTS'      => bd_admin_variants($bd_config->bootstrap_theme),
+  // Light / dark mode (#81): one grid per scheme, holding only the skins of that scheme.
+  'BD_VARIANTS_LIGHT' => bd_admin_variants($bd_config->bootstrap_theme_light, \BootstrapDarkroom\Skins::LIGHT),
+  'BD_VARIANTS_DARK'  => bd_admin_variants($bd_config->bootstrap_theme_dark, \BootstrapDarkroom\Skins::DARK),
   // Unassigned, Smarty would render an empty token and every save would be refused.
   'PWG_TOKEN'        => get_pwg_token(),
   'BD_SAVE_URL'      => get_root_url() . 'admin.php?page=theme&theme=bootstrap_darkroom',

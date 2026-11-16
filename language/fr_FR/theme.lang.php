@@ -117,6 +117,18 @@ $lang['bd_section_social'] = 'Partage social';
 // s'en servir, <br> et <code> admis, jamais affichées par le JS), #29.
 $lang['bd_desc_bootstrap_theme'] = 'La palette de couleurs de toute la galerie : fond, texte, liens et les deux barres de navigation.';
 $lang['bd_tip_bootstrap_theme'] = 'Cliquez sur une vignette pour la choisir.<br>Darkroom est la palette sombre propre au thème, Material suit le Material Design, les palettes Bootswatch viennent de bootswatch.com.<br>Les couleurs de la barre de navigation suivent la variante : rien d\'autre à régler.';
+// Bascule clair / foncé (#81).
+$lang['bd_label_color_mode'] = 'Mode clair / foncé';
+$lang['bd_desc_color_mode'] = 'Un seul thème pour tous les visiteurs, ou un thème clair et un thème foncé entre lesquels les visiteurs basculent depuis la barre de navigation.';
+$lang['bd_tip_color_mode'] = 'Thème unique : le thème ci-dessous s\'applique à tous, aucun bouton n\'est proposé.<br>Clair et foncé : choisissez un thème de chaque sorte. Un bouton lune / soleil apparaît à droite de la barre de navigation, et un visiteur qui arrive pour la première fois reçoit le thème qui correspond à la préférence de son système.<br>La page d\'identification suit le mode en cours.';
+$lang['bd_color_mode_single'] = 'Thème unique';
+$lang['bd_color_mode_pair'] = 'Clair et foncé, au choix du visiteur';
+$lang['bd_label_theme_light'] = 'Thème clair';
+$lang['bd_desc_theme_light'] = 'La palette du mode clair. Seuls les thèmes clairs sont proposés.';
+$lang['bd_tip_theme_light'] = 'Cliquez sur une vignette pour la choisir.<br>Les couleurs de la barre de navigation suivent le thème : rien d\'autre à régler.';
+$lang['bd_label_theme_dark'] = 'Thème foncé';
+$lang['bd_desc_theme_dark'] = 'La palette du mode foncé. Seuls les thèmes foncés sont proposés.';
+$lang['bd_tip_theme_dark'] = 'Cliquez sur une vignette pour la choisir.<br>Les couleurs de la barre de navigation suivent le thème : rien d\'autre à régler.';
 $lang['bd_desc_fluid_width'] = 'Étend les pages sur toute la largeur de la fenêtre au lieu d\'une colonne centrée.';
 $lang['bd_tip_fluid_width'] = 'Désactivé : le contenu reste dans une colonne centrée, dont la largeur dépend de l\'écran.<br>Activé : la grille de miniatures occupe toute la place, ce qui convient aux grands écrans.';
 $lang['bd_desc_fluid_width_col_xxl'] = 'Ajoute une sixième colonne de miniatures sur les très grands écrans.';
@@ -237,3 +249,7 @@ $lang['bd_about_fork_of_by'] = 'fork de %1$s par %2$s';
 $lang['bd_about_license'] = 'Licence : %s.';
 $lang['bd_about_powered_by'] = 'Propulsé par %s.';
 $lang['bd_about_components'] = 'Composants tiers';
+
+// Bascule clair / foncé de la barre de navigation (#81) : titre et nom accessible.
+$lang['bd_switch_to_dark'] = 'Passer en mode sombre';
+$lang['bd_switch_to_light'] = 'Passer en mode clair';

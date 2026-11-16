@@ -2,6 +2,7 @@
 namespace BootstrapDarkroom;
 
 require_once __DIR__ . '/about.php';
+require_once __DIR__ . '/skins.php';
 
 class Config {
 
@@ -9,7 +10,12 @@ class Config {
   // 22: about_title, about_piwigo (and the about_notice file). A row stored at 21
   // is completed with their defaults in memory (populateConfig), never rewritten
   // at boot (#61).
-  const CONF_VERSION = 22;
+  // 23: color_mode, the light and dark skins and their navbar sets (#81).
+  const CONF_VERSION = 23;
+
+  /** color_mode values: one skin for everyone, or a light / dark pair. */
+  const COLOR_MODE_SINGLE = 'single';
+  const COLOR_MODE_PAIR = 'pair';
 
   const TYPE_BOOL = 'bool';
   const TYPE_STRING = 'string';
@@ -27,6 +33,20 @@ class Config {
   const KEY_NAVBAR_MAIN_BG = 'navbar_main_bg';
   const KEY_NAVBAR_CONTEXTUAL_STYLE = 'navbar_contextual_style';
   const KEY_NAVBAR_CONTEXTUAL_BG = 'navbar_contextual_bg';
+
+  // Light / dark switch (#81). In 'pair' mode, the visitor's mode picks one of the
+  // two skins and its navbar set; the keys above then only serve 'single' mode.
+  const KEY_COLOR_MODE = 'color_mode';
+  const KEY_BOOTSTRAP_THEME_LIGHT = 'bootstrap_theme_light';
+  const KEY_BOOTSTRAP_THEME_DARK = 'bootstrap_theme_dark';
+  const KEY_NAVBAR_MAIN_STYLE_LIGHT = 'navbar_main_style_light';
+  const KEY_NAVBAR_MAIN_BG_LIGHT = 'navbar_main_bg_light';
+  const KEY_NAVBAR_CONTEXTUAL_STYLE_LIGHT = 'navbar_contextual_style_light';
+  const KEY_NAVBAR_CONTEXTUAL_BG_LIGHT = 'navbar_contextual_bg_light';
+  const KEY_NAVBAR_MAIN_STYLE_DARK = 'navbar_main_style_dark';
+  const KEY_NAVBAR_MAIN_BG_DARK = 'navbar_main_bg_dark';
+  const KEY_NAVBAR_CONTEXTUAL_STYLE_DARK = 'navbar_contextual_style_dark';
+  const KEY_NAVBAR_CONTEXTUAL_BG_DARK = 'navbar_contextual_bg_dark';
 
   const KEY_SLICK_ENABLED = 'slick_enabled';
   const KEY_SLICK_LAZYLOAD = 'slick_lazyload';
@@ -81,6 +101,18 @@ class Config {
       self::KEY_NAVBAR_MAIN_BG => 'bg-dark',
       self::KEY_NAVBAR_CONTEXTUAL_STYLE => 'navbar-dark',
       self::KEY_NAVBAR_CONTEXTUAL_BG => 'bg-primary',
+      self::KEY_COLOR_MODE => self::COLOR_MODE_SINGLE,
+      // Navbar sets as bd-admin.js navbarFor() derives them from these two skins.
+      self::KEY_BOOTSTRAP_THEME_LIGHT => 'bootstrap-default',
+      self::KEY_BOOTSTRAP_THEME_DARK => 'bootstrap-darkroom',
+      self::KEY_NAVBAR_MAIN_STYLE_LIGHT => 'navbar-dark',
+      self::KEY_NAVBAR_MAIN_BG_LIGHT => 'bg-dark',
+      self::KEY_NAVBAR_CONTEXTUAL_STYLE_LIGHT => 'navbar-light',
+      self::KEY_NAVBAR_CONTEXTUAL_BG_LIGHT => 'bg-light',
+      self::KEY_NAVBAR_MAIN_STYLE_DARK => 'navbar-dark',
+      self::KEY_NAVBAR_MAIN_BG_DARK => 'bg-dark',
+      self::KEY_NAVBAR_CONTEXTUAL_STYLE_DARK => 'navbar-dark',
+      self::KEY_NAVBAR_CONTEXTUAL_BG_DARK => 'bg-light',
       self::KEY_SLICK_ENABLED => true,
       self::KEY_SLICK_LAZYLOAD => 'ondemand',
       self::KEY_SLICK_INFINITE => false,
@@ -130,6 +162,17 @@ class Config {
       self::KEY_NAVBAR_MAIN_BG => self::TYPE_STRING,
       self::KEY_NAVBAR_CONTEXTUAL_STYLE => self::TYPE_STRING,
       self::KEY_NAVBAR_CONTEXTUAL_BG => self::TYPE_STRING,
+      self::KEY_COLOR_MODE => self::TYPE_STRING,
+      self::KEY_BOOTSTRAP_THEME_LIGHT => self::TYPE_STRING,
+      self::KEY_BOOTSTRAP_THEME_DARK => self::TYPE_STRING,
+      self::KEY_NAVBAR_MAIN_STYLE_LIGHT => self::TYPE_STRING,
+      self::KEY_NAVBAR_MAIN_BG_LIGHT => self::TYPE_STRING,
+      self::KEY_NAVBAR_CONTEXTUAL_STYLE_LIGHT => self::TYPE_STRING,
+      self::KEY_NAVBAR_CONTEXTUAL_BG_LIGHT => self::TYPE_STRING,
+      self::KEY_NAVBAR_MAIN_STYLE_DARK => self::TYPE_STRING,
+      self::KEY_NAVBAR_MAIN_BG_DARK => self::TYPE_STRING,
+      self::KEY_NAVBAR_CONTEXTUAL_STYLE_DARK => self::TYPE_STRING,
+      self::KEY_NAVBAR_CONTEXTUAL_BG_DARK => self::TYPE_STRING,
       self::KEY_SLICK_ENABLED => self::TYPE_BOOL,
       self::KEY_SLICK_LAZYLOAD => self::TYPE_STRING,
       self::KEY_SLICK_INFINITE => self::TYPE_BOOL,
@@ -206,6 +249,9 @@ class Config {
 
   private $config = array();
 
+  /** Keys present in the stored row, before defaults fill the gaps. */
+  private $stored_keys = array();
+
   private $files = array();
 
   public function __construct() {
@@ -222,6 +268,7 @@ class Config {
 
     // Load and JSON decode the config
     $loaded = json_decode($conf[self::CONF_PARAM], true);
+    $this->stored_keys = is_array($loaded) ? array_keys($loaded) : array();
 
     // Check for current version
     if (isset($loaded[self::KEY_VERSION]) && $loaded[self::KEY_VERSION] == self::CONF_VERSION) {
@@ -316,6 +363,55 @@ class Config {
       return $cookie === 'list' ? 'list' : 'grid';
     }
     return $default === 'list' ? 'list' : '';
+  }
+
+  /**
+   * Whether the stored row holds this key: false for a setting added after the
+   * last save, which only has its default in memory.
+   *
+   * @param  string $key
+   * @return bool
+   */
+  public function isStored($key) {
+    return in_array($key, $this->stored_keys, true);
+  }
+
+  /**
+   * Light / dark mode (#81): the visitor picks one of two skins. Any other stored
+   * value is single mode, today's behaviour.
+   *
+   * @return bool
+   */
+  public function isPairMode() {
+    return isset($this->config[self::KEY_COLOR_MODE]) && $this->config[self::KEY_COLOR_MODE] === self::COLOR_MODE_PAIR;
+  }
+
+  /**
+   * Puts the skin and the navbar set of one mode in the keys every template reads
+   * (bootstrap_theme, navbar_*), so that header.tpl, menubar.tpl and the child
+   * themes need no change. In memory only: the public side never saves, and the
+   * admin panel builds its own Config.
+   *
+   * A mode whose skin is empty (never chosen) leaves the single-mode keys as they are.
+   *
+   * @param  string $mode Skins::LIGHT or Skins::DARK.
+   * @return void
+   */
+  public function applyColorMode($mode) {
+    if (!$this->isPairMode() || ($mode !== Skins::LIGHT && $mode !== Skins::DARK)) {
+      return;
+    }
+    $skin = isset($this->config['bootstrap_theme_' . $mode]) ? $this->config['bootstrap_theme_' . $mode] : null;
+    if (!is_string($skin) || $skin === '') {
+      return;
+    }
+    $this->config[self::KEY_BOOTSTRAP_THEME] = $skin;
+    foreach (array('navbar_main_style', 'navbar_main_bg', 'navbar_contextual_style', 'navbar_contextual_bg') as $key) {
+      $value = isset($this->config[$key . '_' . $mode]) ? $this->config[$key . '_' . $mode] : null;
+      if (is_string($value) && $value !== '') {
+        $this->config[$key] = $value;
+      }
+    }
   }
 
   public function fromPost(array $post) {

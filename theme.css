@@ -1515,3 +1515,34 @@ span.related-tags .tag-counter{
   content:unset;
 }
 
+
+/* Light / dark switch in the main navbar (#81): a bare nav link, whatever the skin
+   (no .btn: Material would restyle it). Icon only on wide screens, icon + label in
+   the collapsed menu. */
+.bd-mode-switch__btn {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  line-height: inherit;
+}
+
+.bd-mode-switch__btn [class^="gallery-icon-"]:before,
+.bd-mode-switch__btn [class*=" gallery-icon-"]:before {
+  margin: 0;
+}
+
+.bd-mode-switch__label {
+  margin-left: .5em;
+}
+
+@media (min-width: 992px) {
+  .bd-mode-switch__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}

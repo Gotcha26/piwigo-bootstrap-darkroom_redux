@@ -79,10 +79,15 @@
     return nav;
   }
 
-  function applyNavbar(form) {
-    var nav = navbarFor(valueOf(form, 'bootstrap_theme') || '');
+  /* Skin fields and the suffix of the navbar set each one drives: the single skin,
+     and the light / dark pair (#81). */
+  var SKIN_FIELDS = { bootstrap_theme: '', bootstrap_theme_light: '_light', bootstrap_theme_dark: '_dark' };
+
+  function applyNavbar(form, skinField) {
+    var suffix = SKIN_FIELDS[skinField];
+    var nav = navbarFor(valueOf(form, skinField) || '');
     for (var name in nav) {
-      var el = field(form, name);
+      var el = field(form, name + suffix);
       if (el) el.value = nav[name];
     }
   }
@@ -103,7 +108,7 @@
     syncLinkTo(form);
     form.addEventListener('change', function (e) {
       var name = e.target && e.target.name;
-      if (name === 'bootstrap_theme') applyNavbar(form);
+      if (Object.prototype.hasOwnProperty.call(SKIN_FIELDS, name)) applyNavbar(form, name);
       if (name === 'photoswipe') syncLinkTo(form);
       syncDependents(form);
     });
