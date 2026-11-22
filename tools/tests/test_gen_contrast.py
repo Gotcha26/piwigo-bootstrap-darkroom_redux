@@ -99,6 +99,15 @@ class ClassifyTest(unittest.TestCase):
         # carousel controls and captions sit on pictures
         self.assertEqual(self.role(".carousel-control-next{color:#fff}", "light"), gc.Role.SKIP)
 
+    def test_state_on_the_direct_parent(self):
+        # the active view icon: <li class="nav-item active"><a class="nav-link">
+        self.assertEqual(self.role(".nav-tabs .active>.nav-link{color:#fff}"), gc.Role.LINK_STATE)
+        self.assertEqual(self.role(".nav-pills .show>.nav-link{color:#fff}"), gc.Role.LINK_STATE)
+        self.assertEqual(self.role(".nav-tabs .nav-link.show{color:#fff}"), gc.Role.LINK_STATE)
+        # an ancestor further up does not make a state
+        self.assertEqual(self.role(".collapse.show .dropdown-menu .dropdown-item{color:#999}"),
+                         gc.Role.LINK_REST)
+
     def test_selector_list_is_split(self):
         rule = gc.parse_css("a, .btn-primary{color:#fff}")[0]
         self.assertEqual([gc.classify(s, rule, "dark") for s in rule.selectors],
@@ -202,6 +211,13 @@ class NavbarTest(unittest.TestCase):
         self.assertIn(self.MIX.format(src="#fff", dst="#ff7700"), out)
         self.assertNotIn(self.MIX.format(src="#fff", dst="#fff"), out)
         self.assertNotIn("underline", out)
+
+    def test_active_view_icon_goes_orange(self):
+        # index.tpl: <li id="btn-grid" class="nav-item active"><a class="nav-link">
+        out = self.out(".navbar-dark .navbar-nav .active>.nav-link{color:#fff}")
+        self.assertIn(".navbar-dark .navbar-nav .active>.nav-link" + self.UNDER_DARK + " {\n    color: "
+                      + self.MIX.format(src="#fff", dst="#ff7700"), out)
+        self.assertNotIn(self.MIX.format(src="#fff", dst="#fff"), out)
 
     def test_brand_is_text_not_link(self):
         out = self.out(".navbar-dark a.navbar-brand{color:#9e9e9e!important}"

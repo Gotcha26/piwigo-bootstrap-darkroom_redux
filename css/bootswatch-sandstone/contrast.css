@@ -423,13 +423,7 @@
   .navbar-light .navbar-nav .nav-link.disabled {
     color: rgba(0,0,0,.3);
   }
-  .navbar-light .navbar-nav .active>.nav-link:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, #000, #000 calc(var(--bd-contrast, 0) * 1%));
-  }
-  .navbar-light .navbar-nav .active>.nav-link:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .active>.nav-link:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:focus:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, #000, #ff7700 calc(var(--bd-contrast, 0) * 1%));
-  }
-  .navbar-light .navbar-nav .nav-link.active:where(.navbar:is(.bg-white) *) {
+  .navbar-light .navbar-nav .active>.nav-link:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.active:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:where(.navbar:is(.bg-white) *) {
     color: color-mix(in srgb, #000, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-toggler:where(.navbar:is(.bg-white) *) {
@@ -465,13 +459,7 @@
   .navbar-dark .navbar-nav .nav-link.disabled {
     color: rgba(255,255,255,.25);
   }
-  .navbar-dark .navbar-nav .active>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-  }
-  .navbar-dark .navbar-nav .active>.nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .active>.nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
-  }
-  .navbar-dark .navbar-nav .nav-link.active:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *) {
+  .navbar-dark .navbar-nav .active>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.active:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *) {
     color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-toggler:where(.navbar:is(.bg-primary, .bg-secondary, .bg-dark) *) {

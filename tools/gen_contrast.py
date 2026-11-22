@@ -82,7 +82,7 @@ DISABLED = ("disabled",)
 
 # What a link is, judged on the last compound of a selector.
 LINK_CLASSES = ("nav-link", "dropdown-item", "page-link", "btn-link", "card-link")
-LINK_STATES = (":hover", ":focus", ":active", ".active", "[aria-current")
+LINK_STATES = (":hover", ":focus", ":active", ".active", ".show", "[aria-current")
 
 # Above this HSL saturation, a background is a colour, not a surface.
 SATURATION_LIMIT = 0.25
@@ -324,6 +324,16 @@ def _last_compound(selector):
     return parts[-1] if parts else plain
 
 
+def _state_parent(selector):
+    """Compound of the direct parent (`P > last`), or '' when there is none.
+
+    Bootstrap marks an active or open nav item on its <li>: `.active>.nav-link`.
+    """
+    plain = re.sub(r":not\([^)]*\)", "", selector).strip()
+    m = re.search(r"([^\s>+~]+)\s*>\s*[^\s>+~]+$", plain)
+    return m.group(1) if m else ""
+
+
 def contrast_ratio(a, b):
     """WCAG contrast ratio of two colours, 1 to 21."""
     hi, lo = sorted((luminance(a), luminance(b)), reverse=True)
@@ -397,7 +407,8 @@ def _classify(selector, rule, scheme):
     is_link = "navbar-brand" not in last and (bool(re.match(r"a(?![\w-])", last)) or any(
         re.search(r"\." + re.escape(c) + r"(?![\w-])", last) for c in LINK_CLASSES))
     if is_link:
-        if any(s in last for s in LINK_STATES):
+        parent = _state_parent(selector)
+        if any(s in last or s in parent for s in LINK_STATES):
             return Role.LINK_STATE
         return Role.LINK_REST
     # Ordinary text is grey; a saturated text colour carries a meaning
