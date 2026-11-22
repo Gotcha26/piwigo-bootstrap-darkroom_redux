@@ -118,6 +118,35 @@ class ThemeController {
     );
   }
 
+  /**
+   * Text contrast of this request (#83), read by header.tpl.
+   *
+   * The override files are generated per skin by tools/gen_contrast.py:
+   * contrast.css corrects the skin's stylesheets, contrast-theme.css the parent
+   * theme.css. Those of the skin SERVED to this request are returned (the light /
+   * dark pair is resolved by then), none at level 0: the skin is then untouched.
+   *
+   * @return array {level: int 0-100, css: string|null, theme_css: string|null}
+   *               Paths relative to the gallery root, for combine_css.
+   */
+  public function contrastData() {
+    $level = Config::clampContrast($this->config->text_contrast);
+    $data = array('level' => $level, 'css' => null, 'theme_css' => null);
+    $skin = (string) $this->config->bootstrap_theme;
+    if ($level === 0 || $skin === '' || strpbrk($skin, '/\\.') !== false) {
+      return $data;
+    }
+    $dir = dirname(__DIR__) . '/css/' . $skin . '/';
+    $url = 'themes/bootstrap_darkroom/css/' . $skin . '/';
+    if (is_file($dir . 'contrast.css')) {
+      $data['css'] = $url . 'contrast.css';
+    }
+    if (is_file($dir . 'contrast-theme.css')) {
+      $data['theme_css'] = $url . 'contrast-theme.css';
+    }
+    return $data;
+  }
+
   public function init() {
     load_language('theme.lang', PHPWG_THEMES_PATH.'bootstrap_darkroom/', array('force_fallback' => 'en_UK'));
     load_language('lang', PHPWG_ROOT_PATH.PWG_LOCAL_DIR, array('no_fallback'=>true, 'local'=>true) );
@@ -177,6 +206,7 @@ class ThemeController {
 
     $template->assign('theme_config', $this->config);
     $template->assign('bd_color', $this->colorSwitchData());
+    $template->assign('bd_contrast', $this->contrastData());
     // The templates never read the 'view' cookie themselves: a hidden toggle
     // means an imposed view, and only the config knows that.
     $template->assign('bd_view', $this->config->effectiveView(isset($_COOKIE['view']) ? $_COOKIE['view'] : null));

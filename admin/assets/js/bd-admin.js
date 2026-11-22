@@ -103,9 +103,36 @@
     if (!enabled && select.value !== 'picture') select.value = 'picture';
   }
 
+  /* A range and its number field (data-output): the range is the posted field,
+     the number only mirrors it. Typing a number moves the range and fires
+     `change` on it, which the dirty tracker and the save listen to. */
+  function syncSliders(form) {
+    var sliders = form.querySelectorAll('.jm-slider[data-output]');
+    Array.prototype.forEach.call(sliders, function (range) {
+      var number = document.getElementById(range.getAttribute('data-output'));
+      if (!number) return;
+      range.addEventListener('input', function () {
+        number.value = range.value;
+      });
+      number.addEventListener('input', function () {
+        var max = parseInt(range.max, 10);
+        var min = parseInt(range.min, 10);
+        var v = parseInt(number.value, 10);
+        if (isNaN(v)) return;
+        v = Math.max(min, Math.min(max, v));
+        range.value = String(v);
+        range.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      number.addEventListener('change', function () {
+        number.value = range.value;
+      });
+    });
+  }
+
   function initForm(form) {
     syncDependents(form);
     syncLinkTo(form);
+    syncSliders(form);
     form.addEventListener('change', function (e) {
       var name = e.target && e.target.name;
       if (Object.prototype.hasOwnProperty.call(SKIN_FIELDS, name)) applyNavbar(form, name);
