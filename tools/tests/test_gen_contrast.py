@@ -105,7 +105,7 @@ class ClassifyTest(unittest.TestCase):
 
 
 class RenderTest(unittest.TestCase):
-    MIX = "color-mix(in srgb, {src}, {dst} calc(var(--bd-contrast) * 1%))"
+    MIX = "color-mix(in srgb, {src}, {dst} calc(var(--bd-contrast, 0) * 1%))"
 
     def test_header_and_supports(self):
         out = gc.render(gc.parse_css("body{color:#dbdbdb}"), "dark")
