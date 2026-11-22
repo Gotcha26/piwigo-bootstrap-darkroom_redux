@@ -39,7 +39,7 @@ function is_webmaster() {
   return getenv('BD_L_WEBMASTER') === '1';
 }
 function l10n($key) {
-  return $key === 'bd_lineage_pending' ? $key . ' %s' : $key;
+  return strpos($key, 'bd_lineage_pending') === 0 ? $key . ' %s' : $key;
 }
 function get_root_url() {
   return '/gallery/';

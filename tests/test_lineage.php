@@ -164,6 +164,13 @@ bd_assert($r['ev'] !== null && count($r['ev']['infos']) === 1
 bd_assert($r['ev']['purges'] === 0 && !$r['ev']['writes'],
   'public page, webmaster: the notice never purges and never writes (BOOT-WRITE-GUARD)');
 
+bd_assert(strpos($r['ev']['infos'][0], 'bd_lineage_pending ') === 0,
+  'public page, takeover of another build: the "installed" notice');
+
+$r = bd_run(array('BD_L_MODE' => 'notify', 'BD_L_IN_ADMIN' => '0', 'BD_L_CONF' => json_encode($stamped), 'BD_L_FS_VERSION' => '0.2.0'));
+bd_assert($r['ev'] !== null && count($r['ev']['infos']) === 1 && strpos($r['ev']['infos'][0], 'bd_lineage_pending_upgraded ') === 0,
+  'public page, newer redux over a stamped one: the "updated" notice');
+
 $r = bd_run($pub + array('BD_L_WEBMASTER' => '0'));
 bd_assert($r['ev'] !== null && !$r['ev']['infos'] && $r['ev']['queries'] === 0,
   'public page, administrator who is not the webmaster: no notice, no SQL');
@@ -219,14 +226,19 @@ foreach (array('en_UK', 'fr_FR') as $lang_dir) {
   // Found on the lab: the link inherited the page grey on the pale blue box. Bootstrap's own class fixes it.
   bd_assert(preg_match("/bd_lineage_pending'\\].*<a class=\\\\?\"alert-link\\\\?\"/", $lang_src) === 1,
     "language $lang_dir: the pending notice's link carries class alert-link (readable on the alert box)");
-  foreach (array('bd_lineage_adopted', 'bd_lineage_upgraded', 'bd_lineage_pending') as $key) {
+  bd_assert(preg_match("/bd_lineage_pending_upgraded'\\].*<a class=\\\\?\"alert-link\\\\?\"/", $lang_src) === 1,
+    "language $lang_dir: the pending-update notice's link carries class alert-link");
+  foreach (array('bd_lineage_adopted', 'bd_lineage_upgraded', 'bd_lineage_pending', 'bd_lineage_pending_upgraded') as $key) {
     bd_assert(strpos($lang_src, "\$lang['$key']") !== false, "language $lang_dir carries $key");
     // These sentences reach the webmaster of a small gallery, not a developer: reassure, never explain the mechanism.
     $text = preg_match("/\\\$lang\\['$key'\\] = '(.*)';/", $lang_src, $m_text) ? $m_text[1] : '';
     bd_assert($text !== '' && !preg_match('/gabarit|compil|template|cache|purg|smarty|\bSQL\b/i', $text),
       "language $lang_dir: $key carries no technical jargon");
-    bd_assert($text !== '' && preg_match('/r[ée]glages|settings/iu', $text) === 1,
-      "language $lang_dir: $key reassures about the settings");
+    // Reassurance only where settings were taken over; an update of the same theme has nothing to reassure about.
+    if (!in_array($key, array('bd_lineage_upgraded', 'bd_lineage_pending_upgraded'), true)) {
+      bd_assert($text !== '' && preg_match('/r[ée]glages|settings/iu', $text) === 1,
+        "language $lang_dir: $key reassures about the settings");
+    }
   }
 }
 
