@@ -120,14 +120,18 @@ class RenderTest(unittest.TestCase):
         rest = out.index(".card-body a" + self.G + " {")
         hover = out.index(".card-body a:hover" + self.G + ", .card-body a:focus" + self.G + " {")
         self.assertLess(rest, hover)
-        self.assertIn("color: " + self.MIX.format(src="#9e9e9e", dst="#ff7700"), out)
+        # user decision (2026-11-22, after the gallery test): links at rest are
+        # pushed like text, only the highlight (hover, focus, active) is orange
         self.assertIn("color: " + self.MIX.format(src="#9e9e9e", dst="#fff"), out)
-        self.assertIn("text-decoration: underline", out)
+        self.assertIn("color: " + self.MIX.format(src="#9e9e9e", dst="#ff7700"), out)
+        self.assertLess(out.index(self.MIX.format(src="#9e9e9e", dst="#fff")),
+                        out.index(self.MIX.format(src="#9e9e9e", dst="#ff7700")))
+        self.assertNotIn("underline", out)
 
-    def test_link_state_goes_to_extreme_underlined(self):
+    def test_link_state_goes_orange(self):
         out = gc.render(gc.parse_css("a:hover{color:#0056b3}"), "light")
-        self.assertIn("color: " + self.MIX.format(src="#0056b3", dst="#000"), out)
-        self.assertIn("text-decoration: underline", out)
+        self.assertIn("color: " + self.MIX.format(src="#0056b3", dst="#ff7700"), out)
+        self.assertNotIn("underline", out)
 
     def test_text_goes_to_black_on_light(self):
         out = gc.render(gc.parse_css("body{color:#212529;background-color:#fff}"), "light")
@@ -187,15 +191,17 @@ class NavbarTest(unittest.TestCase):
     def out(self, css, scheme="dark"):
         return gc.render(gc.parse_css(css), scheme, (79, 79, 79, 1.0), self.NAVS)
 
-    def test_nav_link_goes_orange_under_a_neutral_bar(self):
+    def test_nav_link_goes_white_under_a_neutral_bar(self):
         out = self.out(".navbar-dark .navbar-nav .nav-link{color:#9e9e9e}")
         self.assertIn(".navbar-dark .navbar-nav .nav-link" + self.UNDER_DARK + " {", out)
-        self.assertIn(self.MIX.format(src="#9e9e9e", dst="#ff7700"), out)
+        self.assertIn(self.MIX.format(src="#9e9e9e", dst="#fff"), out)
 
-    def test_nav_link_state_goes_white_underlined(self):
-        out = self.out(".navbar-dark .navbar-nav .nav-link:hover{color:#fff}")
-        self.assertIn(self.MIX.format(src="#fff", dst="#fff"), out)
-        self.assertIn("text-decoration: underline", out)
+    def test_nav_link_state_goes_orange(self):
+        out = self.out(".navbar-dark .navbar-nav .nav-link:hover{color:#fff}"
+                       ".navbar-dark .navbar-nav .nav-link.active{color:#fff}")
+        self.assertIn(self.MIX.format(src="#fff", dst="#ff7700"), out)
+        self.assertNotIn(self.MIX.format(src="#fff", dst="#fff"), out)
+        self.assertNotIn("underline", out)
 
     def test_brand_is_text_not_link(self):
         out = self.out(".navbar-dark a.navbar-brand{color:#9e9e9e!important}"

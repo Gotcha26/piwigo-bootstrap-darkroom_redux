@@ -4,15 +4,13 @@
     color: color-mix(in srgb, #dbdbdb, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   a:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   a:not([href]):not([tabindex]) {
     color: inherit;
@@ -318,15 +316,13 @@
     color: #fff;
   }
   .btn-link:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .btn-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .btn-link:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .btn-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .btn-link.disabled, .btn-link:disabled {
     color: #a9a9a9;
@@ -395,26 +391,22 @@
     color: #a9a9a9;
   }
   .nav-tabs .nav-item.show .nav-link:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #dbdbdb, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #dbdbdb, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .nav-tabs .nav-item.show .nav-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .nav-tabs .nav-item.show .nav-link:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #dbdbdb, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #dbdbdb, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .nav-tabs .nav-link.active:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #dbdbdb, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #dbdbdb, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .nav-pills .nav-link.active:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
-  }
-  .nav-pills .show>.nav-link:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
-  .nav-pills .show>.nav-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .nav-pills .show>.nav-link:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
+  .nav-pills .show>.nav-link:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+  }
+  .nav-pills .show>.nav-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .nav-pills .show>.nav-link:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-brand:where(.navbar:is(.bg-white) *) {
     color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
@@ -423,29 +415,25 @@
     color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .nav-link:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.5), #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, rgba(0,0,0,.5), #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .nav-link:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link:focus:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.5), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.5), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .nav-link:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link:hover:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.7), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.7), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .nav-link.disabled {
     color: rgba(0,0,0,.3);
   }
   .navbar-light .navbar-nav .active>.nav-link:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .active>.nav-link:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .active>.nav-link:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .nav-link.show:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-nav .show>.nav-link:focus:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-nav .nav-link.active:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-toggler:where(.navbar:is(.bg-white) *) {
     color: color-mix(in srgb, rgba(0,0,0,.5), #000 calc(var(--bd-contrast, 0) * 1%));
@@ -454,15 +442,13 @@
     color: color-mix(in srgb, rgba(0,0,0,.5), #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-text a:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-text a:hover:where(.navbar:is(.bg-white) *), .navbar-light .navbar-text a:focus:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-light .navbar-text a:focus:where(.navbar:is(.bg-white) *), .navbar-light .navbar-text a:hover:where(.navbar:is(.bg-white) *) {
-    color: color-mix(in srgb, rgba(0,0,0,.9), #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, rgba(0,0,0,.9), #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-brand:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
     color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
@@ -471,29 +457,25 @@
     color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .nav-link.disabled {
     color: rgba(255,255,255,.25);
   }
   .navbar-dark .navbar-nav .active>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .active>.nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .active>.nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .nav-link.show:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-nav .show>.nav-link:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-nav .nav-link.active:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-toggler:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
@@ -502,15 +484,13 @@
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-text a:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-text a:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-text a:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .navbar-dark .navbar-text a:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-text a:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .breadcrumb-item+.breadcrumb-item:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *))::before {
     color: color-mix(in srgb, #a9a9a9, #fff calc(var(--bd-contrast, 0) * 1%));
@@ -519,15 +499,13 @@
     color: color-mix(in srgb, #a9a9a9, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .page-link:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .page-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .page-link:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .page-link:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .page-item.active .page-link {
     color: #fff;
@@ -832,25 +810,22 @@
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark .navbar-brand a:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%)) !important;
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark .navbar-brand a:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-dark .navbar-brand a:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
-    text-decoration: underline !important;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark a.navbar-brand:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark .navbar-brand a:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
-    text-decoration: underline !important;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark a.navbar-brand:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark .navbar-brand a:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
-    text-decoration: underline !important;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .navbar-dark a.navbar-brand:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
     color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
@@ -860,11 +835,10 @@
   }
   @media (max-width:991.98px) {
     .navbar-collapse.show .dropdown-menu .dropdown-item:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-      color: color-mix(in srgb, #a9a9a9, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+      color: color-mix(in srgb, #a9a9a9, #fff calc(var(--bd-contrast, 0) * 1%));
     }
     .navbar-collapse.show .dropdown-menu .dropdown-item:hover:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *), .navbar-collapse.show .dropdown-menu .dropdown-item:focus:where(.navbar:is(.bg-primary, .bg-secondary, .bg-light, .bg-dark) *) {
-      color: color-mix(in srgb, #a9a9a9, #fff calc(var(--bd-contrast, 0) * 1%));
-      text-decoration: underline;
+      color: color-mix(in srgb, #a9a9a9, #ff7700 calc(var(--bd-contrast, 0) * 1%));
     }
     .navbar-collapse.show .dropdown-menu .dropdown-item:focus, .navbar-collapse.show .dropdown-menu .dropdown-item:hover {
       color: #000;
@@ -892,15 +866,13 @@
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .handle a:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .handle a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .handle a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .info:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
@@ -909,15 +881,13 @@
     color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .info .imageInfo>dd>a:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .info .imageInfo>dd>a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .info .imageInfo>dd>a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #9e9e9e, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #9e9e9e, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   #sidebar .info .imageInfo>dd>a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .info .imageInfo>dd>a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .mcs-no-result .text span:first-child, .filetypes-option label .checked-icon, .added_by-option label .checked-icon, .date_posted-option label .checked-icon, .breadcrumb-item .icon-cancel-circled:hover, .clear-all.clickable, .filter-form .filter-form-title {
     color: var(--primary) !important;
@@ -950,7 +920,6 @@
     color: #4f4f4f !important;
   }
   #selected-tags-container .selected-related-tag a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #selected-tags-container .selected-related-tag a.selected-related-tag-remove:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #000, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
-    text-decoration: underline !important;
+    color: color-mix(in srgb, #000, #ff7700 calc(var(--bd-contrast, 0) * 1%)) !important;
   }
 }

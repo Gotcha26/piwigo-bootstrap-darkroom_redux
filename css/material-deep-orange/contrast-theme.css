@@ -85,8 +85,7 @@
     color: color-mix(in srgb, #212121, #000 calc(var(--bd-contrast, 0) * 1%));
   }
   #collectionsDropdown a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #262626, #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #262626, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .card-thumbnail .addCollection {
     color: white !important;
@@ -110,14 +109,12 @@
     color: #fafafa;
   }
   .mcs-side-results.search-in-set-button a:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #777, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)), .mcs-side-results.search-in-set-button a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #777, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
-    text-decoration: underline;
+    color: color-mix(in srgb, #777, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
 }

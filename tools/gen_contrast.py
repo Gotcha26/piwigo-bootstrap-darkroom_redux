@@ -12,11 +12,10 @@ cascade order, classifies every `color` declaration by role and writes:
     css/<skin>/contrast.css        overrides of bootstrap.min.css + skin.css
     css/<skin>/contrast-theme.css  overrides of the parent theme.css
 
-Roles: ordinary text is mixed towards black (light skin) or white (dark
-skin), links towards the signature orange, link states (hover, focus,
-active) towards black / white and underlined; text on a coloured background,
-explicit utilities, navbars, PhotoSwipe and the photo page header are left
-alone. One custom property, --bd-contrast (1-100), drives every mix; the
+Roles: ordinary text and resting links are mixed towards black (light skin)
+or white (dark skin), the highlight (link hover, focus, active) towards the
+signature orange; text on a coloured background, explicit utilities, bars on
+a coloured background, PhotoSwipe and the photo page header are left alone. One custom property, --bd-contrast (1-100), drives every mix; the
 theme sets it, and loads these files, only when the setting is above 0.
 
 Generated files are versioned and never edited by hand. Python standard
@@ -481,7 +480,7 @@ def overrides(rules, scheme, page_bg=None, navbars=None):
             continue
         value, important = raw
         bang = " !important" if important else ""
-        underline = "text-decoration: underline" + bang
+        to_orange = "color: " + MIX.format(src=value, dst=ORANGE) + bang
         groups = {}
         skipped = []
         for selector in rule.selectors:
@@ -493,20 +492,19 @@ def overrides(rules, scheme, page_bg=None, navbars=None):
             groups.setdefault((role,) + target, []).append(selector)
         for (role, dst, suffix), selectors in groups.items():
             to_extreme = "color: " + MIX.format(src=value, dst=dst) + bang
-            if role == Role.TEXT:
-                out.append((rule.wrappers, [guard(s, suffix) for s in selectors], [to_extreme]))
-            elif role == Role.LINK_STATE:
-                out.append((rule.wrappers, [guard(s, suffix) for s in selectors],
-                            [to_extreme, underline]))
+            # Text and resting links are pushed to the extreme; only the
+            # highlight (hover, focus, active) turns orange (user decision).
+            if role == Role.LINK_STATE:
+                out.append((rule.wrappers, [guard(s, suffix) for s in selectors], [to_orange]))
             else:
-                out.append((rule.wrappers, [guard(s, suffix) for s in selectors],
-                            ["color: " + MIX.format(src=value, dst=ORANGE) + bang]))
+                out.append((rule.wrappers, [guard(s, suffix) for s in selectors], [to_extreme]))
+            if role == Role.LINK_REST:
                 # A link coloured by a selector more specific than a:hover keeps
                 # its colour on hover too: give every resting link its own states.
                 states = [guard(s + p, suffix) for s in selectors if not PSEUDO_ELEMENT.search(s)
                           for p in (":hover", ":focus")]
                 if states:
-                    out.append((rule.wrappers, states, [to_extreme, underline]))
+                    out.append((rule.wrappers, states, [to_orange]))
         if skipped:
             out.append((rule.wrappers, skipped, ["color: " + value + bang]))
     return out
