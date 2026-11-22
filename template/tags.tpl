@@ -53,8 +53,19 @@
         max = Math.max(max, weight);
       });
 
+      // The computed colour may be written in any syntax: color-mix() (text
+      // contrast, #83) comes back as "color(srgb 0.9 0.9 0.9)". A 1x1 canvas
+      // turns whatever the browser returns into r, g, b.
+      var probe = document.createElement('canvas').getContext('2d');
       var rgb = function(selector) {
-        return ($(selector).css('color').match(/\d+/g) || [0, 0, 0]).slice(0, 3).map(Number);
+        if (!probe) {
+          return [0, 0, 0];
+        }
+        probe.clearRect(0, 0, 1, 1);
+        probe.fillStyle = '#000';
+        probe.fillStyle = $(selector).css('color');
+        probe.fillRect(0, 0, 1, 1);
+        return Array.prototype.slice.call(probe.getImageData(0, 0, 1, 1).data, 0, 3);
       };
       var from = rgb('#tagCloudGradientStart'), to = rgb('#tagCloudGradientEnd');
 
