@@ -11,7 +11,8 @@ class Config {
   // is completed with their defaults in memory (populateConfig), never rewritten
   // at boot (#61).
   // 23: color_mode, the light and dark skins and their navbar sets (#81).
-  const CONF_VERSION = 23;
+  // 24: text_contrast (#83).
+  const CONF_VERSION = 24;
 
   /** color_mode values: one skin for everyone, or a light / dark pair. */
   const COLOR_MODE_SINGLE = 'single';
@@ -72,6 +73,8 @@ class Config {
   const KEY_THUMBNAIL_NB_IMAGES = 'thumbnail_nb_images';
   const KEY_VIEW_DEFAULT = 'view_default';
   const KEY_VIEW_TOGGLE = 'view_toggle';
+  // Text contrast (#83): 0-100, 0 = the skin untouched.
+  const KEY_TEXT_CONTRAST = 'text_contrast';
 
   const KEY_SOCIAL_ENABLED = 'social_enabled';
   const KEY_SOCIAL_BUTTONS = 'social_buttons';
@@ -147,6 +150,7 @@ class Config {
       self::KEY_THUMBNAIL_NB_IMAGES => false,
       self::KEY_VIEW_DEFAULT => 'grid',
       self::KEY_VIEW_TOGGLE => true,
+      self::KEY_TEXT_CONTRAST => 0,
       self::KEY_ABOUT_TITLE => null,
       self::KEY_ABOUT_PIWIGO => About::PIWIGO_ORIGINAL,
       self::KEY_ABOUT_NOTICE => null,
@@ -207,6 +211,7 @@ class Config {
       self::KEY_THUMBNAIL_NB_IMAGES => self::TYPE_BOOL,
       self::KEY_VIEW_DEFAULT => self::TYPE_STRING,
       self::KEY_VIEW_TOGGLE => self::TYPE_BOOL,
+      self::KEY_TEXT_CONTRAST => self::TYPE_NUM,
       self::KEY_ABOUT_TITLE => self::TYPE_STRING,
       self::KEY_ABOUT_PIWIGO => self::TYPE_STRING,
       // A file, like the Custom CSS: a legal notice may outgrow the conf row (a
@@ -295,6 +300,9 @@ class Config {
       if (isset($this->normalizers[$key])) {
         $value = call_user_func(array(__NAMESPACE__ . '\About', $this->normalizers[$key]), $value);
       }
+      if ($key === self::KEY_TEXT_CONTRAST) {
+        $value = self::clampContrast($value);
+      }
       switch ($this->types[$key]) {
         case self::TYPE_STRING:
           $this->config[$key] = !empty($value) ? $value : null;
@@ -310,6 +318,21 @@ class Config {
           break;
       }
     }
+  }
+
+  /**
+   * A text contrast level (#83): an integer 0-100 whatever the input. Applied when
+   * the setting is written and again when it is rendered, so that a tampered row
+   * never reaches the <style> element of header.tpl.
+   *
+   * @param  mixed $value Posted or stored value.
+   * @return int
+   */
+  public static function clampContrast($value) {
+    if (!is_numeric($value)) {
+      return 0;
+    }
+    return (int) max(0, min(100, round((float) $value)));
   }
 
   public function __get($key) {
