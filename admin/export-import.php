@@ -125,8 +125,9 @@ if (!function_exists('bd_admin_expimp_methods')) {
         'plugin_id'      => 'bootstrap_darkroom',
         'schema_version' => \BootstrapDarkroom\Config::CONF_VERSION,
         'snapshot'       => 'bd_admin_config_snapshot',
-        // No 'licensed' hook: its refusal reads "Pro licence required". The admin
-        // page is gated by jm_access_gate('admin') before the dispatcher runs.
+        // No 'licensed' hook: its refusal reads "Pro licence required". Both methods
+        // are reserved to the webmaster by jm_access_gate_webmaster() in
+        // admin.inc.php, before the dispatcher runs.
         'save'           => 'bd_admin_config_import',
       ),
     ));

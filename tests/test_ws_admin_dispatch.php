@@ -9,9 +9,11 @@
  *
  * The theme has ONE access level, 'admin' (piwigo_local#1433): jm_access_gate() at
  * the top of admin.inc.php refuses a non-administrator before the dispatcher, and
- * an administrator who is not the webmaster may save, reset AND dismiss the alert.
- * Only vendorRetry stays the webmaster's: installing an extension is reserved to
- * the webmaster by the Piwigo core (jm_ws_extension_install_denied()).
+ * an administrator who is not the webmaster may save AND dismiss the alert. The
+ * "Maintenance & advanced options" methods (reset, export, import) are reserved to
+ * the webmaster by jm_access_gate_webmaster(), right after the gate. vendorRetry
+ * stays the webmaster's too: installing an extension is reserved to the webmaster
+ * by the Piwigo core (jm_ws_extension_install_denied()).
  *
  * METHOD: a sandbox copy of the theme (admin/*.php, include/*.php) whose include/
  * receives the hub commons jm-access.php, jm-ws.php, jm-vendor-pins.php and
@@ -173,13 +175,22 @@ $r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_toke
 bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403 && $r['json']['message'] === 'invalid_token',
   'scenario 6: settingsReset is served by the dispatcher (wrong token -> 403 invalid_token)');
 
-// 7. Reset by an administrator who is not the webmaster -> allowed, settings written
-// (the theme's level is 'admin', with no exception: whoever may save may reset).
-$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'TOKEN_OK'), false);
+// 7. Maintenance section methods by an administrator who is not the webmaster ->
+// refused BEFORE the dispatcher (reserved by jm_access_gate_webmaster()), nothing
+// written. The section is the webmaster's alone on every extension; the save stays
+// open to that administrator (scenario 8).
+foreach (array('settingsReset', 'configExport', 'configImport') as $bd_m) {
+  $r = bd_run_post(array('method' => 'bootstrap_darkroom.' . $bd_m, 'pwg_token' => 'TOKEN_OK'), false);
+  bd_assert($r['denied'] && $r['json'] === null && $r['conf'] === null && !$r['render'],
+    "scenario 7: $bd_m by an administrator who is not the webmaster -> access_denied() before the dispatcher, nothing written (output: " . substr($r['raw'], 0, 160) . ')');
+}
+
+// 7b. Reset by the webmaster -> ok, settings written.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'TOKEN_OK'));
 bd_assert(!$r['render'] && !$r['denied'] && isset($r['json']['stat']) && $r['json']['stat'] === 'ok'
   && isset($r['json']['result']['reset']) && $r['json']['result']['reset'] === true
   && $r['conf'] !== null && strpos($r['conf'], 'bootstrap_darkroom=') === 0,
-  'scenario 7: settingsReset by an administrator who is not the webmaster -> ok, settings written (output: ' . substr($r['raw'], 0, 160) . ')');
+  'scenario 7b: settingsReset by the webmaster -> ok, settings written (output: ' . substr($r['raw'], 0, 160) . ')');
 
 // 8. Save by an administrator who is not the webmaster -> allowed, settings written.
 $r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsSave', 'pwg_token' => 'TOKEN_OK'), false);
@@ -188,11 +199,11 @@ bd_assert(!$r['render'] && !$r['denied'] && isset($r['json']['stat']) && $r['jso
   && $r['conf'] !== null && strpos($r['conf'], 'bootstrap_darkroom=') === 0,
   'scenario 8: settingsSave by an administrator who is not the webmaster -> ok, settings written (output: ' . substr($r['raw'], 0, 160) . ')');
 
-// 9. Wrong CSRF token on a reset by that same administrator -> still refused.
-$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsReset', 'pwg_token' => 'WRONG'), false);
+// 9. Wrong CSRF token on a save by that same administrator -> still refused.
+$r = bd_run_post(array('method' => 'bootstrap_darkroom.settingsSave', 'pwg_token' => 'WRONG'), false);
 bd_assert(!$r['render'] && isset($r['json']['err']) && $r['json']['err'] === 403 && $r['json']['message'] === 'invalid_token'
   && $r['conf'] === null,
-  'scenario 9: settingsReset with a wrong token by a non-webmaster administrator -> 403 invalid_token, nothing written');
+  'scenario 9: settingsSave with a wrong token by a non-webmaster administrator -> 403 invalid_token, nothing written');
 
 // 10. A user who is not an administrator: refused by the access gate, BEFORE the
 // dispatcher (no JSON, nothing written), even with a valid token.
@@ -209,6 +220,9 @@ $bd_disp = strpos($bd_entry, 'jm_ws_admin_page_dispatch(');
 bd_assert($bd_gate !== false && $bd_disp !== false && $bd_gate < $bd_disp
   && preg_match("/function_exists\\s*\\(\\s*'jm_access_/", $bd_entry) === 0,
   "scenario 11: admin.inc.php calls jm_access_gate('admin') before the dispatcher, unguarded");
+$bd_reserve = strpos($bd_entry, 'jm_access_gate_webmaster(');
+bd_assert($bd_reserve !== false && $bd_reserve > $bd_gate && $bd_reserve < $bd_disp,
+  'scenario 11: admin.inc.php reserves the Maintenance methods (jm_access_gate_webmaster) between the gate and the dispatcher');
 
 // --- Client side: the reset goes through the admin page, never a form POST ---
 $js_all = file_get_contents($root . '/admin/assets/js/bd-admin.js');

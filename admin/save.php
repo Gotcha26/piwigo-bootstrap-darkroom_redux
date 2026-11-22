@@ -48,7 +48,8 @@ if (!function_exists('bd_admin_save_methods')) {
         'description' => 'Saves the Bootstrap Darkroom settings.',
         'params'      => $params,
       ),
-      // "Reset settings" brick of the Maintenance section: same channel as the save.
+      // "Reset settings" brick of the Maintenance section: same channel as the save,
+      // but webmaster only (reserved in admin.inc.php).
       'settingsReset' => array(
         'callback'    => 'bd_admin_settings_reset',
         'description' => 'Resets the Bootstrap Darkroom settings to their defaults, typed content kept.',
@@ -62,8 +63,8 @@ if (!function_exists('bd_admin_settings_reset')) {
   /**
    * Resets the whole theme to its defaults, except the content listed in
    * Config::$preserve_on_reset. The CSRF token is already checked by the dispatcher;
-   * the access level is the theme's own, applied by jm_access_gate() in
-   * admin.inc.php: whoever may save may reset.
+   * the method is reserved to the webmaster by jm_access_gate_webmaster() in
+   * admin.inc.php, before the dispatcher: no level check here.
    *
    * @param  array $params  pwg_token only.
    * @param  mixed $service Unused (no ws service on the admin page).

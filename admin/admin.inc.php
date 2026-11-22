@@ -3,11 +3,18 @@ defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
 
 // --- 0. Access level: any administrator manages the theme (piwigo_local#1433) ---
 // One level for the whole theme, applied before any of its code runs, the save
-// dispatcher included: settings, reset, export and import share it, and no
-// callback adds a level of its own. Deliberately NOT defensive: without this
+// dispatcher included. One exception, on every extension: the "Maintenance &
+// advanced options" section (reset, export, import) is the webmaster's alone, so
+// its methods are reserved right after the gate, still before the dispatcher.
+// No callback adds a level of its own. Deliberately NOT defensive: without this
 // common the page fails instead of opening unguarded.
 require_once dirname(dirname(__FILE__)) . '/include/jm-access.php';
 jm_access_gate('admin');
+jm_access_gate_webmaster(array('ws' => array(
+  'bootstrap_darkroom.settingsReset',
+  'bootstrap_darkroom.configExport',
+  'bootstrap_darkroom.configImport',
+)));
 
 /**
  * Entry point of the theme's admin panel, included by the core's admin/theme.php
