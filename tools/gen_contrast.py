@@ -84,6 +84,17 @@ LINK_STATES = (":hover", ":focus", ":active", ".active", "[aria-current")
 # Above this HSL saturation, a background is a colour, not a surface.
 SATURATION_LIMIT = 0.25
 
+# Below this contrast with the skin's page background, a text colour is not
+# meant for the page: it sits on a surface of its own (see classify()).
+MIN_SURFACE_CONTRAST = 2.0
+
+# Added to every mixed selector: the out-of-scope areas are excluded by
+# position, not only by the selector's text (a generic `a` rule reaches the
+# menus of a navbar). :where() adds no specificity; every browser that knows
+# color-mix() knows it.
+GUARD = ":where(:not(.navbar *, .pswp *, .page-header *, .carousel *))"
+PSEUDO_ELEMENT = re.compile(r"::|:(?:before|after|first-line|first-letter)(?![\w-])")
+
 NAMED_COLOURS = {
     "black": (0, 0, 0), "white": (255, 255, 255), "red": (255, 0, 0),
     "green": (0, 128, 0), "blue": (0, 0, 255), "yellow": (255, 255, 0),
@@ -311,8 +322,28 @@ def _last_compound(selector):
     return parts[-1] if parts else plain
 
 
-def classify(selector, rule, scheme):
-    """Role of one selector of a rule, for a skin of `scheme` ('light' / 'dark')."""
+def contrast_ratio(a, b):
+    """WCAG contrast ratio of two colours, 1 to 21."""
+    hi, lo = sorted((luminance(a), luminance(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def classify(selector, rule, scheme, page_bg=None):
+    """Role of one selector of a rule, for a skin of `scheme` ('light' / 'dark').
+
+    `page_bg` is the skin's page background (body). A text colour that does not
+    read on it sits on a surface of its own (a white menu in a dark skin, a dark
+    panel in a light one), declared by another rule: it is left alone.
+    """
+    role = _classify(selector, rule, scheme)
+    if role != Role.SKIP and page_bg is not None:
+        colour = _colour_decl(rule)
+        if contrast_ratio(parse_color(colour[0]), page_bg) < MIN_SURFACE_CONTRAST:
+            return Role.SKIP
+    return role
+
+
+def _classify(selector, rule, scheme):
     if is_coloured_background(_background(rule), scheme):
         return Role.SKIP
     classes = _classes(selector)
@@ -361,43 +392,68 @@ def _colour_decl(rule):
     return None
 
 
-def overrides(rules, scheme):
-    """(wrappers, selectors, declarations) of every override, in cascade order."""
+def _raw_colour_decl(rule):
+    """The rule's last `color` declaration as written (any value), or None."""
+    for prop, value, important in reversed(rule.decls):
+        if prop == "color":
+            return (value, important)
+    return None
+
+
+def guard(selector):
+    """The selector, restricted to the gallery's own areas (see GUARD)."""
+    m = PSEUDO_ELEMENT.search(selector)
+    if m:
+        return selector[:m.start()] + GUARD + selector[m.start():]
+    return selector + GUARD
+
+
+def overrides(rules, scheme, page_bg=None):
+    """(wrappers, selectors, declarations) of the generated file, in cascade order.
+
+    Every source rule declaring a colour is restated at its own place: mixed
+    when it qualifies, as written otherwise. The file is loaded after the whole
+    stylesheet it corrects, so a mixed rule would otherwise climb above the
+    later rules of the same specificity it used to lose to.
+    """
     out = []
     for rule in rules:
-        colour = _colour_decl(rule)
-        if not colour:
+        raw = _raw_colour_decl(rule)
+        if not raw:
             continue
-        value, important = colour
+        value, important = raw
         bang = " !important" if important else ""
-        groups = {Role.TEXT: [], Role.LINK_REST: [], Role.LINK_STATE: []}
+        groups = {Role.TEXT: [], Role.LINK_REST: [], Role.LINK_STATE: [], Role.SKIP: []}
         for selector in rule.selectors:
-            role = classify(selector, rule, scheme)
-            if role != Role.SKIP:
-                groups[role].append(selector)
+            role = classify(selector, rule, scheme, page_bg) if _colour_decl(rule) else Role.SKIP
+            groups[role].append(selector)
         to_extreme = "color: " + MIX.format(src=value, dst=extreme(scheme)) + bang
         underline = "text-decoration: underline" + bang
         if groups[Role.TEXT]:
-            out.append((rule.wrappers, groups[Role.TEXT], [to_extreme]))
+            out.append((rule.wrappers, [guard(s) for s in groups[Role.TEXT]], [to_extreme]))
         if groups[Role.LINK_REST]:
             rest = groups[Role.LINK_REST]
-            out.append((rule.wrappers, rest,
+            out.append((rule.wrappers, [guard(s) for s in rest],
                         ["color: " + MIX.format(src=value, dst=ORANGE) + bang]))
             # A link coloured by a selector more specific than a:hover keeps its
             # colour on hover too: give every resting link its own hover state.
-            states = [s + p for s in rest if "::" not in s for p in (":hover", ":focus")]
+            states = [guard(s + p) for s in rest if not PSEUDO_ELEMENT.search(s)
+                      for p in (":hover", ":focus")]
             if states:
                 out.append((rule.wrappers, states, [to_extreme, underline]))
         if groups[Role.LINK_STATE]:
-            out.append((rule.wrappers, groups[Role.LINK_STATE], [to_extreme, underline]))
+            out.append((rule.wrappers, [guard(s) for s in groups[Role.LINK_STATE]],
+                        [to_extreme, underline]))
+        if groups[Role.SKIP]:
+            out.append((rule.wrappers, groups[Role.SKIP], ["color: " + value + bang]))
     return out
 
 
-def render(rules, scheme):
-    """Text of a generated file: header, then every override inside @supports."""
+def render(rules, scheme, page_bg=None):
+    """Text of a generated file: header, then every rule inside @supports."""
     lines = [HEADER, SUPPORTS + " {"]
     opened = ()
-    for wrappers, selectors, decls in overrides(rules, scheme):
+    for wrappers, selectors, decls in overrides(rules, scheme, page_bg):
         if wrappers != opened:
             for _ in opened:
                 lines.append("  " * len(opened) + "}")
@@ -469,8 +525,10 @@ def generate(root=ROOT):
     for skin in list_skins(root / "css"):
         scheme = "light" if skin in light else "dark"
         folder = root / "css" / skin
-        files[folder / "contrast.css"] = render(skin_rules(root, skin), scheme)
-        files[folder / "contrast-theme.css"] = render(theme_rules, scheme)
+        rules = skin_rules(root, skin)
+        page_bg = body_background(rules)
+        files[folder / "contrast.css"] = render(rules, scheme, page_bg)
+        files[folder / "contrast-theme.css"] = render(theme_rules, scheme, page_bg)
     return files
 
 
@@ -480,6 +538,7 @@ def report(root=ROOT):
     sources = (("skin", None), ("theme.css", _read_rules(root / "theme.css")))
     for skin in list_skins(root / "css"):
         scheme = "light" if skin in light else "dark"
+        page_bg = body_background(skin_rules(root, skin))
         print("=== {} ({})".format(skin, scheme))
         for label, rules in sources:
             rules = rules if rules is not None else skin_rules(root, skin)
@@ -488,7 +547,7 @@ def report(root=ROOT):
                 if not _colour_decl(rule):
                     continue
                 for s in rule.selectors:
-                    by_role.setdefault(classify(s, rule, scheme), []).append(s)
+                    by_role.setdefault(classify(s, rule, scheme, page_bg), []).append(s)
             for role in (Role.TEXT, Role.LINK_REST, Role.LINK_STATE, Role.SKIP):
                 items = by_role.get(role, [])
                 print("--- {} / {} ({})".format(label, role, len(items)))
