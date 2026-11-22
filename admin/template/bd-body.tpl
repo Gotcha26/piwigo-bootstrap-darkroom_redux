@@ -73,6 +73,24 @@
         {include file=$JM_CHOICE_GRID_PARTIAL name='bootstrap_theme_dark' groups=$BD_VARIANTS_DARK value=$theme_config->bootstrap_theme_dark label='bd_label_theme_dark'|@translate}
       </div>
     </div>
+    {* Text contrast (#83): common to the single skin and the light / dark pair. The
+       number field has no name: the range is the posted field, kept in sync by
+       bd-admin.js (syncSliders). *}
+    <div class="jm-field jm-field--row">
+      <div class="jm-field-label-col">
+        <label class="jm-field-label" for="bd-f-text_contrast">{'bd_label_text_contrast'|@translate}
+          <span class="jm-tooltip-wrap"><button type="button" class="jm-tooltip-btn">i</button><span class="jm-tooltip-text">{'bd_tip_text_contrast'|@translate}</span></span>
+        </label>
+        <span class="jm-field-desc">{'bd_desc_text_contrast'|@translate|escape}</span>
+      </div>
+      <div class="jm-field-controls">
+        <input type="range" class="jm-slider" id="bd-f-text_contrast" name="text_contrast" min="0" max="100" step="1" value="{$theme_config->text_contrast|intval}" data-output="bd-f-text_contrast_value">
+        <div class="jm-value-group">
+          <input type="number" class="jm-input-number" id="bd-f-text_contrast_value" min="0" max="100" step="1" value="{$theme_config->text_contrast|intval}" aria-label="{'bd_label_text_contrast'|@translate|escape:'html'}">
+          <span class="jm-unit">%</span>
+        </div>
+      </div>
+    </div>
     {* Derived from the variant by bd-admin.js, as before: one set per skin field. *}
     <input type="hidden" name="navbar_main_style" value="{$theme_config->navbar_main_style|escape:'html'}">
     <input type="hidden" name="navbar_main_bg" value="{$theme_config->navbar_main_bg|escape:'html'}">

@@ -120,7 +120,10 @@ $lang['bd_tip_bootstrap_theme'] = 'Cliquez sur une vignette pour la choisir.<br>
 // Bascule clair / foncé (#81).
 $lang['bd_label_color_mode'] = 'Mode clair / foncé';
 $lang['bd_desc_color_mode'] = 'Un seul thème pour tous les visiteurs, ou un thème clair et un thème foncé entre lesquels les visiteurs basculent depuis la barre de navigation.';
-$lang['bd_tip_color_mode'] = 'Thème unique : le thème ci-dessous s\'applique à tous, aucun bouton n\'est proposé.<br>Clair et foncé : choisissez un thème de chaque sorte. Un bouton lune / soleil apparaît à droite de la barre de navigation, et un visiteur qui arrive pour la première fois reçoit le thème qui correspond à la préférence de son système.<br>La page d\'identification suit le mode en cours.';
+$lang['bd_label_text_contrast'] = 'Contraste des textes';
+$lang['bd_desc_text_contrast'] = 'Rend le texte plus franc et fait ressortir les liens en orange.';
+$lang['bd_tip_text_contrast'] = 'À 0 %, l\'affichage d\'origine est conservé à l\'identique. En augmentant, le texte devient plus franc et les liens virent à l\'orange.<br>Les barres de navigation et les boutons ne sont pas modifiés.';
+$lang['bd_tip_color_mode'] ='Thème unique : le thème ci-dessous s\'applique à tous, aucun bouton n\'est proposé.<br>Clair et foncé : choisissez un thème de chaque sorte. Un bouton lune / soleil apparaît à droite de la barre de navigation, et un visiteur qui arrive pour la première fois reçoit le thème qui correspond à la préférence de son système.<br>La page d\'identification suit le mode en cours.';
 $lang['bd_color_mode_single'] = 'Thème unique';
 $lang['bd_color_mode_pair'] = 'Clair et foncé, au choix du visiteur';
 $lang['bd_label_theme_light'] = 'Thème clair';

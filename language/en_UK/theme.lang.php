@@ -99,7 +99,10 @@ $lang['bd_tip_bootstrap_theme'] = 'Click a thumbnail to choose it.<br>Darkroom i
 // Light / dark switch (#81).
 $lang['bd_label_color_mode'] = 'Light / dark mode';
 $lang['bd_desc_color_mode'] = 'One theme for every visitor, or a light theme and a dark theme that visitors switch between from the navigation bar.';
-$lang['bd_tip_color_mode'] = 'Single theme: the theme below applies to everyone, no switch is shown.<br>Light and dark: choose one theme of each kind. A moon / sun button appears at the right end of the navigation bar, and a first-time visitor gets the theme that matches their system preference.<br>The login page follows the mode in use.';
+$lang['bd_label_text_contrast'] = 'Text contrast';
+$lang['bd_desc_text_contrast'] = 'Makes text crisper and links stand out in orange.';
+$lang['bd_tip_text_contrast'] = 'At 0 %, the original rendering is kept unchanged. Raising it makes text crisper and turns links orange.<br>Navigation bars and buttons are not changed.';
+$lang['bd_tip_color_mode'] ='Single theme: the theme below applies to everyone, no switch is shown.<br>Light and dark: choose one theme of each kind. A moon / sun button appears at the right end of the navigation bar, and a first-time visitor gets the theme that matches their system preference.<br>The login page follows the mode in use.';
 $lang['bd_color_mode_single'] = 'Single theme';
 $lang['bd_color_mode_pair'] = 'Light and dark, visitor\'s choice';
 $lang['bd_label_theme_light'] = 'Light theme';
