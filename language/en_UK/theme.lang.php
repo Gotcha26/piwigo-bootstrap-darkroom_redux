@@ -200,8 +200,9 @@ $lang['bd_credits_group_admin'] = 'Admin panel';
 $lang['bd_credits_note_privacy'] = 'Every color theme serves its web fonts from your own server, and comment avatars are a local image. No web font or avatar is requested from a third party such as Google Fonts or Gravatar.';
 $lang['bd_credits_note_jquery'] = 'jQuery is not shipped with this theme: it is provided by Piwigo itself, whose version is old (1.11.3, 2015) and obsolete. Updating it is up to Piwigo.';
 $lang['bd_lineage_adopted'] = 'Done: Bootstrap Darkroom (redux) is in place and your settings have been kept. Your gallery now uses the new version of the theme.';
-$lang['bd_lineage_upgraded'] = 'Done: Bootstrap Darkroom (redux) has been updated and your settings have been kept. Your gallery now uses the new version.';
-$lang['bd_lineage_pending'] = 'Bootstrap Darkroom (redux) is installed and your settings have been kept. One last step remains: <a class="alert-link" href="%s">finish the setup</a> (webmaster only).';
+$lang['bd_lineage_upgraded'] = 'Done: Bootstrap Darkroom (redux) has been updated. Your gallery now uses the new version.';
+$lang['bd_lineage_pending'] = '<div class="d-flex align-items-start"><span class="rounded-circle bg-info text-white d-inline-flex align-items-center justify-content-center flex-shrink-0 mr-3" style="width:2.2rem;height:2.2rem" aria-hidden="true"><i class="fas fa-key"></i></span><div><div class="small font-weight-bold text-uppercase">Webmaster only</div>Bootstrap Darkroom (redux) is installed and your settings have been kept. One last step remains: <a class="alert-link" href="%s">finish the setup</a>.</div></div>';
+$lang['bd_lineage_pending_upgraded'] = '<div class="d-flex align-items-start"><span class="rounded-circle bg-info text-white d-inline-flex align-items-center justify-content-center flex-shrink-0 mr-3" style="width:2.2rem;height:2.2rem" aria-hidden="true"><i class="fas fa-key"></i></span><div><div class="small font-weight-bold text-uppercase">Webmaster only</div>Bootstrap Darkroom (redux) has been updated. One last step remains: <a class="alert-link" href="%s">finish the update</a>.</div></div>';
 
 // About page (#75): admin section, then the public page.
 $lang['bd_section_about'] = 'About page';

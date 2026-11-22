@@ -123,7 +123,9 @@ class Lineage {
       return;
     }
     global $page;
-    $page['infos'][] = sprintf(l10n('bd_lineage_pending'), get_root_url() . 'admin.php?page=theme&theme=' . self::THEME_ID);
+    // Same split as apply(): a takeover of another build is an installation, a newer redux is an update.
+    $key = $verdict['state'] === 'upgraded' ? 'bd_lineage_pending_upgraded' : 'bd_lineage_pending';
+    $page['infos'][] = sprintf(l10n($key), get_root_url() . 'admin.php?page=theme&theme=' . self::THEME_ID);
   }
 
   /** The core's activate(): that path is already controlled by the core. */
