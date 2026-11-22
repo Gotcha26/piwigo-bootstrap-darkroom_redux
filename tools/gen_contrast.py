@@ -72,7 +72,11 @@ TEXT_UTILITY_KEPT = ("text-muted", "text-body")
 # Out of scope for the first version (spec, non-goals): navbars (their
 # background is a setting, up to bg-primary), the PhotoSwipe viewer (black
 # background), the photo page header (text over a picture).
-OUT_OF_SCOPE = (".navbar", ".pswp", ".page-header", ".carousel")
+OUT_OF_SCOPE = (".navbar-transparent", ".pswp", ".page-header", ".carousel")
+
+# Navigation bars (spec addendum): handled only under a bar whose background is
+# a neutral one of the skin (neutral_backgrounds()); the bar title is text.
+NAVBAR_BACKGROUNDS = (".bg-primary", ".bg-secondary", ".bg-light", ".bg-dark", ".bg-white")
 
 # Disabled controls keep their muted look: neither orange nor pushed.
 DISABLED = ("disabled",)
@@ -91,8 +95,7 @@ MIN_SURFACE_CONTRAST = 2.0
 # Added to every mixed selector: the out-of-scope areas are excluded by
 # position, not only by the selector's text (a generic `a` rule reaches the
 # menus of a navbar). :where() adds no specificity; every browser that knows
-# color-mix() knows it.
-GUARD = ":where(:not(.navbar *, .pswp *, .page-header *, .carousel *))"
+# color-mix() knows it. See generic_guard() and navbar_guard().
 PSEUDO_ELEMENT = re.compile(r"::|:(?:before|after|first-line|first-letter)(?![\w-])")
 
 NAMED_COLOURS = {
@@ -328,15 +331,47 @@ def contrast_ratio(a, b):
     return (hi + 0.05) / (lo + 0.05)
 
 
-def classify(selector, rule, scheme, page_bg=None):
+def is_navbar(selector):
+    return ".navbar" in selector
+
+
+def navbar_target(rule, navbars, selector=""):
+    """(extreme, guard) of a navbar rule, or None when no neutral bar matches.
+
+    The extreme follows the text colour (light text sits on a dark bar), and the
+    rule only applies under a neutral bar of that polarity. Bootstrap says which
+    bar a rule is for (.navbar-dark / .navbar-light); otherwise the text colour
+    tells, at the luminance where white and black contrast equally (0.179).
+    """
+    colour = _colour_decl(rule)
+    if not colour:
+        return None
+    if ".navbar-dark" in selector:
+        light_text = True
+    elif ".navbar-light" in selector:
+        light_text = False
+    else:
+        light_text = luminance(parse_color(colour[0])) > 0.179
+    classes = (navbars or {}).get("dark" if light_text else "light", [])
+    if not classes:
+        return None
+    return ("#fff" if light_text else "#000", navbar_guard(classes))
+
+
+def classify(selector, rule, scheme, page_bg=None, navbars=None):
     """Role of one selector of a rule, for a skin of `scheme` ('light' / 'dark').
 
     `page_bg` is the skin's page background (body). A text colour that does not
     read on it sits on a surface of its own (a white menu in a dark skin, a dark
     panel in a light one), declared by another rule: it is left alone.
+    A navbar selector is checked against the bar instead (navbar_target()).
     """
     role = _classify(selector, rule, scheme)
-    if role != Role.SKIP and page_bg is not None:
+    if role == Role.SKIP:
+        return role
+    if is_navbar(selector):
+        return role if navbar_target(rule, navbars, selector) else Role.SKIP
+    if page_bg is not None:
         colour = _colour_decl(rule)
         if contrast_ratio(parse_color(colour[0]), page_bg) < MIN_SURFACE_CONTRAST:
             return Role.SKIP
@@ -359,8 +394,9 @@ def _classify(selector, rule, scheme):
     if any(s in selector for s in OUT_OF_SCOPE + DISABLED):
         return Role.SKIP
     last = _last_compound(selector)
-    is_link = bool(re.match(r"a(?![\w-])", last)) or any(
-        re.search(r"\." + re.escape(c) + r"(?![\w-])", last) for c in LINK_CLASSES)
+    # The bar title is text (spec addendum), even written a.navbar-brand.
+    is_link = "navbar-brand" not in last and (bool(re.match(r"a(?![\w-])", last)) or any(
+        re.search(r"\." + re.escape(c) + r"(?![\w-])", last) for c in LINK_CLASSES))
     if is_link:
         if any(s in last for s in LINK_STATES):
             return Role.LINK_STATE
@@ -400,15 +436,36 @@ def _raw_colour_decl(rule):
     return None
 
 
-def guard(selector):
-    """The selector, restricted to the gallery's own areas (see GUARD)."""
+def _neutral_list(navbars):
+    present = set((navbars or {}).get("dark", [])) | set((navbars or {}).get("light", []))
+    return [c for c in NAVBAR_BACKGROUNDS if c in present]
+
+
+def generic_guard(navbars):
+    """Guard of the generic rules: everywhere but the out-of-scope areas.
+
+    Navigation bars are excluded unless their background is a neutral one of the
+    skin; the transparent bar (over the photo) always is.
+    """
+    neutral = _neutral_list(navbars)
+    bars = ".navbar:not({}) *".format(", ".join(neutral)) if neutral else ".navbar *"
+    return ":where(:not(.navbar-transparent *, {}, .pswp *, .page-header *, .carousel *))".format(bars)
+
+
+def navbar_guard(classes):
+    """Guard of a navbar rule: under a bar of one of these neutral backgrounds."""
+    return ":where(.navbar:is({}) *)".format(", ".join(classes))
+
+
+def guard(selector, suffix):
+    """The selector with `suffix` added before any pseudo-element."""
     m = PSEUDO_ELEMENT.search(selector)
     if m:
-        return selector[:m.start()] + GUARD + selector[m.start():]
-    return selector + GUARD
+        return selector[:m.start()] + suffix + selector[m.start():]
+    return selector + suffix
 
 
-def overrides(rules, scheme, page_bg=None):
+def overrides(rules, scheme, page_bg=None, navbars=None):
     """(wrappers, selectors, declarations) of the generated file, in cascade order.
 
     Every source rule declaring a colour is restated at its own place: mixed
@@ -417,43 +474,49 @@ def overrides(rules, scheme, page_bg=None):
     later rules of the same specificity it used to lose to.
     """
     out = []
+    general = (extreme(scheme), generic_guard(navbars))
     for rule in rules:
         raw = _raw_colour_decl(rule)
         if not raw:
             continue
         value, important = raw
         bang = " !important" if important else ""
-        groups = {Role.TEXT: [], Role.LINK_REST: [], Role.LINK_STATE: [], Role.SKIP: []}
-        for selector in rule.selectors:
-            role = classify(selector, rule, scheme, page_bg) if _colour_decl(rule) else Role.SKIP
-            groups[role].append(selector)
-        to_extreme = "color: " + MIX.format(src=value, dst=extreme(scheme)) + bang
         underline = "text-decoration: underline" + bang
-        if groups[Role.TEXT]:
-            out.append((rule.wrappers, [guard(s) for s in groups[Role.TEXT]], [to_extreme]))
-        if groups[Role.LINK_REST]:
-            rest = groups[Role.LINK_REST]
-            out.append((rule.wrappers, [guard(s) for s in rest],
-                        ["color: " + MIX.format(src=value, dst=ORANGE) + bang]))
-            # A link coloured by a selector more specific than a:hover keeps its
-            # colour on hover too: give every resting link its own hover state.
-            states = [guard(s + p) for s in rest if not PSEUDO_ELEMENT.search(s)
-                      for p in (":hover", ":focus")]
-            if states:
-                out.append((rule.wrappers, states, [to_extreme, underline]))
-        if groups[Role.LINK_STATE]:
-            out.append((rule.wrappers, [guard(s) for s in groups[Role.LINK_STATE]],
-                        [to_extreme, underline]))
-        if groups[Role.SKIP]:
-            out.append((rule.wrappers, groups[Role.SKIP], ["color: " + value + bang]))
+        groups = {}
+        skipped = []
+        for selector in rule.selectors:
+            role = classify(selector, rule, scheme, page_bg, navbars) if _colour_decl(rule) else Role.SKIP
+            if role == Role.SKIP:
+                skipped.append(selector)
+                continue
+            target = navbar_target(rule, navbars, selector) if is_navbar(selector) else general
+            groups.setdefault((role,) + target, []).append(selector)
+        for (role, dst, suffix), selectors in groups.items():
+            to_extreme = "color: " + MIX.format(src=value, dst=dst) + bang
+            if role == Role.TEXT:
+                out.append((rule.wrappers, [guard(s, suffix) for s in selectors], [to_extreme]))
+            elif role == Role.LINK_STATE:
+                out.append((rule.wrappers, [guard(s, suffix) for s in selectors],
+                            [to_extreme, underline]))
+            else:
+                out.append((rule.wrappers, [guard(s, suffix) for s in selectors],
+                            ["color: " + MIX.format(src=value, dst=ORANGE) + bang]))
+                # A link coloured by a selector more specific than a:hover keeps
+                # its colour on hover too: give every resting link its own states.
+                states = [guard(s + p, suffix) for s in selectors if not PSEUDO_ELEMENT.search(s)
+                          for p in (":hover", ":focus")]
+                if states:
+                    out.append((rule.wrappers, states, [to_extreme, underline]))
+        if skipped:
+            out.append((rule.wrappers, skipped, ["color: " + value + bang]))
     return out
 
 
-def render(rules, scheme, page_bg=None):
+def render(rules, scheme, page_bg=None, navbars=None):
     """Text of a generated file: header, then every rule inside @supports."""
     lines = [HEADER, SUPPORTS + " {"]
     opened = ()
-    for wrappers, selectors, decls in overrides(rules, scheme, page_bg):
+    for wrappers, selectors, decls in overrides(rules, scheme, page_bg, navbars):
         if wrappers != opened:
             for _ in opened:
                 lines.append("  " * len(opened) + "}")
@@ -527,9 +590,27 @@ def generate(root=ROOT):
         folder = root / "css" / skin
         rules = skin_rules(root, skin)
         page_bg = body_background(rules)
-        files[folder / "contrast.css"] = render(rules, scheme, page_bg)
-        files[folder / "contrast-theme.css"] = render(theme_rules, scheme, page_bg)
+        navbars = neutral_backgrounds(rules)
+        files[folder / "contrast.css"] = render(rules, scheme, page_bg, navbars)
+        files[folder / "contrast-theme.css"] = render(theme_rules, scheme, page_bg, navbars)
     return files
+
+
+def neutral_backgrounds(rules):
+    """Neutral `.bg-*` classes of a skin, by polarity: the bars handled (addendum)."""
+    found = {}
+    for rule in rules:
+        if rule.wrappers or len(rule.selectors) != 1 or rule.selectors[0] not in NAVBAR_BACKGROUNDS:
+            continue
+        colour = _background(rule)
+        if colour:
+            found[rule.selectors[0]] = colour
+    out = {"dark": [], "light": []}
+    for cls in NAVBAR_BACKGROUNDS:
+        colour = found.get(cls)
+        if colour and colour[3] >= 0.5 and saturation(colour) <= SATURATION_LIMIT:
+            out["light" if luminance(colour) >= 0.5 else "dark"].append(cls)
+    return out
 
 
 def report(root=ROOT):
@@ -547,7 +628,7 @@ def report(root=ROOT):
                 if not _colour_decl(rule):
                     continue
                 for s in rule.selectors:
-                    by_role.setdefault(classify(s, rule, scheme, page_bg), []).append(s)
+                    by_role.setdefault(classify(s, rule, scheme, page_bg, neutral_backgrounds(skin_rules(root, skin))), []).append(s)
             for role in (Role.TEXT, Role.LINK_REST, Role.LINK_STATE, Role.SKIP):
                 items = by_role.get(role, [])
                 print("--- {} / {} ({})".format(label, role, len(items)))

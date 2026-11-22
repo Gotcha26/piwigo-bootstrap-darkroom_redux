@@ -81,10 +81,10 @@
   .page-header > .container > .content-center {
     color: #fff;
   }
-  #collectionsDropdown:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #collectionsDropdown:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #212121, #000 calc(var(--bd-contrast, 0) * 1%));
   }
-  #collectionsDropdown a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #collectionsDropdown a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #262626, #000 calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
@@ -100,23 +100,23 @@
   .search-in-set-button a {
     color: unset;
   }
-  .mcs-side-results > div:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results > div:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
   }
-  .mcs-side-results > div:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results > div:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .mcs-side-results .mcs-side-badge {
     color: #fafafa;
   }
-  .mcs-side-results.search-in-set-button a:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
-  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)), .mcs-side-results.search-in-set-button a:focus:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)), .mcs-side-results.search-in-set-button a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
-  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #000 calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }

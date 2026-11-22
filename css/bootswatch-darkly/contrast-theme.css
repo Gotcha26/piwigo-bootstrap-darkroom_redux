@@ -21,13 +21,35 @@
   .navbar.navbar-transparent .navbar-toggler {
     color: #cccccc;
   }
-  .navbar.navbar-forced-sm .navbar-brand, .navbar.navbar-forced-sm .nav-link {
-    color: #cccccc;
+  .navbar.navbar-forced-sm .navbar-brand:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #cccccc, #fff calc(var(--bd-contrast, 0) * 1%));
   }
-  .navbar.navbar-forced-sm .navbar-brand:hover, .navbar.navbar-forced-sm .navbar-brand:focus, .navbar.navbar-forced-sm .nav-link:hover, .navbar.navbar-forced-sm .nav-link:focus {
-    color: #fff;
+  .navbar.navbar-forced-sm .nav-link:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #cccccc, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
-  .navbar.navbar-forced-sm .nav-item .dropdown-item.active a, .navbar.navbar-forced-sm .nav-item .dropdown-item:hover a, .navbar.navbar-forced-sm .nav-item .dropdown-item:focus a, .navbar.navbar-forced-sm .nav-item .dropdown-item a:hover, .navbar.navbar-forced-sm .nav-item .dropdown-item a:focus {
+  .navbar.navbar-forced-sm .nav-link:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-link:focus:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #cccccc, #fff calc(var(--bd-contrast, 0) * 1%));
+    text-decoration: underline;
+  }
+  .navbar.navbar-forced-sm .navbar-brand:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .navbar-brand:focus:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
+  }
+  .navbar.navbar-forced-sm .nav-link:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-link:focus:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
+    text-decoration: underline;
+  }
+  .navbar.navbar-forced-sm .nav-item .dropdown-item:hover a:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-item .dropdown-item:focus a:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
+  }
+  .navbar.navbar-forced-sm .nav-item .dropdown-item:hover a:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-item .dropdown-item:hover a:focus:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-item .dropdown-item:focus a:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-item .dropdown-item:focus a:focus:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
+    text-decoration: underline;
+  }
+  .navbar.navbar-forced-sm .nav-item .dropdown-item a:hover:where(.navbar:is(.bg-secondary, .bg-light) *), .navbar.navbar-forced-sm .nav-item .dropdown-item a:focus:where(.navbar:is(.bg-secondary, .bg-light) *) {
+    color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
+    text-decoration: underline;
+  }
+  .navbar.navbar-forced-sm .nav-item .dropdown-item.active a {
     color: #fff;
   }
   #navbar-menubar > #quicksearch input[type="text"] {
@@ -39,14 +61,14 @@
   .nav-breadcrumb .nav-breadcrumb-item + .nav-breadcrumb-item::before {
     color: inherit;
   }
-  #sidebar .handle a:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #sidebar .handle a:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #fff, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
-  #sidebar .handle a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #sidebar .handle a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #fff, #fff calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
-  #sidebar .handle a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #sidebar .handle a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #eee, #fff calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
@@ -71,7 +93,7 @@
   a.pswp__share--google:hover {
     color: #fff;
   }
-  #tagCloudGradientStart:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  #tagCloudGradientStart:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #ccc, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   #tagCloudGradientEnd {
@@ -92,7 +114,7 @@
   #collectionsDropdown a:hover {
     color: #262626;
   }
-  .card-thumbnail .addCollection:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .card-thumbnail .addCollection:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, white, #fff calc(var(--bd-contrast, 0) * 1%)) !important;
   }
   .card-thumbnail .addCollection .fas {
@@ -104,23 +126,23 @@
   .search-in-set-button a {
     color: unset;
   }
-  .mcs-side-results > div:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results > div:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #fff calc(var(--bd-contrast, 0) * 1%));
   }
   .mcs-side-results > div:hover {
     color: #777;
   }
-  .mcs-side-results .mcs-side-badge:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results .mcs-side-badge:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #fafafa, #fff calc(var(--bd-contrast, 0) * 1%));
   }
-  .mcs-side-results.search-in-set-button a:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
-  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)), .mcs-side-results.search-in-set-button a:focus:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)), .mcs-side-results.search-in-set-button a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #fff calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
-  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar *, .pswp *, .page-header *, .carousel *)) {
+  .mcs-side-results.search-in-set-button a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-secondary, .bg-light, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #777, #fff calc(var(--bd-contrast, 0) * 1%));
     text-decoration: underline;
   }
