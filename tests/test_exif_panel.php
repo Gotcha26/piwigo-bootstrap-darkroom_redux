@@ -76,12 +76,28 @@ function get_exif_data($path, $map) {
   $bd_exif_calls[] = array($path, $map);
   return $bd_exif;
 }
+$bd_mime = false;
+$bd_triggers = array();
+$bd_trigger_override = null;
+function trigger_change($event, $value) {
+  global $bd_triggers, $bd_trigger_override;
+  $args = func_get_args();
+  $bd_triggers[] = $args;
+  if ($bd_trigger_override !== null && isset($bd_trigger_override[$event])) {
+    return $bd_trigger_override[$event];
+  }
+  return $value;
+}
 class SrcImage {
   public function __construct($row) {
   }
   public function get_path() {
     global $bd_path;
     return $bd_path;
+  }
+  public function is_mimetype() {
+    global $bd_mime;
+    return $bd_mime;
   }
 }
 class PwgError {
@@ -162,6 +178,27 @@ if (function_exists('exif_read_data')) {
 } else {
   bd_assert($res['fields'] === array(), 'forimage without exif extension: no fields');
 }
+
+// Parity with picture.php: a media shown through its MIME-type icon (video
+// without representative) has no metadata, unless a plugin says otherwise
+// through get_element_metadata_available.
+$bd_mime = true;
+$bd_exif_calls = array();
+$bd_triggers = array();
+$res = Exif::forImage(42);
+bd_assert(is_array($res) && $res['fields'] === array(), 'forimage_mimetype: no fields');
+bd_assert(count($bd_exif_calls) === 0, 'forimage_mimetype: MIME icon not read');
+$evt = array_values(array_filter($bd_triggers, function ($t) {
+  return $t[0] === 'get_element_metadata_available';
+}));
+bd_assert(count($evt) === 1 && $evt[0][1] === false && $evt[0][2] === $bd_rows[0], 'forimage_mimetype: get_element_metadata_available(false, row) triggered');
+
+$bd_mime = false;
+$bd_trigger_override = array('get_element_metadata_available' => false);
+$bd_exif_calls = array();
+$res = Exif::forImage(42);
+bd_assert(is_array($res) && $res['fields'] === array() && count($bd_exif_calls) === 0, 'forimage_plugin_veto: a plugin answering false hides the data');
+$bd_trigger_override = null;
 
 restore_error_handler();
 @unlink($tmp);

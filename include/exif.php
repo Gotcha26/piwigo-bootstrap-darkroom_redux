@@ -69,11 +69,18 @@ SELECT *
       'fields' => array(),
     );
 
-    if (empty($conf['show_exif']) || !function_exists('exif_read_data')) {
+    // Same gate as picture.php: no metadata for a media shown through its
+    // MIME-type icon, unless a plugin says otherwise.
+    $src = new \SrcImage($row);
+    $showable = trigger_change(
+      'get_element_metadata_available',
+      !empty($conf['show_exif']) && !$src->is_mimetype(),
+      $row
+    );
+    if (!$showable || !function_exists('exif_read_data')) {
       return $data;
     }
 
-    $src = new \SrcImage($row);
     $path = $src->get_path();
     if (!is_file($path)) {
       return $data;
