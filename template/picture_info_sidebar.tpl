@@ -1,10 +1,7 @@
-{footer_script require='jquery'}
-{literal}$(document).ready(function() { $("#wrapper").css({"position":"relative","overflow-x":"hidden"}); });{/literal}
-{/footer_script}
 <div id="sidebar">
-    <div id="info-content" class="info">
+    <div id="info-content" class="info" role="region" aria-label="{'Information'|@translate|escape}">
+        <h4>{'Information'|@translate}</h4>
         <dl id="standard" class="imageInfoTable">
-            <h4>{'Information'|@translate}</h4>
 {if $display_info.author and isset($INFO_AUTHOR)}
             <div id="Author" class="imageInfo">
                 <dt>{'Author'|@translate}</dt>
@@ -83,7 +80,7 @@
 {if isset($PDF_NB_PAGES) and $current.path_ext=="pdf" }
   <div id="Pages" class="imageInfo">
     <dt>{'Pages'|@translate}</dt>
-    <dd>{$PDF_NB_PAGES}</td>
+    <dd>{$PDF_NB_PAGES}</dd>
   </div>
 {/if}
 {if $display_info.rating_score and isset($rate_summary)}
@@ -143,22 +140,25 @@
                 </dd>
            </div>
 {/if}
-{if isset($metadata)}
-<div id="metadata" class="imageInfo">
-{foreach from=$metadata item=meta}
-            <br />
-            <h4>{$meta.TITLE}</h4>
-{foreach from=$meta.lines item=value key=label}
-            <dt>{$label}</dt>
-            <dd>{$value}</dd>
-{/foreach}
-{/foreach}
-</div>
-{/if}
         </dl>
+{if isset($metadata)}
+        <div id="metadata" class="imageInfo">
+{foreach from=$metadata item=meta}
+            <h4>{$meta.TITLE}</h4>
+            <dl class="imageInfoTable">
+{foreach from=$meta.lines item=value key=label}
+                <div class="imageInfo">
+                    <dt>{$label}</dt>
+                    <dd>{$value}</dd>
+                </div>
+{/foreach}
+            </dl>
+{/foreach}
+        </div>
+{/if}
     </div>
     <div class="handle">
-        <a id="info-link" href="#">
+        <a id="info-link" href="#info-content" role="button" aria-controls="info-content" aria-expanded="false" aria-label="{'Information'|@translate|escape}" title="{'Information'|@translate|escape}">
             <span class="fas fa-info" aria-hidden="true"></span>
         </a>
     </div>
