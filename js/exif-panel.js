@@ -100,10 +100,169 @@
     return out;
   }
 
+  /** Responses per image id, for the page's lifetime. Failed requests are evicted. */
+  var cache = {};
+
+  function fetchExif($, ws, id) {
+    if (!cache[id]) {
+      cache[id] = $.ajax({
+        url: ws,
+        data: { format: 'json', method: 'bd.images.getExif', image_id: id },
+        dataType: 'json'
+      }).then(function (r) {
+        if (!r || r.stat !== 'ok' || !r.result) {
+          return $.Deferred().reject().promise();
+        }
+        return r.result;
+      });
+      cache[id].fail(function () {
+        delete cache[id];
+      });
+    }
+    return cache[id];
+  }
+
+  /**
+   * Binds the panel (#pswp-exif, _photoswipe_div.tpl) to one PhotoSwipe
+   * instance, right after its init(). Cleans itself up on the instance's destroy.
+   */
+  function attach(pswp) {
+    var $ = root.jQuery;
+    var panel = root.document && root.document.getElementById('pswp-exif');
+    if (!$ || !panel) {
+      return;
+    }
+    var $panel = $(panel);
+    var $toggle = $panel.find('.pswp-exif__toggle');
+    var $title = $panel.find('.pswp-exif__title');
+    var $summary = $panel.find('.pswp-exif__summary');
+    var $table = $panel.find('.pswp-exif__table');
+    var $status = $panel.find('.pswp-exif__status');
+    var ws = $panel.attr('data-ws');
+
+    // Items built from templates without data-image-id (a child theme's own
+    // copies) have no id: the panel then stays hidden.
+    function currentId() {
+      var item = pswp.currItem;
+      return item && item.imageId ? String(item.imageId) : null;
+    }
+
+    function isOpen() {
+      return $panel.hasClass('open');
+    }
+
+    function clear() {
+      $title.text('');
+      $summary.empty();
+      $table.empty();
+      $status.text('');
+    }
+
+    function render(result) {
+      clear();
+      $title.text(result.title || '');
+      var fields = result.fields || [];
+      if (!fields.length) {
+        $status.text($panel.attr('data-empty') || '');
+        return;
+      }
+      var summary = summarize(fields);
+      for (var i = 0; i < summary.length; i++) {
+        $summary.append(
+          $('<div></div>').addClass(summary[i].slot).append(
+            $('<span aria-hidden="true"></span>').addClass(summary[i].icon),
+            $('<span></span>').text(summary[i].text)
+          )
+        );
+      }
+      for (var j = 0; j < fields.length; j++) {
+        $table.append(
+          $('<div class="pswp-exif__row"></div>').append(
+            $('<dt></dt>').text(fields[j].label),
+            $('<dd></dd>').text(fields[j].value)
+          )
+        );
+      }
+    }
+
+    function load() {
+      var id = currentId();
+      if (!id) {
+        return;
+      }
+      clear();
+      fetchExif($, ws, id).then(function (result) {
+        // A late answer for a photo the visitor has already left is dropped.
+        if (currentId() === id && String(result.image_id) === id) {
+          render(result);
+        }
+      }, function () {
+        if (currentId() === id) {
+          clear();
+          $status.text($panel.attr('data-error') || '');
+        }
+      });
+    }
+
+    function setOpen(open) {
+      $panel.toggleClass('open', open);
+      $toggle.attr('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        load();
+      }
+    }
+
+    function sync() {
+      if (currentId()) {
+        $panel.removeClass('d-none');
+        if (isOpen()) {
+          load();
+        }
+      } else {
+        setOpen(false);
+        $panel.addClass('d-none');
+      }
+    }
+
+    // Capture phase on window: runs before PhotoSwipe's and the #89 sidebar's
+    // keydown handlers (both on document), so Esc can be kept from them.
+    function onKey(e) {
+      var action = keyAction(e, isOpen());
+      if (action === 'toggle') {
+        if (currentId()) {
+          e.preventDefault();
+          setOpen(!isOpen());
+        }
+      } else if (action === 'close-stop') {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(false);
+      } else if (action === 'close') {
+        setOpen(false);
+      }
+    }
+
+    $toggle.on('click.bdexif', function (e) {
+      e.preventDefault();
+      setOpen(!isOpen());
+    });
+    root.addEventListener('keydown', onKey, true);
+    pswp.listen('afterChange', sync);
+    pswp.listen('destroy', function () {
+      setOpen(false);
+      clear();
+      $panel.addClass('d-none');
+      root.removeEventListener('keydown', onKey, true);
+      $toggle.off('click.bdexif');
+    });
+    sync();
+  }
+
   var api = {
     SUMMARY_KEYS: SUMMARY_KEYS,
     keyAction: keyAction,
-    summarize: summarize
+    summarize: summarize,
+    attach: attach
   };
 
   root.BdExifPanel = api;

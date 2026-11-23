@@ -70,4 +70,26 @@ foreach (array('en_UK', 'fr_FR') as $l) {
   }
 }
 
+// --- 4. Wiring to PhotoSwipe ---
+// Each lightbox anchor carries the image id; the items expose it; the panel is
+// attached to every instance right after init().
+$anchors = array(
+  'template/index.tpl' => 1,
+  'template/picture.tpl' => 2,
+);
+foreach ($anchors as $file => $n) {
+  $tpl = bd_read($file);
+  $all = preg_match_all('/<a\b[^>]*data-index="\{\$idx\}"[^>]*>/', $tpl, $m);
+  $with = count(preg_grep('/data-image-id="\{\$thumbnail\.id\}"/', $m[0]));
+  bd_assert($all === $n && $with === $n, "$file: $with/$all lightbox anchors carry data-image-id");
+}
+
+$js = bd_read('template/_photoswipe_js.tpl');
+bd_assert(substr_count($js, "imageId: \$(this).data('image-id')") === 2, 'items expose imageId (video and image)');
+$init = strpos($js, 'photoSwipe.init();');
+$attach = strpos($js, 'BdExifPanel.attach(photoSwipe);');
+bd_assert($init !== false && $attach !== false && $attach > $init, 'panel attached after photoSwipe.init()');
+bd_assert(strpos($js, "path='themes/bootstrap_darkroom/js/exif-panel.js'") !== false || strpos($js, 'path="themes/bootstrap_darkroom/js/exif-panel.js"') !== false, 'exif-panel.js combined');
+bd_assert(preg_match('/\{footer_script[^}]*require=["\']bd\.exif-panel["\']/', $js) === 1, 'footer script requires bd.exif-panel');
+
 exit($fail ? 1 : 0);
