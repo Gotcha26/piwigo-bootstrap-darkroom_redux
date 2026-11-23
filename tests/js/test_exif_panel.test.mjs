@@ -1,5 +1,5 @@
 // EXIF panel of the lightbox (#90): pure helpers of js/exif-panel.js.
-// Run: node --test tests/js/
+// Run: node --test "tests/js/*.test.mjs" (Node 24 does not accept a directory)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';

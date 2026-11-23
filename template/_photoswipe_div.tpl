@@ -36,9 +36,9 @@
          </div>
      </div>
 {* EXIF panel (#90): sibling of the scroll-wrap, so PhotoSwipe's gestures never see its clicks. Driven by js/exif-panel.js. *}
-     <div id="pswp-exif" class="bd-tab-panel pswp-exif d-none" data-ws="{$ROOT_URL}ws.php" data-empty="{'No EXIF data for this photo'|translate|escape}" data-error="{'EXIF data could not be loaded'|translate|escape}">
+     <div id="pswp-exif" class="bd-tab-panel pswp-exif d-none" data-ws="{$ROOT_URL}ws.php" data-empty="{'bd_exif_empty'|translate|escape}" data-error="{'bd_exif_error'|translate|escape}">
          <div class="handle">
-             <button type="button" class="pswp-exif__toggle" aria-expanded="false" aria-controls="pswp-exif-content" aria-label="{'EXIF data (i)'|translate|escape}" title="{'EXIF data (i)'|translate|escape}"><span class="fas fa-info" aria-hidden="true"></span></button>
+             <button type="button" class="pswp-exif__toggle" aria-expanded="false" aria-controls="pswp-exif-content" aria-label="{'bd_exif_tab'|translate|escape}" title="{'bd_exif_tab'|translate|escape}"><span class="fas fa-info" aria-hidden="true"></span></button>
          </div>
          <div id="pswp-exif-content" class="info">
              <h4 class="pswp-exif__title"></h4>

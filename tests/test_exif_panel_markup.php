@@ -46,9 +46,9 @@ bd_assert(strpos($div, 'class="bd-tab-panel pswp-exif d-none"') !== false, 'pane
 bd_assert(strpos($div, 'aria-controls="pswp-exif-content"') !== false && strpos($div, 'id="pswp-exif-content"') !== false, 'toggle controls the content');
 bd_assert(strpos($div, 'aria-expanded="false"') !== false, 'toggle starts collapsed');
 bd_assert(strpos($div, 'data-ws="{$ROOT_URL}ws.php"') !== false, 'web-service URL given to the script');
-bd_assert(strpos($div, "data-empty=\"{'No EXIF data for this photo'|translate|escape}\"") !== false, 'empty message');
-bd_assert(strpos($div, "data-error=\"{'EXIF data could not be loaded'|translate|escape}\"") !== false, 'error message');
-bd_assert(strpos($div, "aria-label=\"{'EXIF data (i)'|translate|escape}\"") !== false, 'toggle accessible name');
+bd_assert(strpos($div, "data-empty=\"{'bd_exif_empty'|translate|escape}\"") !== false, 'empty message');
+bd_assert(strpos($div, "data-error=\"{'bd_exif_error'|translate|escape}\"") !== false, 'error message');
+bd_assert(strpos($div, "aria-label=\"{'bd_exif_tab'|translate|escape}\"") !== false, 'toggle accessible name');
 foreach (array('pswp-exif__title', 'pswp-exif__summary', 'pswp-exif__table', 'pswp-exif__status') as $cls) {
   bd_assert(strpos($div, 'class="' . $cls . '"') !== false, "container .$cls");
 }
@@ -65,7 +65,7 @@ bd_assert(strpos($css, '.pswp-exif__table') !== false && strpos($css, 'column-co
 foreach (array('en_UK', 'fr_FR') as $l) {
   $lang = array();
   include $root . "/language/$l/theme.lang.php";
-  foreach (array('EXIF data (i)', 'No EXIF data for this photo', 'EXIF data could not be loaded') as $k) {
+  foreach (array('bd_exif_tab', 'bd_exif_empty', 'bd_exif_error') as $k) {
     bd_assert(isset($lang[$k]) && $lang[$k] !== '', "$l defines '$k'");
   }
 }
