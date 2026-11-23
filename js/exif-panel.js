@@ -192,12 +192,13 @@
       }
       clear();
       fetchExif($, ws, id).then(function (result) {
-        // A late answer for a photo the visitor has already left is dropped.
-        if (currentId() === id && String(result.image_id) === id) {
+        // A late answer for a photo the visitor has already left, or for a
+        // panel closed in the meantime, is dropped (reopening renders it).
+        if (isOpen() && currentId() === id && String(result.image_id) === id) {
           render(result);
         }
       }, function () {
-        if (currentId() === id) {
+        if (isOpen() && currentId() === id) {
           clear();
           $status.text($panel.attr('data-error') || '');
         }
@@ -248,6 +249,11 @@
     });
     root.addEventListener('keydown', onKey, true);
     pswp.listen('afterChange', sync);
+    // 'destroy' only fires once the closing animation is over: close the panel
+    // as soon as the lightbox starts closing.
+    pswp.listen('close', function () {
+      setOpen(false);
+    });
     pswp.listen('destroy', function () {
       setOpen(false);
       clear();
