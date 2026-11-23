@@ -61,6 +61,9 @@ bd_assert(strpos($css, '.bd-tab-panel.open') !== false, 'open state on the share
 bd_assert(strpos($css, '#sidebar.open') === false, 'open state no longer duplicated on #sidebar');
 bd_assert(strpos($css, '.pswp-exif__table') !== false && strpos($css, 'column-count: 2') !== false, 'two-column EXIF table');
 
+// Readable over a bright photo: the panel background is near-opaque (recette #90).
+bd_assert(preg_match('/\.pswp-exif \.info \{\s*background-color: rgba\(0, 0, 0, 0\.95\);/', $css) === 1, 'panel background black at 95 %');
+
 // --- 3. Translations ---
 foreach (array('en_UK', 'fr_FR') as $l) {
   $lang = array();

@@ -896,7 +896,7 @@ i.video-indicator {
 
 .pswp-exif .handle,
 .pswp-exif .info {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.95);
 }
 
 /* .pswp sets touch-action: none; the panel must still scroll on touch screens. */
