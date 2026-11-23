@@ -35,4 +35,16 @@
              </div>
          </div>
      </div>
+{* EXIF panel (#90): sibling of the scroll-wrap, so PhotoSwipe's gestures never see its clicks. Driven by js/exif-panel.js. *}
+     <div id="pswp-exif" class="bd-tab-panel pswp-exif d-none" data-ws="{$ROOT_URL}ws.php" data-empty="{'bd_exif_empty'|translate|escape}" data-error="{'bd_exif_error'|translate|escape}">
+         <div class="handle">
+             <button type="button" class="pswp-exif__toggle" aria-expanded="false" aria-controls="pswp-exif-content" aria-label="{'bd_exif_tab'|translate|escape}" title="{'bd_exif_tab'|translate|escape}"><span class="camera-aperture" aria-hidden="true"></span></button>
+         </div>
+         <div id="pswp-exif-content" class="info">
+             <h4 class="pswp-exif__title"></h4>
+             <div class="pswp-exif__summary"></div>
+             <dl class="pswp-exif__table"></dl>
+             <p class="pswp-exif__status"></p>
+         </div>
+     </div>
 </div>

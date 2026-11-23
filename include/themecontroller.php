@@ -172,6 +172,7 @@ class ThemeController {
     add_event_handler('loc_begin_page_header', array($this, 'checkIfHomepage'));
     add_event_handler('loc_after_page_header', array($this, 'stripBreadcrumbs'));
     add_event_handler('format_exif_data', array($this, 'exifReplacements'));
+    add_event_handler('ws_add_methods', array($this, 'registerWsMethods'));
     add_event_handler('loc_end_picture', array($this, 'registerPictureTemplates'), 1000);
     add_event_handler('loc_begin_index_thumbnails', array($this, 'returnPageStart'));
     add_event_handler('loc_end_index', array($this, 'trimDescription'));
@@ -344,6 +345,21 @@ class ThemeController {
       }
     }
     return $exif;
+  }
+
+  /**
+   * Declares bd.images.getExif, read by the lightbox EXIF panel (#90). The theme's
+   * themeconf.inc.php is loaded on ws.php too (common.inc.php builds the Template),
+   * so this handler is in place when the service triggers ws_add_methods.
+   */
+  public function registerWsMethods($arr) {
+    $service = $arr[0];
+    $service->addMethod(
+      'bd.images.getExif',
+      array('\BootstrapDarkroom\Exif', 'ws'),
+      array('image_id' => array('type' => WS_TYPE_ID)),
+      'Bootstrap Darkroom: EXIF data of one image, as shown on the photo page.'
+    );
   }
 
   // register additional template files

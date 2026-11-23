@@ -1,4 +1,4 @@
-<div id="sidebar">
+<div id="sidebar" class="bd-tab-panel">
     <div id="info-content" class="info" role="region" aria-label="{'Information'|@translate|escape}">
         <h4>{'Information'|@translate}</h4>
         <dl id="standard" class="imageInfoTable">

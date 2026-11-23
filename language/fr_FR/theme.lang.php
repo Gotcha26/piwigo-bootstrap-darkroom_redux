@@ -257,3 +257,8 @@ $lang['bd_about_components'] = 'Composants tiers';
 // Bascule clair / foncé de la barre de navigation (#81) : titre et nom accessible.
 $lang['bd_switch_to_dark'] = 'Passer en mode sombre';
 $lang['bd_switch_to_light'] = 'Passer en mode clair';
+
+// Volet EXIF de la visionneuse (#90) : nom de la languette, messages vide et erreur.
+$lang['bd_exif_tab'] = 'Données EXIF (i)';
+$lang['bd_exif_empty'] = 'Aucune donnée EXIF pour cette photo';
+$lang['bd_exif_error'] = 'Impossible de charger les données EXIF';

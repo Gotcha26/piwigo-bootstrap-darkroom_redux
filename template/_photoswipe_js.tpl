@@ -2,7 +2,8 @@
 {combine_css path="themes/bootstrap_darkroom/node_modules/photoswipe/dist/default-skin/default-skin.css" order=-12}
 {combine_script id="photoswipe" require="jquery" path="themes/bootstrap_darkroom/node_modules/photoswipe/dist/photoswipe.min.js" load="footer"}
 {combine_script id="photoswipe.ui" require="photoswipe" path="themes/bootstrap_darkroom/node_modules/photoswipe/dist/photoswipe-ui-default.min.js" load="footer"}
-{footer_script require='jquery' require="photoswipe.ui"}{strip}
+{combine_script id="bd.exif-panel" require="photoswipe.ui" path="themes/bootstrap_darkroom/js/exif-panel.js" load="footer"}
+{footer_script require="bd.exif-panel"}{strip}
 var selector = '{$selector|escape:'javascript'}';
 
 function startPhotoSwipe(idx) {
@@ -25,6 +26,7 @@ function startPhotoSwipe(idx) {
                          $title          = '<a href="' + $href + '">' + $(this).data('name') + '</a><ul><li>' + $(this).data('description') + '</li></ul>';
                      var item = {
                          is_video : true,
+                         imageId: $(this).data('image-id'),
                          href     : $href,
                          src      : $src_preview,
                          w        : $width_preview,
@@ -58,6 +60,7 @@ function startPhotoSwipe(idx) {
                          $title      += '</div></a>';
                      var item = {
                          is_video: false,
+                         imageId: $(this).data('image-id'),
                          href: $href,
                          mediumImage: {
                              src   : $src_medium,
@@ -191,6 +194,8 @@ function startPhotoSwipe(idx) {
         });
 
         photoSwipe.init();
+
+        BdExifPanel.attach(photoSwipe);
 
         detectVideo(photoSwipe);
 

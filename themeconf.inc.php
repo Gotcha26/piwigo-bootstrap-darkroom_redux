@@ -12,6 +12,7 @@ require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/themecontroller.php
 require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/config.php');
 require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/lineage.php');
 require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/assets.php');
+require_once(PHPWG_THEMES_PATH . 'bootstrap_darkroom/include/exif.php');
 add_event_handler('combined_css', 'bd_cache_bust_combined_css');
 
 $themeconf = array(
