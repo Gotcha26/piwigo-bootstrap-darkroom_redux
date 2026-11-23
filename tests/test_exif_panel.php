@@ -31,6 +31,11 @@ function bd_assert($c, $m) {
 $bd_root = sys_get_temp_dir() . '/bd_exif_' . getmypid() . '_' . uniqid();
 @mkdir($bd_root, 0777, true);
 define('PHPWG_ROOT_PATH', $bd_root . '/');
+// ws.php never loads the core file that defines get_exif_data(): forImage() must
+// include it itself. This stand-in only records that it was included.
+@mkdir($bd_root . '/include', 0777, true);
+file_put_contents($bd_root . '/include/functions_metadata.inc.php', '<?php $GLOBALS[\'bd_metadata_included\'] = true;');
+$bd_metadata_included = false;
 define('PWG_LOCAL_DIR', 'local/');
 define('IMAGES_TABLE', 'piwigo_images');
 define('WS_TYPE_ID', 5);
@@ -153,6 +158,7 @@ if (function_exists('exif_read_data')) {
   bd_assert($res['image_id'] === 42 && $res['title'] === 'EXIF Metadata', 'forimage_ok: id and title');
   bd_assert($res['fields'] === Exif::rows($bd_exif, $conf['show_exif_fields'], $lang), 'forimage_ok: fields as rows()');
   bd_assert($bd_exif_calls[0] === array($tmp, array('Make' => 'Make', 'Model' => 'Model')), 'forimage_ok: identity mapping, real path');
+  bd_assert($bd_metadata_included === true, 'forimage_ok: includes include/functions_metadata.inc.php (not loaded on ws.php)');
 } else {
   bd_assert($res['fields'] === array(), 'forimage without exif extension: no fields');
 }

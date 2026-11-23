@@ -85,6 +85,9 @@ SELECT *
       $mapping[$field] = $field;
     }
 
+    // get_exif_data() lives in a core file ws.php never loads (picture.php gets it
+    // through include/picture_metadata.inc.php).
+    include_once(PHPWG_ROOT_PATH . 'include/functions_metadata.inc.php');
     $exif = get_exif_data($path, $mapping);
     $data['fields'] = self::rows(is_array($exif) ? $exif : array(), $fields, is_array($lang) ? $lang : array());
     return $data;
