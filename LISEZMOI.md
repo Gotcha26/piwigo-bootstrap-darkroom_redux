@@ -29,7 +29,7 @@ Un thème Piwigo qui met vos photos au premier plan : un style sombre et calme i
 ### Une navigation pensée pour les images
 
 - **Un diaporama plein écran** avec PhotoSwipe : lecture automatique, vidéo HTML5, et vignettes d'album qui peuvent l'ouvrir directement.
-- **Les données de prise de vue sans quitter le diaporama** : la touche `i` (ou la languette `i` au bord droit) fait glisser les données EXIF de la photo — boîtier, objectif, exposition d'un coup d'œil, puis tous les champs que la galerie affiche. `i`, `Échap` ou une flèche le referme. L'ouvrir ne compte aucune visite.
+- **Les données de prise de vue sans quitter le diaporama** : la touche `i` (ou la languette au diaphragme, au bord droit) fait glisser les données EXIF de la photo — boîtier, objectif, exposition d'un coup d'œil, puis tous les champs que la galerie affiche. `i`, `Échap` ou une flèche le referme. L'ouvrir ne compte aucune visite.
 - **Un carrousel sur la page d'une photo** pour passer d'une image à la suivante sans retourner à l'album.
 - **Entièrement adaptatif** : barres de navigation, carrousel, diaporama et vidéo s'ajustent à l'écran. Le contenu du carrousel et du diaporama se charge à la demande, avec la taille d'image choisie pour l'appareil.
 - **Des boutons de plugins qui trouvent leur place** : les boutons ajoutés à la barre par des plugins reçoivent un repli raisonnable au lieu de casser la barre.

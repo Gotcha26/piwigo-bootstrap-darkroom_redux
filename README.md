@@ -29,7 +29,7 @@ A Piwigo theme that puts your photos first: a calm, dark, Lightroom-inspired loo
 ### A way of browsing made for pictures
 
 - **A fullscreen slideshow** with PhotoSwipe: auto play, HTML5 video, and album thumbnails that can open it directly.
-- **The shooting data without leaving the slideshow**: press `i` (or tap the `i` tab on the right edge) to slide in the photo's EXIF data — camera, lens, exposure at a glance, then every field the gallery shows. `i`, `Esc` or an arrow key closes it. Opening it counts no visit.
+- **The shooting data without leaving the slideshow**: press `i` (or tap the aperture tab on the right edge) to slide in the photo's EXIF data — camera, lens, exposure at a glance, then every field the gallery shows. `i`, `Esc` or an arrow key closes it. Opening it counts no visit.
 - **A carousel on the photo page** to hop from one picture to the next without going back to the album.
 - **Fully responsive**: navbars, carousel, slideshow and video adapt to the screen. Carousel and slideshow content loads on demand, with the image size picked to fit the device.
 - **Plugin buttons that find their place**: buttons added to the navbar by plugins get a sensible fallback instead of breaking the bar.

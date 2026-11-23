@@ -918,6 +918,25 @@ i.video-indicator {
   color: #fff;
 }
 
+/* Aperture icon (PhotographyIcons): EXIF, not a second "i" next to the
+   lightbox's details button. */
+.pswp-exif__toggle .camera-aperture {
+  display: block;
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+/* The tab hides with the other lightbox controls: mouse idle on desktop,
+   controls toggled off by a tap on touch screens (default-skin.css). */
+.pswp-exif .handle {
+  transition: opacity 333ms cubic-bezier(0.4, 0, 0.22, 1);
+}
+
+.pswp:has(.pswp__ui--idle) .pswp-exif .handle,
+.pswp:has(.pswp__ui--hidden) .pswp-exif .handle {
+  opacity: 0;
+}
+
 .pswp-exif__title {
   color: #fff;
   margin-bottom: 1rem;

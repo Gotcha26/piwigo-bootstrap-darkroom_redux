@@ -61,6 +61,13 @@ bd_assert(strpos($css, '.bd-tab-panel.open') !== false, 'open state on the share
 bd_assert(strpos($css, '#sidebar.open') === false, 'open state no longer duplicated on #sidebar');
 bd_assert(strpos($css, '.pswp-exif__table') !== false && strpos($css, 'column-count: 2') !== false, 'two-column EXIF table');
 
+// Recette #90: the tab must not read as a second "i" next to PhotoSwipe's details
+// button, and it hides with the other lightbox controls.
+bd_assert(strpos($div, '<span class="camera-aperture" aria-hidden="true"></span></button>') !== false, 'tab shows the aperture icon');
+bd_assert(strpos($div, 'fa-info') === false, 'no info icon on the tab');
+bd_assert(strpos($css, '.pswp:has(.pswp__ui--idle) .pswp-exif .handle') !== false, 'tab hidden when the lightbox UI is idle');
+bd_assert(strpos($css, '.pswp:has(.pswp__ui--hidden) .pswp-exif .handle') !== false, 'tab hidden when the lightbox UI is hidden');
+
 // Readable over a bright photo: the panel background is near-opaque (recette #90).
 bd_assert(preg_match('/\.pswp-exif \.info \{\s*background-color: rgba\(0, 0, 0, 0\.95\);/', $css) === 1, 'panel background black at 95 %');
 
