@@ -804,28 +804,26 @@ i.video-indicator {
   }
 }
 
-/* Picture info panel: pinned to the viewport, state held by the .open class. */
-#sidebar {
+/* Tab panel (#89, #90): pinned to the right edge of the viewport, an `i` tab
+   sticking out on its left, state held by the .open class. Shared by the
+   picture info sidebar and the lightbox EXIF panel. */
+.bd-tab-panel {
   position: fixed;
-  top: 6rem;
   right: 0;
-  width: min(24rem, calc(100vw - 3.5rem));
-  max-height: calc(100vh - 7rem);
   display: flex;
   text-align: left;
-  z-index: 100;
   transform: translateX(100%);
   visibility: hidden;
   transition: transform 0.3s ease, visibility 0s linear 0.3s;
 }
 
-#sidebar.open {
+.bd-tab-panel.open {
   transform: none;
   visibility: visible;
   transition: transform 0.3s ease, visibility 0s;
 }
 
-#sidebar .handle {
+.bd-tab-panel .handle {
   position: absolute;
   top: 10px;
   right: 100%;
@@ -834,10 +832,28 @@ i.video-indicator {
   border-bottom-left-radius: 10px;
 }
 
+.bd-tab-panel .info {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 20px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  #sidebar, #sidebar.open {
+  .bd-tab-panel, .bd-tab-panel.open {
     transition: none;
   }
+}
+
+/* Picture info panel. */
+#sidebar {
+  top: 6rem;
+  width: min(24rem, calc(100vw - 3.5rem));
+  max-height: calc(100vh - 7rem);
+  z-index: 100;
 }
 
 #sidebar .handle a {
@@ -854,16 +870,6 @@ i.video-indicator {
   font-size: 1.2em;
 }
 
-#sidebar .info {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow-y: auto;
-  overflow-wrap: anywhere;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  padding: 20px;
-}
-
 #sidebar .info dl {
   margin-bottom: 0;
 }
@@ -876,6 +882,103 @@ i.video-indicator {
 #sidebar .info select,
 #sidebar .info button {
   max-width: 100%;
+}
+
+/* Lightbox EXIF panel (#90). The lightbox is always dark: fixed palette,
+   whatever the skin. Above .pswp__ui, below the top bar (44px). */
+.pswp-exif {
+  top: 60px;
+  width: min(48rem, calc(100vw - 3.5rem));
+  max-height: calc(100vh - 80px);
+  z-index: 1600;
+  color: #ddd;
+}
+
+.pswp-exif .handle,
+.pswp-exif .info {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* .pswp sets touch-action: none; the panel must still scroll on touch screens. */
+.pswp-exif .info {
+  touch-action: pan-y;
+}
+
+.pswp-exif__toggle {
+  display: block;
+  padding: 10px 12px;
+  border: 0;
+  background: none;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.pswp-exif__toggle:hover,
+.pswp-exif__toggle:focus {
+  color: #fff;
+}
+
+.pswp-exif__title {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.pswp-exif__summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.pswp-exif__summary .camera,
+.pswp-exif__summary .lens {
+  grid-column: 1 / -1;
+}
+
+.pswp-exif__summary > div {
+  display: flex;
+  align-items: center;
+}
+
+.pswp-exif__summary [class^="camera-"] {
+  margin-right: 0.5rem;
+  font-size: 1.75em;
+}
+
+.pswp-exif__table {
+  column-count: 2;
+  column-gap: 2rem;
+  margin-bottom: 0;
+}
+
+.pswp-exif__row {
+  display: grid;
+  grid-template-columns: 45% 1fr;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  break-inside: avoid;
+}
+
+.pswp-exif__row dt {
+  font-weight: bold;
+}
+
+.pswp-exif__row dd {
+  margin: 0;
+}
+
+.pswp-exif__status:empty {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .pswp-exif__table {
+    column-count: 1;
+  }
+
+  .pswp-exif__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 #disqus_thread {

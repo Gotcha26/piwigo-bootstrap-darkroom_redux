@@ -236,3 +236,8 @@ $lang['bd_about_components'] = 'Third-party components';
 // Light / dark switch of the main navbar (#81): title and accessible name.
 $lang['bd_switch_to_dark'] = 'Switch to dark mode';
 $lang['bd_switch_to_light'] = 'Switch to light mode';
+
+// EXIF panel of the lightbox (#90): tab name, empty and error messages.
+$lang['EXIF data (i)'] = 'EXIF data (i)';
+$lang['No EXIF data for this photo'] = 'No EXIF data for this photo';
+$lang['EXIF data could not be loaded'] = 'EXIF data could not be loaded';
