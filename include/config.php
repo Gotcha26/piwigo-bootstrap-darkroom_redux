@@ -278,6 +278,13 @@ class Config {
     // Check for current version
     if (isset($loaded[self::KEY_VERSION]) && $loaded[self::KEY_VERSION] == self::CONF_VERSION) {
       $this->config = $loaded;
+      // A key missing from a row stored at the current version gets its default,
+      // in memory only (piwigo_local#1846). A stored null stays null.
+      foreach ($this->defaults as $key => $default) {
+        if (!array_key_exists($key, $this->config)) {
+          $this->config[$key] = $default;
+        }
+      }
       return;
     }
 
@@ -355,9 +362,10 @@ class Config {
   }
 
   /**
-   * The loaded configuration, as stored: a stored null stays null, and a key
-   * missing from an old row is missing here too. The Custom CSS is not in it
-   * (it is a file, read through __get()). Used by the settings export.
+   * The loaded configuration: a stored null stays null, and a key missing from
+   * the stored row holds its default (isStored() tells them apart). The Custom
+   * CSS is not in it (it is a file, read through __get()). Used by the settings
+   * export.
    *
    * @return array
    */

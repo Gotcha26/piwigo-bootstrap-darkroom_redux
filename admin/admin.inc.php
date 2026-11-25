@@ -132,19 +132,16 @@ load_language('theme.lang', $bd_root . '/', array('force_fallback' => 'en_UK'));
 require_once $bd_root . '/include/lineage.php';
 \BootstrapDarkroom\Lineage::apply($bd_root . '/themeconf.inc.php');
 
-// --- 5. Settings added after 2024-12: store their default once (PHP 8 notices) ---
+// --- 5. Settings, as the form shows them ---
+// A key missing from the stored row (a setting added since) is completed in memory
+// by Config. Rendering this page never writes the row: it is written at the
+// webmaster's next save (piwigo_local#1846).
 $bd_config = new \BootstrapDarkroom\Config();
-$bd_class = new ReflectionClass('\BootstrapDarkroom\Config');
-$bd_props = $bd_class->getDefaultProperties();
-if (!isset($bd_config->thumbnail_nb_images)) {
-  $bd_config->thumbnail_nb_images = $bd_props['defaults']['thumbnail_nb_images'];
-  $bd_config->save();
-}
 
 // --- 5b. Light / dark mode never saved yet (#81): its pickers start from the gallery ---
 // The current skin and its navbar set go in the slot of their scheme, so that switching
-// to "Light and dark" keeps the gallery's look on that side. In memory only, AFTER the
-// save above: stored at the webmaster's next save, like every other field of the form.
+// to "Light and dark" keeps the gallery's look on that side. In memory only: stored at
+// the webmaster's next save, like every other field of the form.
 if (!$bd_config->isStored(\BootstrapDarkroom\Config::KEY_COLOR_MODE)
     && is_string($bd_config->bootstrap_theme) && $bd_config->bootstrap_theme !== '') {
   $bd_slot = \BootstrapDarkroom\Skins::scheme($bd_config->bootstrap_theme);
