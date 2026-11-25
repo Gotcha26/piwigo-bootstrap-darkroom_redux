@@ -7,6 +7,10 @@
  * older conf_version or a legacy bootstrap_theme value is normalised IN MEMORY,
  * and the row is rewritten at the next explicit save().
  *
+ * Same rule for a row stored at the CURRENT conf_version that misses a key: the
+ * key is completed in memory, and neither the construction nor the admin page's
+ * rendering stores it (piwigo_local#1846).
+ *
  * METHOD: the real include/config.php and include/themecontroller.php, with the
  * Piwigo boundary doubled ($conf, conf_update_param(), load_language(),
  * add_event_handler()). Every conf_update_param() call is counted.
@@ -112,6 +116,47 @@ foreach (array('darkroom', 'material', 'bootswatch') as $legacy) {
   bd_assert($cfg->bootstrap_theme === 'bootstrap-darkroom', "legacy '$legacy': normalised in memory");
   bd_assert($warns, "legacy '$legacy': the upgrade notice is still registered");
 }
+
+// --- 4. Row at the CURRENT conf_version missing a key: completed in memory, never seeded ---
+// piwigo_local#1846: the admin page used to store thumbnail_nb_images "once" at
+// render time. The completion belongs to the read; the row is born at a real save.
+$row = $saved;
+unset($row['thumbnail_nb_images']);
+$row['comments_disqus_shortname'] = null;
+$conf['bootstrap_darkroom'] = json_encode($row);
+$before = $conf['bootstrap_darkroom'];
+$writes = 0;
+$notices = array();
+set_error_handler(function ($no, $str) use (&$notices) {
+  $notices[] = $str;
+  return true;
+});
+$config = new \BootstrapDarkroom\Config();
+$read = $config->thumbnail_nb_images;
+$is_set = isset($config->thumbnail_nb_images);
+$disqus = $config->comments_disqus_shortname;
+restore_error_handler();
+bd_assert($writes === 0, 'current conf_version, missing key: zero conf_update_param() at construction (' . $writes . ')');
+bd_assert($conf['bootstrap_darkroom'] === $before, 'current conf_version, missing key: the stored row is untouched');
+bd_assert($notices === array(), 'current conf_version, missing key: read without a PHP notice (' . implode(' | ', $notices) . ')');
+bd_assert($read === $defaults['thumbnail_nb_images'], 'current conf_version, missing key: read as its default');
+bd_assert($is_set, 'current conf_version, missing key: isset() true, as the admin page and index.tpl test it');
+bd_assert(!$config->isStored('thumbnail_nb_images'), 'current conf_version, missing key: still reported as not stored');
+bd_assert($disqus === null, 'current conf_version: a stored null stays null');
+$exported = $config->toArray();
+bd_assert(array_key_exists('thumbnail_nb_images', $exported) && $exported['thumbnail_nb_images'] === $defaults['thumbnail_nb_images'], 'current conf_version, missing key: toArray() carries the default');
+
+// The admin page no longer stores anything when it renders: the only writes of the
+// panel are the dispatcher callbacks (admin/save.php, admin/export-import.php).
+$admin_src = file_get_contents(dirname(__DIR__) . '/admin/admin.inc.php');
+bd_assert(strpos($admin_src, '->save(') === false, 'admin.inc.php: no save() at render (piwigo_local#1846)');
+bd_assert(strpos($admin_src, 'conf_update_param(') === false, 'admin.inc.php: no conf_update_param() at render');
+
+// The next real save writes the completed row.
+$writes = 0;
+$config->save();
+$resaved = json_decode($conf['bootstrap_darkroom'], true);
+bd_assert($writes === 1 && array_key_exists('thumbnail_nb_images', $resaved), 'save(): the completed key is stored with the row');
 
 // Cleanup.
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmp, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
