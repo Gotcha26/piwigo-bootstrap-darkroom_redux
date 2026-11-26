@@ -45,6 +45,18 @@
   #sidebar .handle a:hover, #sidebar .handle a:focus {
     color: #eee;
   }
+  .pswp-exif {
+    color: #ddd;
+  }
+  .pswp-exif__toggle {
+    color: #ddd;
+  }
+  .pswp-exif__toggle:hover, .pswp-exif__toggle:focus {
+    color: #fff;
+  }
+  .pswp-exif__title {
+    color: #fff;
+  }
   .pswp__button--autoplay:before {
     color: #fff;
   }

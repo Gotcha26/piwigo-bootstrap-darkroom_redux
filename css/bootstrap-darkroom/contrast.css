@@ -330,8 +330,11 @@
   .dropdown-menu {
     color: #dbdbdb;
   }
-  .dropdown-item {
-    color: #4f4f4f;
+  .dropdown-item:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
+    color: color-mix(in srgb, #4f4f4f, #000 calc(var(--bd-contrast, 0) * 1%));
+  }
+  .dropdown-item:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), .dropdown-item:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
+    color: color-mix(in srgb, #4f4f4f, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
   .dropdown-item:focus, .dropdown-item:hover {
     color: #212121;
@@ -343,10 +346,10 @@
     color: #9e9e9e;
   }
   .dropdown-header:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
-    color: color-mix(in srgb, #a9a9a9, #fff calc(var(--bd-contrast, 0) * 1%));
+    color: color-mix(in srgb, #a9a9a9, #000 calc(var(--bd-contrast, 0) * 1%));
   }
-  .dropdown-item-text {
-    color: #4f4f4f;
+  .dropdown-item-text:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
+    color: color-mix(in srgb, #4f4f4f, #000 calc(var(--bd-contrast, 0) * 1%));
   }
   .input-group-text {
     color: #495057;

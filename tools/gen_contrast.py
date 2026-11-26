@@ -77,6 +77,12 @@ OUT_OF_SCOPE = (".navbar-transparent", ".pswp", ".page-header", ".carousel")
 # a neutral one of the skin (neutral_backgrounds()); the bar title is text.
 NAVBAR_BACKGROUNDS = (".bg-primary", ".bg-secondary", ".bg-light", ".bg-dark", ".bg-white")
 
+# Text drawn on the surface of a dropdown menu, not on the page: its colour is
+# pushed toward the extreme of the MENU background (black on a white menu even
+# in a dark skin), judged against that background (menu_background()).
+MENU_TEXT_CLASSES = ("dropdown-header", "dropdown-item", "dropdown-item-text")
+MENU_TEXT_MIN_CONTRAST = 1.5
+
 # Disabled controls keep their muted look: neither orange nor pushed.
 DISABLED = ("disabled",)
 
@@ -367,7 +373,13 @@ def navbar_target(rule, navbars, selector=""):
     return ("#fff" if light_text else "#000", navbar_guard(classes))
 
 
-def classify(selector, rule, scheme, page_bg=None, navbars=None):
+def on_menu_surface(selector):
+    """True when the selector targets text that sits on the dropdown menu surface."""
+    last = _last_compound(selector)
+    return any(re.search(r"\." + re.escape(c) + r"(?![\w-])", last) for c in MENU_TEXT_CLASSES)
+
+
+def classify(selector, rule, scheme, page_bg=None, navbars=None, menu_bg=None):
     """Role of one selector of a rule, for a skin of `scheme` ('light' / 'dark').
 
     `page_bg` is the skin's page background (body). A text colour that does not
@@ -380,8 +392,14 @@ def classify(selector, rule, scheme, page_bg=None, navbars=None):
         return role
     if is_navbar(selector):
         return role if navbar_target(rule, navbars, selector) else Role.SKIP
-    if page_bg is not None:
-        colour = _colour_decl(rule)
+    # Menu text sits on the menu, not on the page: judged against the menu
+    # background, and mixed toward the menu's extreme (see overrides()). Only a
+    # colour invisible on the menu (yeti: #fff on white, set by the skin) is kept.
+    colour = _colour_decl(rule)
+    if menu_bg is not None and on_menu_surface(selector):
+        if contrast_ratio(parse_color(colour[0]), menu_bg) < MENU_TEXT_MIN_CONTRAST:
+            return Role.SKIP
+    elif page_bg is not None:
         if contrast_ratio(parse_color(colour[0]), page_bg) < MIN_SURFACE_CONTRAST:
             return Role.SKIP
     return role
@@ -475,7 +493,7 @@ def guard(selector, suffix):
     return selector + suffix
 
 
-def overrides(rules, scheme, page_bg=None, navbars=None):
+def overrides(rules, scheme, page_bg=None, navbars=None, menu_bg=None):
     """(wrappers, selectors, declarations) of the generated file, in cascade order.
 
     Every source rule declaring a colour is restated at its own place: mixed
@@ -495,11 +513,16 @@ def overrides(rules, scheme, page_bg=None, navbars=None):
         groups = {}
         skipped = []
         for selector in rule.selectors:
-            role = classify(selector, rule, scheme, page_bg, navbars) if _colour_decl(rule) else Role.SKIP
+            role = classify(selector, rule, scheme, page_bg, navbars, menu_bg) if _colour_decl(rule) else Role.SKIP
             if role == Role.SKIP:
                 skipped.append(selector)
                 continue
-            target = navbar_target(rule, navbars, selector) if is_navbar(selector) else general
+            if is_navbar(selector):
+                target = navbar_target(rule, navbars, selector)
+            elif menu_bg is not None and on_menu_surface(selector):
+                target = ("#000" if luminance(menu_bg) > 0.179 else "#fff", general[1])
+            else:
+                target = general
             groups.setdefault((role,) + target, []).append(selector)
         for (role, dst, suffix), selectors in groups.items():
             to_extreme = "color: " + MIX.format(src=value, dst=dst) + bang
@@ -521,11 +544,11 @@ def overrides(rules, scheme, page_bg=None, navbars=None):
     return out
 
 
-def render(rules, scheme, page_bg=None, navbars=None):
+def render(rules, scheme, page_bg=None, navbars=None, menu_bg=None):
     """Text of a generated file: header, then every rule inside @supports."""
     lines = [HEADER, SUPPORTS + " {"]
     opened = ()
-    for wrappers, selectors, decls in overrides(rules, scheme, page_bg, navbars):
+    for wrappers, selectors, decls in overrides(rules, scheme, page_bg, navbars, menu_bg):
         if wrappers != opened:
             for _ in opened:
                 lines.append("  " * len(opened) + "}")
@@ -588,6 +611,18 @@ def body_background(rules):
     return found
 
 
+def menu_background(rules):
+    """Colour of the last background declared on a bare `.dropdown-menu`."""
+    found = None
+    for rule in rules:
+        if rule.wrappers or ".dropdown-menu" not in rule.selectors:
+            continue
+        colour = _background(rule)
+        if colour:
+            found = colour
+    return found
+
+
 def generate(root=ROOT):
     """Every generated path, with its expected content."""
     root = Path(root)
@@ -600,8 +635,9 @@ def generate(root=ROOT):
         rules = skin_rules(root, skin)
         page_bg = body_background(rules)
         navbars = neutral_backgrounds(rules)
-        files[folder / "contrast.css"] = render(rules, scheme, page_bg, navbars)
-        files[folder / "contrast-theme.css"] = render(theme_rules, scheme, page_bg, navbars)
+        menu_bg = menu_background(rules)
+        files[folder / "contrast.css"] = render(rules, scheme, page_bg, navbars, menu_bg)
+        files[folder / "contrast-theme.css"] = render(theme_rules, scheme, page_bg, navbars, menu_bg)
     return files
 
 
@@ -629,6 +665,7 @@ def report(root=ROOT):
     for skin in list_skins(root / "css"):
         scheme = "light" if skin in light else "dark"
         page_bg = body_background(skin_rules(root, skin))
+        menu_bg = menu_background(skin_rules(root, skin))
         print("=== {} ({})".format(skin, scheme))
         for label, rules in sources:
             rules = rules if rules is not None else skin_rules(root, skin)
@@ -637,7 +674,7 @@ def report(root=ROOT):
                 if not _colour_decl(rule):
                     continue
                 for s in rule.selectors:
-                    by_role.setdefault(classify(s, rule, scheme, page_bg, neutral_backgrounds(skin_rules(root, skin))), []).append(s)
+                    by_role.setdefault(classify(s, rule, scheme, page_bg, neutral_backgrounds(skin_rules(root, skin)), menu_bg), []).append(s)
             for role in (Role.TEXT, Role.LINK_REST, Role.LINK_STATE, Role.SKIP):
                 items = by_role.get(role, [])
                 print("--- {} / {} ({})".format(label, role, len(items)))

@@ -166,6 +166,25 @@ class RenderTest(unittest.TestCase):
         self.assertLess(out.index(".dropdown-item:hover" + self.G), out.index(".dropdown-item.active {"))
         self.assertLess(out.index("a" + self.G + " {"), out.index("a:not([href]) {\n    color: inherit !important;"))
 
+    def test_dropdown_header_follows_the_menu_surface(self):
+        # white menu in a dark skin: the header goes toward black, never white
+        css = ".dropdown-header{color:#a9a9a9}"
+        out = gc.render(gc.parse_css(css), "dark", (0, 0, 0, 1.0), None, (255, 255, 255, 1.0))
+        self.assertIn("color-mix(in srgb, #a9a9a9, #000", out)
+        self.assertNotIn("#fff calc", out)
+        # dark menu in a dark skin: still toward white
+        out = gc.render(gc.parse_css(css), "dark", (0, 0, 0, 1.0), None, (33, 37, 41, 1.0))
+        self.assertIn("color-mix(in srgb, #a9a9a9, #fff", out)
+
+    def test_dropdown_items_move_with_the_header(self):
+        # same white menu in a dark skin: items and header share one direction,
+        # otherwise the header turns black while the items stay grey
+        css = ".dropdown-item{color:#4f4f4f}.dropdown-header{color:#a9a9a9}.dropdown-item.active{color:#fff}"
+        out = gc.render(gc.parse_css(css), "dark", (0, 0, 0, 1.0), None, (255, 255, 255, 1.0))
+        self.assertIn("color-mix(in srgb, #4f4f4f, #000", out)
+        self.assertIn("color-mix(in srgb, #a9a9a9, #000", out)
+        self.assertNotIn("color-mix(in srgb, #fff", out)
+
     def test_text_on_inverse_surface_is_kept(self):
         # review C1: a menu on a white surface in a dark skin, a dark panel in a light one
         dark_bg = (79, 79, 79, 1.0)
@@ -273,10 +292,16 @@ class RepoTest(unittest.TestCase):
         mix = re.compile(r"([^{}]+)\{\s*color: color-mix\(in srgb, ([^,]+?), #")
         for skin in gc.list_skins(ROOT / "css"):
             bg = gc.body_background(gc.skin_rules(ROOT, skin))
+            menu_bg = gc.menu_background(gc.skin_rules(ROOT, skin))
             for name in ("contrast.css", "contrast-theme.css"):
                 text = (ROOT / "css" / skin / name).read_text(encoding="utf-8")
                 for selector, src in mix.findall(text):
                     if ".navbar:is(" in selector:
+                        continue
+                    # text on a dropdown menu is judged against the menu itself
+                    if menu_bg is not None and gc.on_menu_surface(selector.split(":where(")[0].strip()):
+                        self.assertGreaterEqual(gc.contrast_ratio(gc.parse_color(src), menu_bg),
+                                                gc.MENU_TEXT_MIN_CONTRAST, "{} {}: {}".format(skin, name, src))
                         continue
                     ratio = gc.contrast_ratio(gc.parse_color(src), bg)
                     self.assertGreaterEqual(ratio, gc.MIN_SURFACE_CONTRAST,

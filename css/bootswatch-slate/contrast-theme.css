@@ -66,6 +66,18 @@
   #sidebar .handle a:hover:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)), #sidebar .handle a:focus:where(:not(.navbar-transparent *, .navbar:not(.bg-primary, .bg-secondary, .bg-light, .bg-dark, .bg-white) *, .pswp *, .page-header *, .carousel *)) {
     color: color-mix(in srgb, #eee, #ff7700 calc(var(--bd-contrast, 0) * 1%));
   }
+  .pswp-exif {
+    color: #ddd;
+  }
+  .pswp-exif__toggle {
+    color: #ddd;
+  }
+  .pswp-exif__toggle:hover, .pswp-exif__toggle:focus {
+    color: #fff;
+  }
+  .pswp-exif__title {
+    color: #fff;
+  }
   .pswp__button--autoplay:before {
     color: #fff;
   }
