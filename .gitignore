@@ -125,3 +125,6 @@ admin/assets/js/*.min.js
 # ⛔ Load-bearing : sans cette ligne, git suit la jonction `.worktrees/.local` vers
 # le hub et propose d'ajouter le hub ENTIER au dépôt.
 .worktrees/
+# Claude Code worktrees (EnterWorktree tool): full checkouts INSIDE the repo,
+# same risk (GIT-CONVENTIONS.md, minimal mandatory .gitignore).
+.claude/worktrees/
